@@ -65,8 +65,13 @@
             <version>8.0.32</version>
         </dependency>
 
+        <!-- 参数校验 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
 
-<!--        &lt;!&ndash; swagger &ndash;&gt;-->
+        <!--        &lt;!&ndash; swagger &ndash;&gt;-->
 <!--        <dependency>-->
 <!--            <groupId>com.github.xiaoymin</groupId>-->
 <!--            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>-->
