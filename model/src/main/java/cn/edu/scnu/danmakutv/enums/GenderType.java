@@ -14,7 +14,7 @@ public enum GenderType {
 
     private final String label;
 
-    GenderType(int code, String label) {
+    GenderType (int code, String label) {
         this.code = code;
         this.label = label;
     }

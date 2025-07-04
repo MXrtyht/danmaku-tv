@@ -31,7 +31,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                                               .eq("email", userRegisterVO.getEmail())
         );
 
-        if(existingUser != null) {
+        if (existingUser != null) {
             String errorMessage;
             if (userRegisterVO.getPhone().equals(existingUser.getPhone())) {
                 errorMessage = "手机号已被注册";
@@ -44,9 +44,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 对密码RSA解密, MD5加密
         String password = userRegisterVO.getPassword();
         String rawPassword;
-        try{
-            rawPassword= RSAUtil.decrypt(password);
-        }catch (Exception e) {
+        try {
+            rawPassword = RSAUtil.decrypt(password);
+        } catch (Exception e) {
             log.error("密码解密失败", e);
             throw new DanmakuException(StatusCodeEnum.SERVICE_ERROR);
         }

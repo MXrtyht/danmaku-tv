@@ -20,7 +20,7 @@ public class AESUtil {
 
     private final String seed;
 
-    public AESUtil(String seed) throws Exception {
+    public AESUtil (String seed) throws Exception {
         this.seed = seed;
         decryptCipher = Cipher.getInstance(KEY_ALGORITHM);
         encryptCipher = Cipher.getInstance(KEY_ALGORITHM);
@@ -28,18 +28,18 @@ public class AESUtil {
         encryptCipher.init(Cipher.ENCRYPT_MODE, this.getSecretKey());
     }
 
-    public String decrypt(String content) throws Exception {
+    public String decrypt (String content) throws Exception {
         byte[] bytes = Base64.decodeBase64(content);
         byte[] result = decryptCipher.doFinal(bytes);
         return new String(result, StandardCharsets.UTF_8);
     }
 
-    public String encrypt(String content) throws Exception {
+    public String encrypt (String content) throws Exception {
         byte[] result = encryptCipher.doFinal(content.getBytes(StandardCharsets.UTF_8));
         return Base64.encodeBase64String(result);
     }
 
-    public SecretKey getSecretKey() throws Exception {
+    public SecretKey getSecretKey () throws Exception {
         SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
         random.setSeed(seed.getBytes());
         KeyGenerator kg = KeyGenerator.getInstance(KEY_ALGORITHM);

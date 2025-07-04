@@ -5,7 +5,7 @@ import java.util.Base64;
 
 public class SaltUtil {
     // 生成一个安全的随机盐，默认长度 16 字节
-    public static String generateSalt(int byteLength) {
+    public static String generateSalt (int byteLength) {
         SecureRandom random = new SecureRandom();
         byte[] saltBytes = new byte[byteLength];
         random.nextBytes(saltBytes);
@@ -13,7 +13,7 @@ public class SaltUtil {
     }
 
     // 默认 16 字节盐值（128位）
-    public static String generateSalt() {
+    public static String generateSalt () {
         return generateSalt(16);
     }
 }
