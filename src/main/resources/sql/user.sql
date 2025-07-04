@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `t_user`
     `email`         VARCHAR(100)             DEFAULT NULL COMMENT '邮箱',
     `password`      VARCHAR(100)    NOT NULL COMMENT '密码',
     `salt`          VARCHAR(100)    NOT NULL COMMENT '加密盐',
-    `is_banned`        TINYINT(1)      NOT NULL DEFAULT 0 COMMENT '状态(0:正常, 1:封禁)',
+    `is_banned`     TINYINT(1)      NOT NULL DEFAULT 0 COMMENT '状态(0:正常, 1:封禁)',
     `last_login_at` DATETIME                 DEFAULT NULL COMMENT '最后登录时间',
     `create_at`     DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
     PRIMARY KEY (`id`)

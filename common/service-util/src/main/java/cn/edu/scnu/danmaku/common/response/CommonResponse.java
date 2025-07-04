@@ -34,7 +34,7 @@ public class CommonResponse<T> {
 
 
     // 设置数据,返回对象的方法
-    public static <T> CommonResponse<T> build (T data, StatusCodeENum statusCodeENum) {
+    public static <T> CommonResponse<T> build (T data, StatusCodeEnum statusCodeENum) {
         // 创建CommonResponse对象，设置值，返回对象
         CommonResponse<T> commonResponse = new CommonResponse<>();
         // 判断返回结果中是否需要数据
@@ -51,12 +51,12 @@ public class CommonResponse<T> {
 
     // 成功的方法
     public static <T> CommonResponse<T> success (T data) {
-        CommonResponse<T> commonResponse = build(data, StatusCodeENum.SUCCESS);
+        CommonResponse<T> commonResponse = build(data, StatusCodeEnum.SUCCESS);
         return commonResponse;
     }
 
     // 失败的方法
     public static <T> CommonResponse<T> fail (T data) {
-        return build(data, StatusCodeENum.FAIL);
+        return build(data, StatusCodeEnum.FAIL);
     }
 }
