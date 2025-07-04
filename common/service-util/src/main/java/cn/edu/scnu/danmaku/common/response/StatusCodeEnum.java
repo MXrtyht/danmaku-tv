@@ -3,7 +3,7 @@ package cn.edu.scnu.danmaku.common.response;
 import lombok.Getter;
 
 @Getter
-public enum StatusCodeENum {
+public enum StatusCodeEnum {
     SUCCESS(200,"成功"),
     FAIL(201, "失败"),
 
@@ -37,7 +37,7 @@ public enum StatusCodeENum {
 
     private Integer code;
     private String message;
-    private StatusCodeENum(Integer code, String message) {
+    private StatusCodeEnum (Integer code, String message) {
         this.code = code;
         this.message = message;
     }
