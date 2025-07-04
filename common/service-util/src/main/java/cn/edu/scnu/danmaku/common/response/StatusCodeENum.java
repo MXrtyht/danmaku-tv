@@ -1,4 +1,4 @@
-package cn.edu.scnu.danmaku.common;
+package cn.edu.scnu.danmaku.common.response;
 
 import lombok.Getter;
 
