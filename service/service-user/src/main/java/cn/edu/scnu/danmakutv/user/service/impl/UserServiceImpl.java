@@ -24,7 +24,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @param userRegisterVO
      */
     @Override
-    public void registerUser (UserRegisterVO userRegisterVO) throws DanmakuException {
+    public void registerUser (UserRegisterVO userRegisterVO) {
         User existingUser = baseMapper.selectOne(
                 new QueryWrapper<>(User.class).eq("phone", userRegisterVO.getPhone())
                                               .or()
@@ -38,7 +38,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             } else {
                 errorMessage = "邮箱已被注册";
             }
-            throw new DanmakuException(errorMessage, 400);
+            throw new DanmakuException(errorMessage,400);
         }
 
         // 对密码RSA解密, MD5加密
