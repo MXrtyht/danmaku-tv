@@ -4,6 +4,8 @@ import cn.edu.scnu.danmakutv.constant.UserProfilesDefaultConstant;
 import cn.edu.scnu.danmakutv.domain.UserProfiles;
 import cn.edu.scnu.danmakutv.user.mapper.UserProfilesMapper;
 import cn.edu.scnu.danmakutv.user.service.UserProfilesService;
+import cn.edu.scnu.danmakutv.vo.UserProfilesVO;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -27,5 +29,25 @@ public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, Use
         userProfiles.setCreatedAt(LocalDateTime.now());
 
         baseMapper.insert(userProfiles);
+    }
+
+    @Override
+    public UserProfilesVO getUserProfilesByUserId (Long userId) {
+        UserProfiles userProfiles = baseMapper.selectOne(
+                new QueryWrapper<>(UserProfiles.class)
+                        .eq("uid", userId)
+        );
+
+        UserProfilesVO userProfilesVO = new UserProfilesVO();
+        userProfilesVO.setUid(userProfiles.getUid());
+        userProfilesVO.setNickname(userProfiles.getNickname());
+        userProfilesVO.setAvatar(userProfiles.getAvatar());
+        userProfilesVO.setGender(userProfiles.getGender());
+        userProfilesVO.setBirthday(userProfiles.getBirthday());
+        userProfilesVO.setCoin(userProfiles.getCoin());
+        userProfilesVO.setSign(userProfiles.getSign());
+        userProfiles.setAnnouncement(userProfiles.getAnnouncement());
+
+        return userProfilesVO;
     }
 }
