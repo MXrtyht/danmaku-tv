@@ -1,14 +1,13 @@
-package cn.edu.scnu.danmakutv.vo.authentication;
+package cn.edu.scnu.danmakutv.dto;
 
 import cn.edu.scnu.danmakutv.enums.GenderType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-public class UserProfilesVO {
+public class UserProfilesDTO {
 
     private String nickname;
 

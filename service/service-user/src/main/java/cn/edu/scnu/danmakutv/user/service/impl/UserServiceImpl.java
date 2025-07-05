@@ -10,9 +10,8 @@ import cn.edu.scnu.danmakutv.domain.User;
 import cn.edu.scnu.danmakutv.user.mapper.UserMapper;
 import cn.edu.scnu.danmakutv.user.service.UserProfilesService;
 import cn.edu.scnu.danmakutv.user.service.UserService;
-import cn.edu.scnu.danmakutv.dto.UserLoginVO;
-import cn.edu.scnu.danmakutv.dto.UserRegisterVO;
-import cn.edu.scnu.danmakutv.vo.UserProfilesVO;
+import cn.edu.scnu.danmakutv.dto.UserLoginDTO;
+import cn.edu.scnu.danmakutv.dto.UserRegisterDTO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
@@ -28,19 +27,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     /**
      * 用户注册
-     * @param userRegisterVO
+     * @param userRegisterDTO
      */
     @Override
-    public void registerUser (UserRegisterVO userRegisterVO) {
+    public void registerUser (UserRegisterDTO userRegisterDTO) {
         User existingUser = baseMapper.selectOne(
-                new QueryWrapper<>(User.class).eq("phone", userRegisterVO.getPhone())
+                new QueryWrapper<>(User.class).eq("phone", userRegisterDTO.getPhone())
                                               .or()
-                                              .eq("email", userRegisterVO.getEmail())
+                                              .eq("email", userRegisterDTO.getEmail())
         );
 
         if (existingUser != null) {
             String errorMessage;
-            if (userRegisterVO.getPhone().equals(existingUser.getPhone())) {
+            if (userRegisterDTO.getPhone().equals(existingUser.getPhone())) {
                 errorMessage = "手机号已被注册";
             } else {
                 errorMessage = "邮箱已被注册";
@@ -49,7 +48,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         // 对密码RSA解密, MD5加密
-        String password = userRegisterVO.getPassword();
+        String password = userRegisterDTO.getPassword();
         String rawPassword;
         try {
             rawPassword = RSAUtil.decrypt(password);
@@ -62,8 +61,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         // 设置相应字段
         User user = new User();
-        user.setPhone(userRegisterVO.getPhone());
-        user.setEmail(userRegisterVO.getEmail());
+        user.setPhone(userRegisterDTO.getPhone());
+        user.setEmail(userRegisterDTO.getEmail());
         user.setPassword(md5Password);
         user.setSalt(salt);
         user.setIsBanned(false);
@@ -76,9 +75,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public String loginUser (UserLoginVO userLoginVO) {
+    public String loginUser (UserLoginDTO userLoginDTO) {
         User user = baseMapper.selectOne(
-                new QueryWrapper<>(User.class).eq("phone", userLoginVO.getPhone())
+                new QueryWrapper<>(User.class).eq("phone", userLoginDTO.getPhone())
         );
         if (user == null) {
             throw new DanmakuException("用户不存在", 400);
@@ -87,7 +86,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new DanmakuException("用户已被封禁", 400);
         }
 
-        String password = userLoginVO.getPassword();
+        String password = userLoginDTO.getPassword();
         String rawPassword;
         try{
             rawPassword= RSAUtil.decrypt(password);

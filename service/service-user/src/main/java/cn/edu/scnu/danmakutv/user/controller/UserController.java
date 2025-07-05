@@ -3,10 +3,9 @@ package cn.edu.scnu.danmakutv.user.controller;
 import cn.edu.scnu.common.utils.RSAUtil;
 import cn.edu.scnu.danmaku.common.response.CommonResponse;
 import cn.edu.scnu.danmakutv.user.service.UserService;
-import cn.edu.scnu.danmakutv.dto.UserLoginVO;
-import cn.edu.scnu.danmakutv.dto.UserRegisterVO;
+import cn.edu.scnu.danmakutv.dto.UserLoginDTO;
+import cn.edu.scnu.danmakutv.dto.UserRegisterDTO;
 import cn.edu.scnu.danmakutv.user.support.AuthenticationSupport;
-import cn.edu.scnu.danmakutv.vo.UserProfilesVO;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -29,15 +28,15 @@ public class UserController {
 
     // 注册
     @PostMapping("/register")
-    public CommonResponse<String> registerUser (@Valid @RequestBody UserRegisterVO userRegisterVO) {
-        userService.registerUser(userRegisterVO);
+    public CommonResponse<String> registerUser (@Valid @RequestBody UserRegisterDTO userRegisterDTO) {
+        userService.registerUser(userRegisterDTO);
         return CommonResponse.success("注册成功");
     }
 
     // 登录
     @PostMapping("/login")
-    public CommonResponse<String> loginUser(@Valid @RequestBody UserLoginVO userLoginVO){
-        String token = userService.loginUser(userLoginVO);
+    public CommonResponse<String> loginUser(@Valid @RequestBody UserLoginDTO userLoginDTO){
+        String token = userService.loginUser(userLoginDTO);
         return CommonResponse.success(token);
     }
 
