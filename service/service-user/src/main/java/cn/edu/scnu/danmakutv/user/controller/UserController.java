@@ -2,9 +2,9 @@ package cn.edu.scnu.danmakutv.user.controller;
 
 import cn.edu.scnu.common.utils.RSAUtil;
 import cn.edu.scnu.danmaku.common.response.CommonResponse;
-import cn.edu.scnu.danmakutv.user.service.UserService;
 import cn.edu.scnu.danmakutv.dto.UserLoginDTO;
 import cn.edu.scnu.danmakutv.dto.UserRegisterDTO;
+import cn.edu.scnu.danmakutv.user.service.UserService;
 import cn.edu.scnu.danmakutv.user.support.AuthenticationSupport;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
@@ -35,7 +35,7 @@ public class UserController {
 
     // 登录
     @PostMapping("/login")
-    public CommonResponse<String> loginUser(@Valid @RequestBody UserLoginDTO userLoginDTO){
+    public CommonResponse<String> loginUser (@Valid @RequestBody UserLoginDTO userLoginDTO) {
         String token = userService.loginUser(userLoginDTO);
         return CommonResponse.success(token);
     }

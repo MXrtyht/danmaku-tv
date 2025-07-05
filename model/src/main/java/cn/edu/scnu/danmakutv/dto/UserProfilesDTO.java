@@ -4,7 +4,6 @@ import cn.edu.scnu.danmakutv.enums.GenderType;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 public class UserProfilesDTO {

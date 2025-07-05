@@ -7,11 +7,11 @@ import cn.edu.scnu.common.utils.SaltUtil;
 import cn.edu.scnu.danmaku.common.exception.DanmakuException;
 import cn.edu.scnu.danmaku.common.response.StatusCodeEnum;
 import cn.edu.scnu.danmakutv.domain.User;
+import cn.edu.scnu.danmakutv.dto.UserLoginDTO;
+import cn.edu.scnu.danmakutv.dto.UserRegisterDTO;
 import cn.edu.scnu.danmakutv.user.mapper.UserMapper;
 import cn.edu.scnu.danmakutv.user.service.UserProfilesService;
 import cn.edu.scnu.danmakutv.user.service.UserService;
-import cn.edu.scnu.danmakutv.dto.UserLoginDTO;
-import cn.edu.scnu.danmakutv.dto.UserRegisterDTO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
@@ -27,6 +27,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     /**
      * 用户注册
+     *
      * @param userRegisterDTO
      */
     @Override
@@ -88,9 +89,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         String password = userLoginDTO.getPassword();
         String rawPassword;
-        try{
-            rawPassword= RSAUtil.decrypt(password);
-        }catch (Exception e) {
+        try {
+            rawPassword = RSAUtil.decrypt(password);
+        } catch (Exception e) {
             log.error("密码解密失败", e);
             throw new DanmakuException("密码无效或格式错误", 400);
         }

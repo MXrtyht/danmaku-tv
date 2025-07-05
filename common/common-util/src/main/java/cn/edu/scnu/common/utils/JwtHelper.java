@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class JwtHelper {
 
-    private static final long tokenExpiration = 365*24*60*60*1000;
+    private static final long tokenExpiration = 365 * 24 * 60 * 60 * 1000;
     private static final String tokenSignKey = "M6JUZD5dVVOS7bZb4wLSciECukkunIns2WW7klTxA1EE90KhfC0ihQE3LsRS4Zmf" +
             "AF2o5LJeOMHFvjb3apVdkAkEpGsqcMy5q54qSXe3QkVSnhTeISQdlCy750yZdSAf" +
             "jJwPO0TN26RN4kLgOotIWiSq9deLm8I0ryuqgNzZG8LUZDwGkFJrAuHaSUOw4emI" +
@@ -20,7 +20,7 @@ public class JwtHelper {
     /**
      * 生成 JWT，载荷只包含 userId
      */
-    public static String createToken(Long userId) {
+    public static String createToken (Long userId) {
         return Jwts.builder()
                    .setSubject("danmaku-USER")
                    .setExpiration(new Date(System.currentTimeMillis() + tokenExpiration))
@@ -33,7 +33,7 @@ public class JwtHelper {
     /**
      * 从 JWT 中解析出 userId
      */
-    public static Long getUserId(String token) {
+    public static Long getUserId (String token) {
         if (!StringUtils.hasText(token)) return -1L;
 
         try {
@@ -54,12 +54,12 @@ public class JwtHelper {
     /**
      * JWT 是无状态的，客户端删除即可
      */
-    public static void removeToken(String token) {
+    public static void removeToken (String token) {
         // no-op
     }
 
     // 测试
-    public static void main(String[] args) {
+    public static void main (String[] args) {
         String token = createToken(123L);
         System.out.println("Token: " + token);
         System.out.println("User ID: " + getUserId(token));
