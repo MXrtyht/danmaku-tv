@@ -1,5 +1,6 @@
 package cn.edu.scnu.danmakutv.user.service.impl;
 
+import cn.edu.scnu.common.utils.JwtHelper;
 import cn.edu.scnu.common.utils.MD5Util;
 import cn.edu.scnu.common.utils.RSAUtil;
 import cn.edu.scnu.common.utils.SaltUtil;
@@ -9,7 +10,9 @@ import cn.edu.scnu.danmakutv.domain.User;
 import cn.edu.scnu.danmakutv.user.mapper.UserMapper;
 import cn.edu.scnu.danmakutv.user.service.UserProfilesService;
 import cn.edu.scnu.danmakutv.user.service.UserService;
-import cn.edu.scnu.danmakutv.vo.authentication.UserRegisterVO;
+import cn.edu.scnu.danmakutv.dto.UserLoginVO;
+import cn.edu.scnu.danmakutv.dto.UserRegisterVO;
+import cn.edu.scnu.danmakutv.vo.UserProfilesVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
@@ -70,5 +73,35 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         // 设置相应用户信息
         userProfilesService.addUserProfiles(user.getId());
+    }
+
+    @Override
+    public String loginUser (UserLoginVO userLoginVO) {
+        User user = baseMapper.selectOne(
+                new QueryWrapper<>(User.class).eq("phone", userLoginVO.getPhone())
+        );
+        if (user == null) {
+            throw new DanmakuException("用户不存在", 400);
+        }
+        if (user.getIsBanned()) {
+            throw new DanmakuException("用户已被封禁", 400);
+        }
+
+        String password = userLoginVO.getPassword();
+        String rawPassword;
+        try{
+            rawPassword= RSAUtil.decrypt(password);
+        }catch (Exception e) {
+            log.error("密码解密失败", e);
+            throw new DanmakuException("密码无效或格式错误", 400);
+        }
+        String md5Password = MD5Util.sign(rawPassword, user.getSalt(), "UTF-8");
+
+        // 验证密码
+        if (!md5Password.equals(user.getPassword())) {
+            throw new DanmakuException("密码错误", 400);
+        }
+
+        return JwtHelper.createToken(user.getId());
     }
 }

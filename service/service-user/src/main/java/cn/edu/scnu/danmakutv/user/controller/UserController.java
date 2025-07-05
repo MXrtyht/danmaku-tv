@@ -3,7 +3,10 @@ package cn.edu.scnu.danmakutv.user.controller;
 import cn.edu.scnu.common.utils.RSAUtil;
 import cn.edu.scnu.danmaku.common.response.CommonResponse;
 import cn.edu.scnu.danmakutv.user.service.UserService;
-import cn.edu.scnu.danmakutv.vo.authentication.UserRegisterVO;
+import cn.edu.scnu.danmakutv.dto.UserLoginVO;
+import cn.edu.scnu.danmakutv.dto.UserRegisterVO;
+import cn.edu.scnu.danmakutv.user.support.AuthenticationSupport;
+import cn.edu.scnu.danmakutv.vo.UserProfilesVO;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +16,9 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Resource
     private UserService userService;
+
+    @Resource
+    private AuthenticationSupport authenticationSupport;
 
     // 获取RSA公钥
     @GetMapping("/rsa-pks")
@@ -27,4 +33,12 @@ public class UserController {
         userService.registerUser(userRegisterVO);
         return CommonResponse.success("注册成功");
     }
+
+    // 登录
+    @PostMapping("/login")
+    public CommonResponse<String> loginUser(@Valid @RequestBody UserLoginVO userLoginVO){
+        String token = userService.loginUser(userLoginVO);
+        return CommonResponse.success(token);
+    }
+
 }
