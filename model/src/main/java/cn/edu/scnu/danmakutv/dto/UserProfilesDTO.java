@@ -22,9 +22,4 @@ public class UserProfilesDTO {
     private String avatar;
 
     private Integer coin;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
 }

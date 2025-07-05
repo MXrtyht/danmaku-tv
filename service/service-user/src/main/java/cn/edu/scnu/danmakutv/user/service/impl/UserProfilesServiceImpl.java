@@ -2,11 +2,13 @@ package cn.edu.scnu.danmakutv.user.service.impl;
 
 import cn.edu.scnu.danmakutv.constant.UserProfilesDefaultConstant;
 import cn.edu.scnu.danmakutv.domain.UserProfiles;
+import cn.edu.scnu.danmakutv.dto.UserProfilesDTO;
 import cn.edu.scnu.danmakutv.user.mapper.UserProfilesMapper;
 import cn.edu.scnu.danmakutv.user.service.UserProfilesService;
 import cn.edu.scnu.danmakutv.vo.UserProfilesVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -46,8 +48,19 @@ public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, Use
         userProfilesVO.setBirthday(userProfiles.getBirthday());
         userProfilesVO.setCoin(userProfiles.getCoin());
         userProfilesVO.setSign(userProfiles.getSign());
-        userProfiles.setAnnouncement(userProfiles.getAnnouncement());
+        userProfilesVO.setAnnouncement(userProfiles.getAnnouncement());
 
         return userProfilesVO;
+    }
+
+    @Override
+    public void updateUserProfiles (Long userId, UserProfilesDTO userProfilesDTO) {
+        UserProfiles userProfiles = baseMapper.selectOne(
+                new QueryWrapper<>(UserProfiles.class)
+                        .eq("uid", userId)
+        );
+        BeanUtils.copyProperties(userProfilesDTO, userProfiles, "uid", "createdAt");
+        userProfiles.setUpdatedAt(LocalDateTime.now());
+        baseMapper.updateById(userProfiles);
     }
 }
