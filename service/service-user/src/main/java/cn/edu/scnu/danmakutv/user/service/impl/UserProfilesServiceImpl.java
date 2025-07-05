@@ -41,14 +41,7 @@ public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, Use
         );
 
         UserProfilesVO userProfilesVO = new UserProfilesVO();
-        userProfilesVO.setUid(userProfiles.getUid());
-        userProfilesVO.setNickname(userProfiles.getNickname());
-        userProfilesVO.setAvatar(userProfiles.getAvatar());
-        userProfilesVO.setGender(userProfiles.getGender());
-        userProfilesVO.setBirthday(userProfiles.getBirthday());
-        userProfilesVO.setCoin(userProfiles.getCoin());
-        userProfilesVO.setSign(userProfiles.getSign());
-        userProfilesVO.setAnnouncement(userProfiles.getAnnouncement());
+        BeanUtils.copyProperties(userProfiles, userProfilesVO);
 
         return userProfilesVO;
     }
