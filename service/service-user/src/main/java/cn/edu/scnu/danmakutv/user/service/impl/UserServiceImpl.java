@@ -7,10 +7,12 @@ import cn.edu.scnu.danmaku.common.exception.DanmakuException;
 import cn.edu.scnu.danmaku.common.response.StatusCodeEnum;
 import cn.edu.scnu.danmakutv.domain.User;
 import cn.edu.scnu.danmakutv.user.mapper.UserMapper;
+import cn.edu.scnu.danmakutv.user.service.UserProfilesService;
 import cn.edu.scnu.danmakutv.user.service.UserService;
 import cn.edu.scnu.danmakutv.vo.authentication.UserRegisterVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,9 +20,11 @@ import java.time.LocalDateTime;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
+    @Resource
+    private UserProfilesService userProfilesService;
+
     /**
      * 用户注册
-     *
      * @param userRegisterVO
      */
     @Override
@@ -38,7 +42,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             } else {
                 errorMessage = "邮箱已被注册";
             }
-            throw new DanmakuException(errorMessage,400);
+            throw new DanmakuException(errorMessage, 400);
         }
 
         // 对密码RSA解密, MD5加密
@@ -61,7 +65,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setSalt(salt);
         user.setIsBanned(false);
         user.setCreateAt(LocalDateTime.now());
+        // 添加用户
         baseMapper.insert(user);
 
+        // 设置相应用户信息
+        userProfilesService.addUserProfiles(user.getId());
     }
 }
