@@ -1,6 +1,6 @@
-package cn.edu.scnu.danmaku.common.exception;
+package cn.edu.scnu.danmakutv.common.exception;
 
-import cn.edu.scnu.danmaku.common.response.StatusCodeEnum;
+import cn.edu.scnu.danmakutv.common.response.StatusCodeEnum;
 import lombok.Data;
 
 @Data

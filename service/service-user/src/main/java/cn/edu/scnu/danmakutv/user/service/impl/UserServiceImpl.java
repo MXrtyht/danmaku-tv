@@ -1,11 +1,11 @@
 package cn.edu.scnu.danmakutv.user.service.impl;
 
-import cn.edu.scnu.danmaku.common.authentication.JwtHelper;
+import cn.edu.scnu.danmakutv.common.authentication.JwtHelper;
 import cn.edu.scnu.common.utils.MD5Util;
 import cn.edu.scnu.common.utils.RSAUtil;
 import cn.edu.scnu.common.utils.SaltUtil;
-import cn.edu.scnu.danmaku.common.exception.DanmakuException;
-import cn.edu.scnu.danmaku.common.response.StatusCodeEnum;
+import cn.edu.scnu.danmakutv.common.exception.DanmakuException;
+import cn.edu.scnu.danmakutv.common.response.StatusCodeEnum;
 import cn.edu.scnu.danmakutv.domain.User;
 import cn.edu.scnu.danmakutv.dto.UserLoginDTO;
 import cn.edu.scnu.danmakutv.dto.UserRegisterDTO;

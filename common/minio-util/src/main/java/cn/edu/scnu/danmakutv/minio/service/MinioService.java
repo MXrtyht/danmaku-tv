@@ -1,4 +1,4 @@
-package cn.edu.scnu.danmaku.minio.service;
+package cn.edu.scnu.danmakutv.minio.service;
 
 import io.minio.*;
 import jakarta.annotation.Resource;

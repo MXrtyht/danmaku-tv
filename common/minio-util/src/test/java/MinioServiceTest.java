@@ -1,4 +1,4 @@
-import cn.edu.scnu.danmaku.minio.service.MinioService;
+import cn.edu.scnu.danmakutv.minio.service.MinioService;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 

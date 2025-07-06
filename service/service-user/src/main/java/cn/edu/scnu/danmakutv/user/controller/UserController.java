@@ -1,11 +1,11 @@
 package cn.edu.scnu.danmakutv.user.controller;
 
 import cn.edu.scnu.common.utils.RSAUtil;
-import cn.edu.scnu.danmaku.common.response.CommonResponse;
+import cn.edu.scnu.danmakutv.common.response.CommonResponse;
 import cn.edu.scnu.danmakutv.dto.UserLoginDTO;
 import cn.edu.scnu.danmakutv.dto.UserRegisterDTO;
 import cn.edu.scnu.danmakutv.user.service.UserService;
-import cn.edu.scnu.danmaku.common.authentication.AuthenticationSupport;
+import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,6 @@
-package cn.edu.scnu.danmaku.common.exception;
+package cn.edu.scnu.danmakutv.common.exception;
 
-import cn.edu.scnu.danmaku.common.response.CommonResponse;
+import cn.edu.scnu.danmakutv.common.response.CommonResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;

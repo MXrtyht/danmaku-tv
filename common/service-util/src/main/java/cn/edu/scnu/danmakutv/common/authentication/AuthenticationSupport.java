@@ -1,7 +1,7 @@
-package cn.edu.scnu.danmaku.common.authentication;
+package cn.edu.scnu.danmakutv.common.authentication;
 
-import cn.edu.scnu.danmaku.common.exception.DanmakuException;
-import cn.edu.scnu.danmaku.common.response.StatusCodeEnum;
+import cn.edu.scnu.danmakutv.common.exception.DanmakuException;
+import cn.edu.scnu.danmakutv.common.response.StatusCodeEnum;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;

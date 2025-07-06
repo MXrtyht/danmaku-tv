@@ -1,4 +1,4 @@
-package cn.edu.scnu.danmaku.common.authentication;
+package cn.edu.scnu.danmakutv.common.authentication;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
