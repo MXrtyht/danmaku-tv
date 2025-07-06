@@ -1,6 +1,6 @@
 package cn.edu.scnu.danmakutv.user.service.impl;
 
-import cn.edu.scnu.common.utils.JwtHelper;
+import cn.edu.scnu.danmaku.common.authentication.JwtHelper;
 import cn.edu.scnu.common.utils.MD5Util;
 import cn.edu.scnu.common.utils.RSAUtil;
 import cn.edu.scnu.common.utils.SaltUtil;

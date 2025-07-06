@@ -3,7 +3,7 @@ package cn.edu.scnu.danmakutv.user.controller;
 import cn.edu.scnu.danmaku.common.response.CommonResponse;
 import cn.edu.scnu.danmakutv.dto.UserProfilesDTO;
 import cn.edu.scnu.danmakutv.user.service.UserProfilesService;
-import cn.edu.scnu.danmakutv.user.support.AuthenticationSupport;
+import cn.edu.scnu.danmaku.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.vo.UserProfilesVO;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;

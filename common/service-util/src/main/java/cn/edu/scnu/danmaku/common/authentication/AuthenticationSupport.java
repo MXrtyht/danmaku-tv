@@ -1,6 +1,5 @@
-package cn.edu.scnu.danmakutv.user.support;
+package cn.edu.scnu.danmaku.common.authentication;
 
-import cn.edu.scnu.common.utils.JwtHelper;
 import cn.edu.scnu.danmaku.common.exception.DanmakuException;
 import cn.edu.scnu.danmaku.common.response.StatusCodeEnum;
 import org.springframework.stereotype.Component;
