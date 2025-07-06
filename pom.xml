@@ -26,6 +26,19 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <!-- 引入 MyBatis-Plus BOM，统一管理依赖版本 -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-bom</artifactId>
+                <version>3.5.12</version> <!-- 或更高版本 -->
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <!-- spring web -->
         <dependency>
@@ -34,11 +47,16 @@
             <version>3.0.2</version>
         </dependency>
 
-        <!-- mybatis-plus 持久层 -->
+        <!-- mybatis-plus 持久层及其分页插件 -->
+        <!-- Spring Boot 3 对应的 starter -->
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.5.12</version>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+        </dependency>
+        <!-- jsqlparser 的自动兼容版本 用于分页-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-jsqlparser</artifactId>
         </dependency>
 
         <!-- JWT -->
