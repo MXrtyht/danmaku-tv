@@ -14,7 +14,14 @@ public class UploadController {
     @Resource
     private MinioService minioService;
 
-    // 单点上传
+
+    /**
+     * 单点上传
+     * @param file 上传的文件 前端: type = file 即可
+     * @param bucketName 桶名称
+     * @return 上传后的文件名
+     * @throws Exception 所有异常都抛出
+     */
     @PostMapping("/single")
     public String uploadFile(@RequestParam("file") MultipartFile file,
                              @RequestParam("bucketName") String bucketName) throws Exception {
