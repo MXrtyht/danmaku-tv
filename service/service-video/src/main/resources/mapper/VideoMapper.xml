@@ -6,7 +6,7 @@
 <mapper namespace="cn.edu.scnu.danmakutv.video.mapper.VideoMapper">
 
     <!-- 查询所有视频 -->
-    <select id="selectAllVideo" resultType="cn.edu.scnu.danmakutv.vo.VideoVO" resultMap="VideoWithTagsMap">
+    <select id="selectVideo" resultType="cn.edu.scnu.danmakutv.vo.VideoVO" resultMap="VideoWithTagsMap">
         SELECT * FROM t_video
         <where>
             ${ew.sqlSegment}
