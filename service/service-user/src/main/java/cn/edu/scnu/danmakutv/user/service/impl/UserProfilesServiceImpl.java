@@ -52,7 +52,7 @@ public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, Use
                 new QueryWrapper<>(UserProfiles.class)
                         .eq("uid", userId)
         );
-        BeanUtils.copyProperties(userProfilesDTO, userProfiles, "uid", "createdAt");
+        BeanUtils.copyProperties(userProfilesDTO, userProfiles, "uid", "createAt");
         userProfiles.setUpdatedAt(LocalDateTime.now());
         baseMapper.updateById(userProfiles);
     }
