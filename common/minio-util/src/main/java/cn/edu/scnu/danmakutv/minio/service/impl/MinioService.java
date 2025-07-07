@@ -1,8 +1,7 @@
-package cn.edu.scnu.danmakutv.minio.service;
+package cn.edu.scnu.danmakutv.minio.service.impl;
 
 import io.minio.*;
 import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,14 +13,6 @@ public class MinioService {
 
     @Resource
     private MinioClient minioClient;
-
-    @Value("${minio.endpoint}")
-    private String endpoint;
-
-    // 测试用
-    public void setEndpoint (String endpoint) {
-        this.endpoint = endpoint;
-    }
 
     /**
      * 上传文件到MinIO
@@ -38,12 +29,6 @@ public class MinioService {
 
         // try-with-resources 确保 InputStream 在使用后被关闭
         try (InputStream inputStream = file.getInputStream()) {
-
-            // 先"登录"
-            minioClient = MinioClient.builder()
-                                     .endpoint(endpoint)
-                                     .credentials("ROOTNAME", "CHANGEME123")
-                                     .build();
 
             // 如果桶不存在，则创建
             if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
@@ -76,11 +61,6 @@ public class MinioService {
      * @throws Exception 所有异常都抛出
      */
     public InputStream downloadFile (String bucketName, String objectName) throws Exception {
-        // 先"登录"
-        minioClient = MinioClient.builder()
-                                 .endpoint(endpoint)
-                                 .credentials("ROOTNAME", "CHANGEME123")
-                                 .build();
 
         // 下载文件
         InputStream file = minioClient.getObject(
@@ -103,11 +83,6 @@ public class MinioService {
      * @throws Exception 所有异常都抛出
      */
     public boolean deleteFile (String bucketName, String objectName) throws Exception {
-        // 先"登录"
-        minioClient = MinioClient.builder()
-                                 .endpoint(endpoint)
-                                 .credentials("ROOTNAME", "CHANGEME123")
-                                 .build();
 
         // 删除文件
         minioClient.removeObject(

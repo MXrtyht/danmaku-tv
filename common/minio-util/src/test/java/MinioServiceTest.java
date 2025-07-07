@@ -1,4 +1,4 @@
-import cn.edu.scnu.danmakutv.minio.service.MinioService;
+import cn.edu.scnu.danmakutv.minio.service.impl.MinioService;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,7 +9,6 @@ public class MinioServiceTest {
 
     public MinioServiceTest () {
         minioService = new MinioService();
-        minioService.setEndpoint("http://192.168.159.6:9000");
     }
 
     public static void main (String[] args) {
