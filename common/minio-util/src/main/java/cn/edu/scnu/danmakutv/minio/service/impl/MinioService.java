@@ -96,6 +96,8 @@ public class MinioService {
         return true;
     }
 
+    // TODO: 分片上传 断点续传 秒传
+
     /**
      * 生成唯一的文件名
      *

@@ -16,5 +16,5 @@ public interface UserProfilesDefaultConstant {
 
     LocalDate DEFAULT_BIRTHDAY = LocalDate.of(1990, 1, 1);
 
-    int DEFAULT_COIN = 10;
+    Integer DEFAULT_COIN = 10;
 }

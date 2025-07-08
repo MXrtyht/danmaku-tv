@@ -1,6 +1,5 @@
 package cn.edu.scnu.danmakutv.domain;
 
-import cn.edu.scnu.danmakutv.enums.AreaType;
 import cn.edu.scnu.danmakutv.enums.VideoType;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -17,7 +16,7 @@ public class Video {
     private Long id;
 
     @TableField("user_id")
-    private String userId;
+    private Long userId;
 
     @TableField("video_url")
     private String videoUrl;
@@ -32,10 +31,10 @@ public class Video {
     private VideoType type;
 
     @TableField("duration")
-    private int duration;
+    private Integer duration;
 
     @TableField("area")
-    private AreaType area;
+    private Integer area;
 
     @TableField("create_at")
     private LocalDateTime createdAt;
