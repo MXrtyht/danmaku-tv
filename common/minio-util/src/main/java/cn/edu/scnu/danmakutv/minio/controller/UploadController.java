@@ -2,10 +2,9 @@ package cn.edu.scnu.danmakutv.minio.controller;
 
 import cn.edu.scnu.danmakutv.minio.service.impl.MinioService;
 import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -26,5 +25,21 @@ public class UploadController {
     public String uploadFile(@RequestParam("file") MultipartFile file,
                              @RequestParam("bucketName") String bucketName) throws Exception {
         return minioService.uploadFile(file, bucketName);
+    }
+
+    /**
+     * 支持分段读取视频流
+     *
+     * @param request    请求对象
+     * @param response   响应对象
+     * @param bucketName 视频所在桶的位置
+     * @param objectName 视频的文件名
+     * @throws Exception 所有异常都抛出
+     */
+    @GetMapping(value = "/play/{bucketName}/{objectName}")
+    public void videoPlay(HttpServletRequest request, HttpServletResponse response,
+                          @PathVariable(value = "bucketName") String bucketName,
+                          @PathVariable(value = "objectName") String objectName) throws Exception{
+        minioService.videoPlay(request, response, bucketName, objectName);
     }
 }

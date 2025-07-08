@@ -11,7 +11,7 @@ public class GlobalExceptionHandler extends RuntimeException {
     @ResponseBody  // 返回json数据
     public CommonResponse error (Exception e) {
         e.printStackTrace();
-        return CommonResponse.fail(null);
+        return CommonResponse.fail(e.getMessage());
     }
 
     // 自定义异常处理

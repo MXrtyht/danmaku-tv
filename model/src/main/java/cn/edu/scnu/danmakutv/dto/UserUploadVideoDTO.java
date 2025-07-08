@@ -1,5 +1,6 @@
 package cn.edu.scnu.danmakutv.dto;
 
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.List;
@@ -21,5 +22,6 @@ public class UserUploadVideoDTO {
 
     Integer area;
 
+    @Size(min = 1, max = 10, message = "标签数量必须在1到10之间")
     List<Long> tags; // 标签id列表
 }

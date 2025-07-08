@@ -33,9 +33,11 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         video.setUpdatedAt(LocalDateTime.now());
 
         // TODO 插入视频-tag关联表
+        // TODO 返回视频ID
         for(Long tag : userUploadVideoDTO.getTags()){
             System.out.println("Tag ID: " + tag);
         }
         baseMapper.insert(video);
+        Long videoId = video.getId();
     }
 }
