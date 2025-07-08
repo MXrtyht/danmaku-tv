@@ -1,6 +1,7 @@
 package cn.edu.scnu.danmakutv.video.service;
 
 import cn.edu.scnu.danmakutv.domain.Video;
+import cn.edu.scnu.danmakutv.dto.UserUploadVideoDTO;
 import cn.edu.scnu.danmakutv.vo.VideoVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -15,4 +16,10 @@ public interface VideoService extends IService<Video> {
      * @return 分页视频信息
      */
     IPage<VideoVO> selectVideo (int page, int size, QueryWrapper<?> wrapper);
+
+    /**
+     * 上传视频
+     * @param userUploadVideoDTO 视频上传的数据传输对象
+     */
+    void uploadVideo(UserUploadVideoDTO userUploadVideoDTO);
 }
