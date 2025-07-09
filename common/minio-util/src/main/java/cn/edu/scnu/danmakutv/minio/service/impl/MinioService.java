@@ -1,11 +1,14 @@
 package cn.edu.scnu.danmakutv.minio.service.impl;
 
+import cn.edu.scnu.common.utils.HttpUtil;
 import io.minio.*;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,6 +16,9 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -20,6 +26,10 @@ public class MinioService {
 
     @Resource
     private MinioClient minioClient;
+
+    @Resource
+    @Value("${minio.endpoint}")
+    private String minioUrl;
 
     /**
      * 上传文件到MinIO
@@ -115,6 +125,7 @@ public class MinioService {
         return UUID.randomUUID() + "_" + originalFilename;
     }
 
+    @Deprecated
     public void videoPlay (HttpServletRequest request, HttpServletResponse response,
                            String bucketName, String objectName) throws Exception {
 
@@ -195,5 +206,73 @@ public class MinioService {
             e.printStackTrace();
         }
 
+    }
+
+    public void videoSlice (HttpServletRequest request, HttpServletResponse response,
+                            String bucketName, String objectName) throws Exception {
+
+        // 获取视频文件的元信息（包括 Content-Type、文件大小等）
+        StatObjectResponse metaInfo = minioClient.statObject(
+                StatObjectArgs.builder()
+                              .bucket(bucketName)
+                              .object(objectName)
+                              .build()
+        );
+
+        // System.out.println("test: " + metaInfo.contentType() + " " + metaInfo.size());
+
+        // 获取文件类型和大小
+        String contentType = metaInfo.contentType();
+        Long fileSize = metaInfo.size();
+
+        // 收集所有请求头信息
+        Enumeration<String> headerNames = request.getHeaderNames();
+        Map<String, Object> headers = new HashMap<>();
+        while (headerNames.hasMoreElements()) {
+            String header = headerNames.nextElement();
+            headers.put(header, request.getHeader(header));
+        }
+
+        // 获取客户端请求的 Range 字段
+        String rangeStr = request.getHeader("Range");
+        String[] range;
+
+        // 如果没有指定 Range，则默认从头到尾
+        if (rangeStr == null || StringUtils.isBlank(rangeStr)) {
+            rangeStr = "bytes=0-" + (fileSize - 1);
+        }
+
+        // 解析 Range
+        range = rangeStr.split("bytes=|-");
+
+        Long beginPos = 0L;
+        Long endPos = fileSize - 1;
+
+        // 如果有起始位置
+        if (range.length >= 2) {
+            beginPos = Long.parseLong(range[1]);
+        }
+
+        // 如果有结束位置
+        if (range.length >= 3) {
+            endPos = Long.parseLong(range[2]);
+        }
+
+        // 计算实际请求的分片长度
+        Long sliceLength = (endPos - beginPos) + 1;
+
+        // 设置响应头
+        String contentRange = "bytes " + beginPos + "-" + endPos + "/" + fileSize;
+        response.setHeader("Accept-Ranges", "bytes");
+        response.setHeader("Content-Range", contentRange);
+        response.setHeader("Content-Type", contentType);
+        response.setContentLength(sliceLength.intValue());
+        response.setStatus(HttpServletResponse.SC_PARTIAL_CONTENT); // 206
+
+        // MinIO 文件 URL
+        String url = minioUrl + "/" + bucketName + "/" + objectName;
+
+        // 发起请求并将数据写入响应流
+        HttpUtil.get(url, headers, response);
     }
 }
