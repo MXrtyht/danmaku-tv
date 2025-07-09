@@ -14,6 +14,7 @@
     <modules>
         <module>service-user</module>
         <module>service-video</module>
+        <module>service-interaction</module>
     </modules>
 
     <properties>
