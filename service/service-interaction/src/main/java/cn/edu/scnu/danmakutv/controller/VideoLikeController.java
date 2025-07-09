@@ -6,6 +6,8 @@ import cn.edu.scnu.danmakutv.service.VideoLikeService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/video")
 public class VideoLikeController {
@@ -30,6 +32,7 @@ public class VideoLikeController {
 
     /**
      * 取消视频点赞
+     *
      * @param videoId 视频ID
      * @return 响应
      */
@@ -40,4 +43,20 @@ public class VideoLikeController {
         return CommonResponse.success("");
     }
 
+    /**
+     * 获取视频点赞数量
+     *
+     * @param videoId 视频ID
+     * @return CommonResponse<Map < Long, Boolean>> Long:视频点赞数 Boolean:是否已点赞
+     */
+    @GetMapping("/like")
+    public CommonResponse<Map<String, Object>> getVideoLikeCount (Long videoId) {
+        Long userId = null;
+        try {
+            userId = authenticationSupport.getCurrentUserId();
+        } catch (Exception ignore) {
+        }
+        Map<String, Object> result = videoLikeService.getVideoLikeCount(videoId, userId);
+        return CommonResponse.success(result);
+    }
 }

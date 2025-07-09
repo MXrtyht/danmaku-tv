@@ -3,7 +3,8 @@ POST http://localhost:8084/video/like
 Content-Type: application/x-www-form-urlencoded
 token: eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAA_6tWKi5NUrJSSknMy03MLtUNDXYNUtJRSq0oULIyNDc1NjUxNDO11FEqLU4t8kxRsjKqBQA7ZJ38MgAAAA.Hx_lbnuRh9LIr0G8PuISLVhh_-rpSeaVRkdcWEfqCrJ6X-U2uOYPMsll_tE70M-qrzrxqY0iDCis-LGYw1cvIA
 
-videoId=1
+videoId = 1
+
 ###
 
 # 测试取消点赞接口
@@ -11,5 +12,19 @@ DELETE http://localhost:8084/video/like
 Content-Type: application/x-www-form-urlencoded
 token: eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAA_6tWKi5NUrJSSknMy03MLtUNDXYNUtJRSq0oULIyNDc1NjUxNDO11FEqLU4t8kxRsjKqBQA7ZJ38MgAAAA.Hx_lbnuRh9LIr0G8PuISLVhh_-rpSeaVRkdcWEfqCrJ6X-U2uOYPMsll_tE70M-qrzrxqY0iDCis-LGYw1cvIA
 
-videoId=1
+videoId = 1
+
+###
+
+# 测试视频点赞数接口(带token)
+GET http://localhost:8084/video/like?videoId=1
+token: eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAA_6tWKi5NUrJSSknMy03MLtUNDXYNUtJRSq0oULIyNDc1NjUxNDO11FEqLU4t8kxRsjKqBQA7ZJ38MgAAAA.Hx_lbnuRh9LIr0G8PuISLVhh_-rpSeaVRkdcWEfqCrJ6X-U2uOYPMsll_tE70M-qrzrxqY0iDCis-LGYw1cvIA
+Content-Type: application/x-www-form-urlencoded
+
+###
+
+# 测试视频点赞数接口(无token)
+GET http://localhost:8084/video/like?videoId=1
+Content-Type: application/x-www-form-urlencoded
+
 ###
