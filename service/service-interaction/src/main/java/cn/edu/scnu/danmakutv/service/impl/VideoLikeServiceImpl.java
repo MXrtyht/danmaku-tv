@@ -27,4 +27,19 @@ public class VideoLikeServiceImpl extends ServiceImpl<VideoLikeMapper, VideoLike
 
         baseMapper.insert(videoLike);
     }
+
+    @Override
+    public void deleteVideoLike (Long userId, Long videoId) {
+        // TODO 检查videoId是否存在 集成微服务 调用video-service的接口
+        VideoLike videoLike = baseMapper.selectOne(
+                new QueryWrapper<VideoLike>().eq("video_id", videoId)
+                                             .eq("user_id", userId)
+        );
+        if (videoLike == null) {
+            throw new DanmakuException("未点赞", 3002);
+        }
+
+        baseMapper.delete(new QueryWrapper<VideoLike>().eq("video_id", videoId)
+                                                       .eq("user_id", userId));
+    }
 }

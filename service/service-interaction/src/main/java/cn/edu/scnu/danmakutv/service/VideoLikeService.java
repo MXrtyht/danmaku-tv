@@ -5,4 +5,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 public interface VideoLikeService extends IService<VideoLike> {
     void addVideoLike (Long userId, Long videoId);
+
+    void deleteVideoLike (Long userId, Long videoId);
 }

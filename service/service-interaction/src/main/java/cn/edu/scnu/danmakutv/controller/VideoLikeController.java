@@ -4,9 +4,7 @@ import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
 import cn.edu.scnu.danmakutv.service.VideoLikeService;
 import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/video")
@@ -19,6 +17,7 @@ public class VideoLikeController {
 
     /**
      * 视频点赞
+     *
      * @param videoId 视频ID
      * @return 响应
      */
@@ -28,4 +27,17 @@ public class VideoLikeController {
         videoLikeService.addVideoLike(userId, videoId);
         return CommonResponse.success("");
     }
+
+    /**
+     * 取消视频点赞
+     * @param videoId 视频ID
+     * @return 响应
+     */
+    @DeleteMapping("/like")
+    public CommonResponse<String> deleteVideoLike (Long videoId) {
+        Long userId = authenticationSupport.getCurrentUserId();
+        videoLikeService.deleteVideoLike(userId, videoId);
+        return CommonResponse.success("");
+    }
+
 }
