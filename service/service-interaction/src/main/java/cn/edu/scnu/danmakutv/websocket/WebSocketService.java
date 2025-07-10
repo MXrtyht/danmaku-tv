@@ -4,6 +4,7 @@ import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -24,6 +25,12 @@ public class WebSocketService {
     private Session session;
 
     private String sessionId;
+
+    private static ApplicationContext APPLICATION_CONTEXT;
+
+    public static void setApplicationContext(ApplicationContext applicationContext) {
+        WebSocketService.APPLICATION_CONTEXT = applicationContext;
+    }
 
     // 建立连接
     @OnOpen
