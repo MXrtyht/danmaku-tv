@@ -9,7 +9,7 @@ public class WebSocketConfig {
 
     // 自动注册所有@ServerEndpoint注解的类
     @Bean
-    public ServerEndpointExporter serverEndpointExporter() {
+    public ServerEndpointExporter serverEndpointExporter () {
         return new ServerEndpointExporter();
     }
 }

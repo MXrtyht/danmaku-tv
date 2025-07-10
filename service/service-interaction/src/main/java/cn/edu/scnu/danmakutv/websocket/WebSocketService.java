@@ -1,6 +1,12 @@
 package cn.edu.scnu.danmakutv.websocket;
 
+import cn.edu.scnu.danmakutv.common.authentication.JwtHelper;
+import cn.edu.scnu.danmakutv.domain.Danmaku;
+import cn.edu.scnu.danmakutv.service.DanmakuService;
+import com.alibaba.fastjson.JSONObject;
+import io.netty.util.internal.StringUtil;
 import jakarta.websocket.*;
+import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,36 +19,37 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 @Component
-@ServerEndpoint("/wsserver")
+@ServerEndpoint("/wsserver/{token}")
 public class WebSocketService {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     private static final AtomicInteger ONLINE_COUNT = new AtomicInteger(0);
-
     private static final ConcurrentHashMap<String, WebSocketService> WEBSOCKET_MAP = new ConcurrentHashMap<>();
-
-    private Session session;
-
-    private String sessionId;
-
     private static ApplicationContext APPLICATION_CONTEXT;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private Session session;
+    private String sessionId;
+    private Long userId;
 
-    public static void setApplicationContext(ApplicationContext applicationContext) {
+    public static void setApplicationContext (ApplicationContext applicationContext) {
         WebSocketService.APPLICATION_CONTEXT = applicationContext;
     }
 
     // 建立连接
     @OnOpen
-    public void openConnection(Session session){
+    public void openConnection (Session session, @PathParam("token") String token) {
         this.session = session;
         this.sessionId = session.getId();
 
+        // 未登录时没有 userId
+        try{
+            this.userId = JwtHelper.getUserId(token);
+        }catch (Exception ignored){}
+
         // 有旧的连接 则移除
-        if(WEBSOCKET_MAP.containsKey(sessionId)){
+        if (WEBSOCKET_MAP.containsKey(sessionId)) {
             WEBSOCKET_MAP.remove(sessionId);
             WEBSOCKET_MAP.put(sessionId, this);
-        }else{
+        } else {
             // 新的连接 则添加, 且在线人数加1
             WEBSOCKET_MAP.put(sessionId, this);
             ONLINE_COUNT.getAndIncrement();
@@ -52,18 +59,18 @@ public class WebSocketService {
         logger.info("用户连接成功：" + sessionId + ", 当前在线人数为：" + ONLINE_COUNT.get());
 
         // 通知前端
-        try{
+        try {
             this.sendMessage("成功");
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("连接异常", e);
         }
     }
 
     // 取消连接
     @OnClose
-    public void closeConnection(){
+    public void closeConnection () {
         // 移除连接
-        if(WEBSOCKET_MAP.containsKey(sessionId)){
+        if (WEBSOCKET_MAP.containsKey(sessionId)) {
             WEBSOCKET_MAP.remove(sessionId);
             ONLINE_COUNT.getAndDecrement();
         }
@@ -71,16 +78,41 @@ public class WebSocketService {
     }
 
     @OnMessage
-    public void onMessage(String message){
+    public void onMessage (String message) {
+        logger.info("用户信息：" + sessionId + ", 报文：" + message);
+        if (!StringUtil.isNullOrEmpty(message)) {
+            try {
+                // 群发消息
+                for (WebSocketService webSocketService : WEBSOCKET_MAP.values()) {
+                    if (webSocketService.session.isOpen()) {
+                        webSocketService.sendMessage(message);
+                    }
+                }
 
+                // 登陆的用户才可发弹幕
+                if(this.userId != null){
+                    // 保存弹幕到数据库
+                    Danmaku danmaku = JSONObject.parseObject(message, Danmaku.class);
+                    danmaku.setUserId(userId);
+                    DanmakuService danmakuService = APPLICATION_CONTEXT.getBean(DanmakuService.class);
+                    danmakuService.addDanmaku(danmaku);
+
+                    // 保存弹幕到redis
+                    danmakuService.addDanmakuToRedis(danmaku);
+                }
+
+            } catch (Exception e) {
+                logger.error("弹幕接收出现问题", e);
+            }
+        }
     }
 
     @OnError
-    public void onError(Throwable error){
+    public void onError (Throwable error) {
 
     }
 
-    public void sendMessage(String message) throws IOException {
+    public void sendMessage (String message) throws IOException {
         this.session.getBasicRemote().sendText(message);
     }
 }
