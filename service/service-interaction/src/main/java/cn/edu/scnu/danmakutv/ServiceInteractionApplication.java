@@ -8,7 +8,7 @@ import org.springframework.context.ApplicationContext;
 @SpringBootApplication
 public class ServiceInteractionApplication {
     public static void main (String[] args) {
-        ApplicationContext app =  SpringApplication.run(ServiceInteractionApplication.class, args);
+        ApplicationContext app = SpringApplication.run(ServiceInteractionApplication.class, args);
         WebSocketService.setApplicationContext(app);
     }
 }
