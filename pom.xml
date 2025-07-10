@@ -46,6 +46,13 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <version>3.0.2</version>
         </dependency>
+        <!-- spring websocket -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
 
         <!-- mybatis-plus 持久层及其分页插件 -->
         <!-- Spring Boot 3 对应的 starter -->
