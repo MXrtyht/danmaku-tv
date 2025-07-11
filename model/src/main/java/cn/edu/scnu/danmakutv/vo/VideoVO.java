@@ -1,7 +1,6 @@
 package cn.edu.scnu.danmakutv.vo;
 
 import cn.edu.scnu.danmakutv.domain.VideoTag;
-import cn.edu.scnu.danmakutv.enums.VideoType;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -20,7 +19,7 @@ public class VideoVO {
 
     private String title;
 
-    private VideoType type;
+    private boolean type;
 
     private int duration;
 

@@ -1,6 +1,5 @@
 package cn.edu.scnu.danmakutv.domain;
 
-import cn.edu.scnu.danmakutv.enums.VideoType;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -28,7 +27,7 @@ public class Video {
     private String title;
 
     @TableField("type")
-    private VideoType type;
+    private boolean type;
 
     @TableField("duration")
     private Integer duration;
