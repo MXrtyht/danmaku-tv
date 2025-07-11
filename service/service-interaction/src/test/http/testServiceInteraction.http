@@ -42,5 +42,8 @@ Content-Type: application/json
 
 GET http://localhost:8084/danmaku?videoId=1&startTime=2025-07-01 00:00:00&endTime=2025-07-11 23:00:00
 
+###
+
+GET http://localhost:8084/danmaku?videoId=1
 
 ###

@@ -50,7 +50,13 @@ public class DanmakuServiceImpl extends ServiceImpl<DanmakuMapper, Danmaku> impl
         if (!StringUtil.isNullOrEmpty(redisValue) && !"[]".equals(redisValue)) {
             danmakuList = JSON.parseArray(redisValue, Danmaku.class);
 
+            // 如果没有时间段, 返回所有结果
+            if (startTime == null || endTime == null){
+                return danmakuList;
+            }
+
             List<Danmaku> childList = new ArrayList<>();
+            // 取出指定时间段的弹幕
             for (Danmaku danmaku : danmakuList) {
                 LocalDateTime createAt = danmaku.getCreateAt();
                 if (createAt.isAfter(startTime) && createAt.isBefore(endTime)) {
@@ -67,13 +73,9 @@ public class DanmakuServiceImpl extends ServiceImpl<DanmakuMapper, Danmaku> impl
             if (videoId != null) {
                 wrapper.eq("video_id", videoId);
             }
-            if (startTime != null) {
-                wrapper.ge("create_at", startTime);
+            if (startTime != null && endTime != null) {
+                wrapper.ge("create_at", startTime).le("create_at", endTime);
             }
-            if (endTime != null) {
-                wrapper.le("create_at", endTime);
-            }
-
             danmakuList = baseMapper.selectList(wrapper);
 
             // 保存到redis
