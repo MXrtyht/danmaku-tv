@@ -104,4 +104,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         return JwtHelper.createToken(user.getId());
     }
+
+    @Override
+    public User getUserById (Long Id) {
+        return this.baseMapper.selectById(Id);
+    }
 }

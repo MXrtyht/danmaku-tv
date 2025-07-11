@@ -10,7 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user/")
+@RequestMapping("/user")
 public class UserProfilesController {
     @Resource
     private UserProfilesService userProfilesService;
