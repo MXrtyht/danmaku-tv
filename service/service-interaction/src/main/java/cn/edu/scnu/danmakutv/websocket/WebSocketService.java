@@ -112,7 +112,7 @@ public class WebSocketService {
                     Danmaku danmaku = JSONObject.parseObject(message, Danmaku.class);
                     danmaku.setUserId(userId);
                     DanmakuService danmakuService = APPLICATION_CONTEXT.getBean(DanmakuService.class);
-                    danmakuService.addDanmaku(danmaku);
+                    danmakuService.asyncAddDanmaku(danmaku);
 
                     // 保存弹幕到redis
                     danmakuService.addDanmakuToRedis(danmaku);
