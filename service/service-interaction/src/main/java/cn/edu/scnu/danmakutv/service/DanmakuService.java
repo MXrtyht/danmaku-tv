@@ -14,5 +14,5 @@ public interface DanmakuService extends IService<Danmaku> {
     List<Danmaku> getDanmaku (Long videoId, LocalDateTime startTime, LocalDateTime endTime);
 
     // 添加弹幕到redis
-    public void addDanmakuToRedis(Danmaku danmaku);
+    void addDanmakuToRedis (Danmaku danmaku);
 }

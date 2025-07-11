@@ -83,11 +83,11 @@ public class DanmakuServiceImpl extends ServiceImpl<DanmakuMapper, Danmaku> impl
         }
     }
 
-    public void addDanmakuToRedis(Danmaku danmaku) {
+    public void addDanmakuToRedis (Danmaku danmaku) {
         String key = DANMAKU_KEY + danmaku.getVideoId();
         String value = redisTemplate.opsForValue().get(key);
         List<Danmaku> list = new ArrayList<>();
-        if(!StringUtil.isNullOrEmpty(value)){
+        if (!StringUtil.isNullOrEmpty(value)) {
             list = JSON.parseArray(value, Danmaku.class);
         }
         list.add(danmaku);
