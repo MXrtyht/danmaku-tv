@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -113,8 +114,11 @@ public class WebSocketService {
                     // 保存弹幕到数据库
                     Danmaku danmaku = JSONObject.parseObject(message, Danmaku.class);
                     danmaku.setUserId(userId);
+                    danmaku.setCreateAt(LocalDateTime.now());
+                    System.out.println("-------------弹幕内容: " + danmaku.getId() + " " + danmaku.getCreateAt());
                     DanmakuService danmakuService = APPLICATION_CONTEXT.getBean(DanmakuService.class);
-                    danmakuService.asyncAddDanmaku(danmaku);
+                    // danmakuService.asyncAddDanmaku(danmaku);
+                    danmakuService.addDanmaku(danmaku);
 
                     // 保存弹幕到redis
                     danmakuService.addDanmakuToRedis(danmaku);
