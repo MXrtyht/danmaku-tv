@@ -15,10 +15,12 @@ import org.apache.rocketmq.common.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -127,6 +129,20 @@ public class WebSocketService {
     @OnError
     public void onError (Throwable error) {
 
+    }
+
+    // 定时任务，通知前端在线人数
+    // fixedRate 单位毫秒
+    @Scheduled(fixedRate=10000)
+    private void noticeOnlineCount() throws IOException {
+        for(WebSocketService webSocketService : WEBSOCKET_MAP.values()){
+            if(webSocketService.session.isOpen()){
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("onlineCount", ONLINE_COUNT.get());
+                jsonObject.put("msg", "当前在线人数为" + ONLINE_COUNT.get());
+                webSocketService.sendMessage(jsonObject.toJSONString());
+            }
+        }
     }
 
     public void sendMessage (String message) throws IOException {
