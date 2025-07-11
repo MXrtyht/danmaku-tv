@@ -1,0 +1,23 @@
+# 测试注册接口
+POST http://localhost:8081/user/register
+Content-Type: application/json
+
+{
+  "phone": "1832040346",
+  "email": "1922382997@qq.com",
+  "password": "dnPviG4PPiyRciXY8oDnX2MFhI7IDn1HOf607XkzjGk8hjJKpL+DE2Y0vvv8G3+5NR4GMOTbtTQxbgNzw1OO5hOWCzx4SCzxHj4P21olJzHwad0icX+IWyBbANqMpkR5KCDUycVOMEYyyZa+FGs1GtSWQrHV9Mx2FGCLHTGeUSU="
+}
+
+###
+
+# 测试关注接口
+POST http://localhost:8081/user/follow
+Content-Type: application/json
+
+{
+  "userId": 2,
+  "followId": 3,
+  "createdAt": "2025-07-01T00:00:00"
+}
+
+###
