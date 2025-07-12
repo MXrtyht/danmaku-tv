@@ -75,6 +75,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userProfilesService.addUserProfiles(user.getId());
     }
 
+    /**
+     * 用户登录
+     *
+     * @param userLoginDTO 用户登录信息
+     * @return 返回JWT Token
+     */
     @Override
     public String loginUser (UserLoginDTO userLoginDTO) {
         User user = baseMapper.selectOne(
@@ -105,6 +111,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return JwtHelper.createToken(user.getId());
     }
 
+    /**
+     * 根据id获取用户信息
+     *
+     * @param Id 用户ID
+     * @return 返回用户信息
+     */
     @Override
     public User getUserById (Long Id) {
         return this.baseMapper.selectById(Id);

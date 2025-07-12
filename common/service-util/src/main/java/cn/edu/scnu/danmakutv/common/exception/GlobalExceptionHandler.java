@@ -5,6 +5,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+/**
+ * 全局异常处理器
+ * 配合DanmakuException使用
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler extends RuntimeException {
     @ExceptionHandler(Exception.class) // 异常处理器

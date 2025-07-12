@@ -25,28 +25,39 @@ public class DanmakuServiceImpl extends ServiceImpl<DanmakuMapper, Danmaku> impl
     @Resource
     private RedisTemplate<String, String> redisTemplate;
 
+    /**
+     * 添加弹幕
+     * @param danmaku 弹幕内容
+     */
     @Override
     public void addDanmaku (Danmaku danmaku) {
         baseMapper.insert(danmaku);
     }
 
+    /**
+     * 异步添加弹幕
+     * @param danmaku 弹幕内容
+     */
     @Async
     public void asyncAddDanmaku (Danmaku danmaku) {
         baseMapper.insert(danmaku);
     }
 
+    /**
+     * 获取视频弹幕
+     * @param videoId 视频ID
+     * @param startTime 可选的开始时间
+     * @param endTime 可选的结束时间
+     * @return 弹幕列表
+     */
     @Override
     public List<Danmaku> getDanmaku (Long videoId, LocalDateTime startTime, LocalDateTime endTime) {
-
-        System.out.println("-------------" + startTime + "  " + endTime);
 
         // 先查Redis中的弹幕数据
         String redisKey = DANMAKU_KEY + videoId;
         String redisValue = redisTemplate.opsForValue().get(redisKey);
         List<Danmaku> danmakuList;
 
-        System.out.println("------------------------------Redis Value: " + redisValue);
-        System.out.println("------------------------------Redis Value: " + StringUtil.isNullOrEmpty(redisValue));
         if (!StringUtil.isNullOrEmpty(redisValue) && !"[]".equals(redisValue)) {
             danmakuList = JSON.parseArray(redisValue, Danmaku.class);
 
@@ -85,6 +96,10 @@ public class DanmakuServiceImpl extends ServiceImpl<DanmakuMapper, Danmaku> impl
         }
     }
 
+    /**
+     * 弹幕添加到Redis
+     * @param danmaku 弹幕内容
+     */
     public void addDanmakuToRedis (Danmaku danmaku) {
         String key = DANMAKU_KEY + danmaku.getVideoId();
         String value = redisTemplate.opsForValue().get(key);

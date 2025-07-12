@@ -17,6 +17,10 @@ import java.util.List;
 @Service
 public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, UserProfiles> implements UserProfilesService {
 
+    /**
+     * 添加用户个人资料
+     * @param userId 用户ID
+     */
     @Override
     public void addUserProfiles (Long userId) {
         UserProfiles userProfiles = new UserProfiles();
@@ -34,6 +38,11 @@ public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, Use
         baseMapper.insert(userProfiles);
     }
 
+    /**
+     * 根据用户ID获取用户个人资料
+     * @param userId 用户ID
+     * @return 返回用户个人资料
+     */
     @Override
     public UserProfilesVO getUserProfilesByUserId (Long userId) {
         UserProfiles userProfiles = baseMapper.selectOne(
@@ -47,6 +56,11 @@ public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, Use
         return userProfilesVO;
     }
 
+    /**
+     * 更新用户个人资料
+     * @param userId 用户ID
+     * @param userProfilesDTO 包含更新信息的DTO
+     */
     @Override
     public void updateUserProfiles (Long userId, UserProfilesDTO userProfilesDTO) {
         UserProfiles userProfiles = baseMapper.selectOne(
@@ -58,6 +72,11 @@ public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, Use
         baseMapper.updateById(userProfiles);
     }
 
+    /**
+     * 根据用户ID列表获取用户个人资料
+     * @param userIds 用户ID列表
+     * @return 返回用户个人资料列表
+     */
     @Override
     public List<UserProfiles> getUserProfilesByUserIds (List<Long> userIds) {
         return this.baseMapper.selectList(

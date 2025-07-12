@@ -3,6 +3,9 @@ package cn.edu.scnu.danmakutv.common.exception;
 import cn.edu.scnu.danmakutv.common.response.StatusCodeEnum;
 import lombok.Data;
 
+/**
+ * 自定义异常类，用于处理该项目相关的异常情况
+ */
 @Data
 public class DanmakuException extends RuntimeException {
     // 异常状态码

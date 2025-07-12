@@ -17,12 +17,26 @@ import java.time.LocalDateTime;
 
 @Service
 public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements VideoService {
+    /**
+     * 查询视频列表
+     *
+     * @param page    分页页码
+     * @param size    分页大小
+     * @param wrapper 查询条件
+     * @return 包含视频列表的分页结果
+     */
     @Override
     public IPage<VideoVO> selectVideo (int page, int size, QueryWrapper<?> wrapper) {
         Page<VideoVO> pageRequest = new Page<>(page, size);
         return baseMapper.selectVideo(pageRequest, wrapper);
     }
 
+
+    /**
+     * 上传视频
+     *
+     * @param userUploadVideoDTO 包含视频信息
+     */
     @Transactional
     @Override
     public void uploadVideo (UserUploadVideoDTO userUploadVideoDTO) {

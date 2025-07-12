@@ -35,6 +35,10 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
     @Resource
     private FollowGroupService followGroupService;
 
+    /**
+     * 添加用户关注
+     * @param userFollowDTO 包含用户ID、被关注用户ID和分组ID
+     */
     @Override
     @Transactional
     public void addUserFollow (UserFollowDTO userFollowDTO) {
@@ -75,6 +79,11 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
     // 先获取关注的用户列表
     // 查询所有已关注的用户信息
     // 根据关注分组进行分类
+    /**
+     * 获取用户关注分组和对应的用户列表
+     * @param userId 用户ID
+     * @return 包含关注分组和相应分组的用户信息的列表
+     */
     @Override
     public List<UserFollowsWithGroupVO> getUserFollowGroups (Long userId) {
         List<UserFollowsWithGroupVO> result = new ArrayList<>();
@@ -132,6 +141,12 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
     }
 
     // 获取粉丝列表
+
+    /**
+     * 获取用户的粉丝列表
+     * @param userId 用户ID
+     * @return 包含粉丝用户信息和是否已关注的Map
+     */
     @Override
     public Map<UserProfiles, Boolean> getFans (Long userId) {
         // 查询所有粉丝

@@ -208,6 +208,14 @@ public class MinioService {
 
     }
 
+    /**
+     * 分片视频流处理
+     * @param request 请求
+     * @param response 响应
+     * @param bucketName 视频所在桶的位置
+     * @param objectName 视频的文件名
+     * @throws Exception 所有异常都抛出
+     */
     public void videoSlice (HttpServletRequest request, HttpServletResponse response,
                             String bucketName, String objectName) throws Exception {
 

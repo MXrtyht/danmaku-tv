@@ -20,6 +20,11 @@ public class FollowGroupServiceImpl extends ServiceImpl<FollowGroupMapper, Follo
     }
 
     // 根据用户ID获取关注分组列表
+    /**
+     * 获取指定用户的关注分组列表
+     * @param userId 用户ID
+     * @return 返回用户的关注分组列表，包含默认分组
+     */
     @Override
     public List<FollowGroup> getFollowGroupsByUserId (Long userId) {
         List<FollowGroup> followGroups = this.baseMapper.selectList(
@@ -33,6 +38,11 @@ public class FollowGroupServiceImpl extends ServiceImpl<FollowGroupMapper, Follo
     }
 
     // 创建关注分组
+    /**
+     * 创建一个新的关注分组
+     * @param createFollowGroupDTO 包含分组信息的DTO
+     * @return 返回新创建的分组ID
+     */
     @Override
     public Long createFollowGroup (CreateFollowGroupDTO createFollowGroupDTO) {
         // 检查分组名称是否已存在
