@@ -16,8 +16,8 @@ public class UserProfiles {
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    @TableField("uid")
-    private Long uid;
+    @TableField("user_id")
+    private Long userId;
 
     @TableField("nickname")
     private String nickname;

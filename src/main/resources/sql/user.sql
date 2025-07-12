@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS `t_user_profiles`;
 CREATE TABLE IF NOT EXISTS `t_user_profiles`
 (
     `id`           BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `uid`          BIGINT UNSIGNED NOT NULL UNIQUE COMMENT '关联用户表 uid',
+    `user_id`          BIGINT UNSIGNED NOT NULL UNIQUE COMMENT '关联用户表 userId',
     `nickname`     VARCHAR(20)     NOT NULL COMMENT '昵称',
     `gender`       TINYINT(1)      NOT NULL DEFAULT 1 COMMENT '性别 (0:女, 1:男, 2:未知)',
     `birthday`     DATE            NOT NULL DEFAULT '1970-01-01' COMMENT '出生日期',

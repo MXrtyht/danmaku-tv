@@ -21,7 +21,7 @@ public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, Use
         UserProfiles userProfiles = new UserProfiles();
 
         // 设置默认值
-        userProfiles.setUid(userId);
+        userProfiles.setUserId(userId);
         userProfiles.setNickname(UserProfilesDefaultConstant.DEFAULT_NICKNAME_PREFIX + userId);
         userProfiles.setAvatar(UserProfilesDefaultConstant.DEFAULT_AVATAR);
         userProfiles.setGender(UserProfilesDefaultConstant.DEFAULT_GENDER);
@@ -37,7 +37,7 @@ public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, Use
     public UserProfilesVO getUserProfilesByUserId (Long userId) {
         UserProfiles userProfiles = baseMapper.selectOne(
                 new QueryWrapper<>(UserProfiles.class)
-                        .eq("uid", userId)
+                        .eq("userId", userId)
         );
 
         UserProfilesVO userProfilesVO = new UserProfilesVO();
@@ -50,9 +50,9 @@ public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, Use
     public void updateUserProfiles (Long userId, UserProfilesDTO userProfilesDTO) {
         UserProfiles userProfiles = baseMapper.selectOne(
                 new QueryWrapper<>(UserProfiles.class)
-                        .eq("uid", userId)
+                        .eq("userId", userId)
         );
-        BeanUtils.copyProperties(userProfilesDTO, userProfiles, "uid", "createAt");
+        BeanUtils.copyProperties(userProfilesDTO, userProfiles, "userId", "createAt");
         userProfiles.setUpdatedAt(LocalDateTime.now());
         baseMapper.updateById(userProfiles);
     }
