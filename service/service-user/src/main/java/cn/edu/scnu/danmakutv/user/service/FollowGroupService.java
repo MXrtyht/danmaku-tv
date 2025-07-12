@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
 
 public interface FollowGroupService extends IService<FollowGroup> {
-    public FollowGroup getById(Long id);
-    List<FollowGroup> getFollowGroupsByUserId(Long userId);
+    FollowGroup getById (Long id);
+
+    List<FollowGroup> getFollowGroupsByUserId (Long userId);
 }

@@ -55,8 +55,8 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
 
         Long followId = userFollowDTO.getFollowId();
         // 检查被关注用户是否存在
-        User followUser =  userService.getUserById(followId);
-        if( followUser == null) {
+        User followUser = userService.getUserById(followId);
+        if (followUser == null) {
             throw new DanmakuException("被关注用户不存在", 400);
         }
 
@@ -87,36 +87,36 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
                         .eq("user_id", userId)
         );
 
-        if(userFollows.isEmpty()){
+        if (userFollows.isEmpty()) {
             return result;
         }
 
         // 获取所有关注的用户的id
         Set<Long> followUserIds = userFollows.stream()
-                .map(UserFollow::getFollowId)
-                .collect(Collectors.toSet());
+                                             .map(UserFollow::getFollowId)
+                                             .collect(Collectors.toSet());
         // 查询所有关注的用户信息
         List<UserProfiles> followUserProfiles = userProfilesService.getUserProfilesByUserIds(followUserIds.stream()
                                                                                                           .toList());
 
         // 获取所有关注分组
         List<FollowGroup> followGroups = followGroupService.getFollowGroupsByUserId(userId);
-        followGroups.add (
+        followGroups.add(
                 // 添加默认分组
                 0, followGroupService.getById(1)
         );
 
         // 对关注分组进行分类
-        for(FollowGroup followGroup : followGroups){
+        for (FollowGroup followGroup : followGroups) {
             UserFollowGroupVO userFollowGroupVO = new UserFollowGroupVO();
 
             BeanUtils.copyProperties(followGroup, userFollowGroupVO);
             userFollowGroupVO.setUserProfilesList(new ArrayList<>());
 
             // 获取当前分组下 关注的用户
-            for(UserFollow userFollow : userFollows){
+            for (UserFollow userFollow : userFollows) {
                 // 如果关注的用户在当前分组下
-                if(userFollow.getGroupId().equals(followGroup.getId())){
+                if (userFollow.getGroupId().equals(followGroup.getId())) {
                     userFollowGroupVO.getUserProfilesList().add(
                             followUserProfiles.stream()
                                               .filter(profile -> profile.getUserId().equals(userFollow.getFollowId()))

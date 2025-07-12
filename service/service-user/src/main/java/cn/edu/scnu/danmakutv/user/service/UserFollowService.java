@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
 
 public interface UserFollowService extends IService<UserFollow> {
-    void addUserFollow(UserFollowDTO userFollowDTO);
-    List<UserFollowGroupVO> getUserFollowGroups(Long userId);
+    void addUserFollow (UserFollowDTO userFollowDTO);
+
+    List<UserFollowGroupVO> getUserFollowGroups (Long userId);
 }

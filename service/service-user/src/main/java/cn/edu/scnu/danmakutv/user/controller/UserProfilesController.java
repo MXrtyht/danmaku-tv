@@ -1,9 +1,9 @@
 package cn.edu.scnu.danmakutv.user.controller;
 
+import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
 import cn.edu.scnu.danmakutv.dto.UserProfilesDTO;
 import cn.edu.scnu.danmakutv.user.service.UserProfilesService;
-import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.vo.UserProfilesVO;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;

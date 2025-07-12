@@ -1,10 +1,7 @@
 package cn.edu.scnu.danmakutv.user.controller;
 
 import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
-import cn.edu.scnu.danmakutv.common.exception.DanmakuException;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
-import cn.edu.scnu.danmakutv.domain.Danmaku;
-import cn.edu.scnu.danmakutv.domain.UserFollow;
 import cn.edu.scnu.danmakutv.dto.UserFollowDTO;
 import cn.edu.scnu.danmakutv.user.service.UserFollowService;
 import cn.edu.scnu.danmakutv.vo.UserFollowGroupVO;
@@ -13,7 +10,6 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/user")
@@ -25,7 +21,7 @@ public class UserFollowController {
     private AuthenticationSupport authenticationSupport;
 
     @PostMapping("/follow")
-    public CommonResponse<String> followUser(@Valid @RequestBody UserFollowDTO userFollowDTO) {
+    public CommonResponse<String> followUser (@Valid @RequestBody UserFollowDTO userFollowDTO) {
         Long userId = authenticationSupport.getCurrentUserId();
         userFollowDTO.setUserId(userId);
 
@@ -34,7 +30,7 @@ public class UserFollowController {
     }
 
     @GetMapping("/follow")
-    public CommonResponse<List<UserFollowGroupVO>> getFollowGroups() {
+    public CommonResponse<List<UserFollowGroupVO>> getFollowGroups () {
         Long userId = authenticationSupport.getCurrentUserId();
 
         List<UserFollowGroupVO> followGroups = userFollowService.getUserFollowGroups(userId);

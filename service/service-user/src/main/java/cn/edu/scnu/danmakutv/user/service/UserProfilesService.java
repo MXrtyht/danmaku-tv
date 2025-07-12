@@ -14,5 +14,5 @@ public interface UserProfilesService extends IService<UserProfiles> {
 
     void updateUserProfiles (Long userId, UserProfilesDTO userProfilesDTO);
 
-    List<UserProfiles> getUserProfilesByUserIds(List<Long> userIds);
+    List<UserProfiles> getUserProfilesByUserIds (List<Long> userIds);
 }
