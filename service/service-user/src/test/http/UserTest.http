@@ -48,3 +48,10 @@ token: eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAA_6tWKi5NUrJSSknMy03MLt
 }
 
 ###
+
+# 测试获取关注分组
+GET http://localhost:8081/user/follow-groups
+Content-Type: application/x-www-form-urlencoded
+token: eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAA_6tWKi5NUrJSSknMy03MLtUNDXYNUtJRSq0oULIyNDc1NjUxNDO11FEqLU4t8kxRsjKqBQA7ZJ38MgAAAA.Hx_lbnuRh9LIr0G8PuISLVhh_-rpSeaVRkdcWEfqCrJ6X-U2uOYPMsll_tE70M-qrzrxqY0iDCis-LGYw1cvIA
+
+###

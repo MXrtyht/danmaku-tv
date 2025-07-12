@@ -20,12 +20,17 @@ public class FollowGroupServiceImpl extends ServiceImpl<FollowGroupMapper, Follo
         return this.baseMapper.selectById(id);
     }
 
+    // 根据用户ID获取关注分组列表
     @Override
     public List<FollowGroup> getFollowGroupsByUserId (Long userId) {
-        return this.baseMapper.selectList(
+        List<FollowGroup> followGroups = this.baseMapper.selectList(
                 new QueryWrapper<FollowGroup>()
                         .eq("user_id", userId)
         );
+        // 添加默认分组
+        followGroups.add(0, this.getById(1));
+
+        return followGroups;
     }
 
     // 创建关注分组

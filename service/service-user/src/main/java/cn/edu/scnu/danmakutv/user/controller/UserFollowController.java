@@ -62,4 +62,12 @@ public class UserFollowController {
         Long groupId = followGroupService.createFollowGroup(createFollowGroupDTO);
         return CommonResponse.success(groupId);
     }
+
+    // 查询所有关注分组
+    @GetMapping("/follow-groups")
+    public CommonResponse<List<FollowGroup>> getFollowGroups () {
+        Long userId = authenticationSupport.getCurrentUserId();
+        List<FollowGroup> followGroups = followGroupService.getFollowGroupsByUserId(userId);
+        return CommonResponse.success(followGroups);
+    }
 }
