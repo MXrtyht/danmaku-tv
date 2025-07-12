@@ -21,6 +21,12 @@ public class VideoController {
     @Resource
     private VideoService videoService;
 
+    /**
+     * 查询所有视频
+     * @param page 分页页码
+     * @param size 分页大小
+     * @return 包含视频列表的分页结果
+     */
     @GetMapping("/all")
     public CommonResponse<IPage<VideoVO>> selectAllVideo (@Size(min = 1) int page, @Size(min = 4) int size) {
         // QueryWrapper 设置为 null ，查询所有视频
@@ -28,6 +34,12 @@ public class VideoController {
         return CommonResponse.success(result);
     }
 
+    /**
+     * 查询当前用户上传的视频
+     * @param page 分页页码
+     * @param size 分页大小
+     * @return 包含当前用户视频列表的分页结果
+     */
     @GetMapping("/user")
     public CommonResponse<IPage<VideoVO>> selectUserVideo (@Size(min = 1) int page, @Size(min = 4) int size) {
         Long userId = authenticationSupport.getCurrentUserId();
@@ -41,6 +53,11 @@ public class VideoController {
     }
 
     // 上传视频 前端先去MinioService的uploadFile接口上传视频 得到视频的存储路径再调用该接口
+    /**
+     * 上传视频
+     * @param userUploadVideoDTO 请去该类看具体字段
+     * @return 响应
+     */
     @PostMapping("/user")
     public CommonResponse<String> uploadVideo (@Valid @RequestBody UserUploadVideoDTO userUploadVideoDTO) {
         Long userId = authenticationSupport.getCurrentUserId();

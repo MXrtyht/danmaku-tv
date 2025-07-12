@@ -29,7 +29,7 @@ public class UploadController {
     }
 
     /**
-     * 支持分段读取视频流
+     * 分段读取视频流
      *
      * @param request    请求对象
      * @param response   响应对象
@@ -37,7 +37,6 @@ public class UploadController {
      * @param objectName 视频的文件名
      * @throws Exception 所有异常都抛出
      */
-
     @GetMapping(value = "/play/{bucketName}/{objectName}")
     public void videoPlay (HttpServletRequest request, HttpServletResponse response,
                            @PathVariable(value = "bucketName") String bucketName,
@@ -46,7 +45,7 @@ public class UploadController {
     }
 
     /**
-     * 分片视频流处理(对上面接口的封装)
+     * 分片视频流处理(对上面videoPlay的封装)
      *
      * @param request    请求对象
      * @param response   响应对象
