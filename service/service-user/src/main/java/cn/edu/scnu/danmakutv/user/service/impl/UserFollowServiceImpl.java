@@ -11,7 +11,7 @@ import cn.edu.scnu.danmakutv.user.service.FollowGroupService;
 import cn.edu.scnu.danmakutv.user.service.UserFollowService;
 import cn.edu.scnu.danmakutv.user.service.UserProfilesService;
 import cn.edu.scnu.danmakutv.user.service.UserService;
-import cn.edu.scnu.danmakutv.vo.UserFollowGroupVO;
+import cn.edu.scnu.danmakutv.vo.UserFollowsWithGroupVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
@@ -76,8 +76,8 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
     // 查询所有已关注的用户信息
     // 根据关注分组进行分类
     @Override
-    public List<UserFollowGroupVO> getUserFollowGroups (Long userId) {
-        List<UserFollowGroupVO> result = new ArrayList<>();
+    public List<UserFollowsWithGroupVO> getUserFollowGroups (Long userId) {
+        List<UserFollowsWithGroupVO> result = new ArrayList<>();
 
         // 获取所有关注的用户
         List<UserFollow> userFollows = this.baseMapper.selectList(
@@ -106,16 +106,16 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
 
         // 对关注分组进行分类
         for (FollowGroup followGroup : followGroups) {
-            UserFollowGroupVO userFollowGroupVO = new UserFollowGroupVO();
+            UserFollowsWithGroupVO userFollowsWithGroupVO = new UserFollowsWithGroupVO();
 
-            BeanUtils.copyProperties(followGroup, userFollowGroupVO);
-            userFollowGroupVO.setUserProfilesList(new ArrayList<>());
+            BeanUtils.copyProperties(followGroup, userFollowsWithGroupVO);
+            userFollowsWithGroupVO.setUserProfilesList(new ArrayList<>());
 
             // 获取当前分组下 关注的用户
             for (UserFollow userFollow : userFollows) {
                 // 如果关注的用户在当前分组下
                 if (userFollow.getGroupId().equals(followGroup.getId())) {
-                    userFollowGroupVO.getUserProfilesList().add(
+                    userFollowsWithGroupVO.getUserProfilesList().add(
                             followUserProfiles.stream()
                                               .filter(profile -> profile.getUserId().equals(userFollow.getFollowId()))
                                               .findFirst()
@@ -125,7 +125,7 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
             }
 
             // 添加到结果列表
-            result.add(userFollowGroupVO);
+            result.add(userFollowsWithGroupVO);
         }
 
         return result;

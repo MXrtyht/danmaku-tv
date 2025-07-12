@@ -8,7 +8,7 @@ import cn.edu.scnu.danmakutv.dto.CreateFollowGroupDTO;
 import cn.edu.scnu.danmakutv.dto.UserFollowDTO;
 import cn.edu.scnu.danmakutv.user.service.FollowGroupService;
 import cn.edu.scnu.danmakutv.user.service.UserFollowService;
-import cn.edu.scnu.danmakutv.vo.UserFollowGroupVO;
+import cn.edu.scnu.danmakutv.vo.UserFollowsWithGroupVO;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +28,7 @@ public class UserFollowController {
     @Resource
     private AuthenticationSupport authenticationSupport;
 
-    @PostMapping("/follow")
+    @PostMapping("/follows")
     public CommonResponse<String> followUser (@Valid @RequestBody UserFollowDTO userFollowDTO) {
         Long userId = authenticationSupport.getCurrentUserId();
         userFollowDTO.setUserId(userId);
@@ -37,11 +37,11 @@ public class UserFollowController {
         return CommonResponse.success("关注成功");
     }
 
-    @GetMapping("/follow")
-    public CommonResponse<List<UserFollowGroupVO>> getFollowGroups () {
+    @GetMapping("/follows")
+    public CommonResponse<List<UserFollowsWithGroupVO>> getUserFollows () {
         Long userId = authenticationSupport.getCurrentUserId();
 
-        List<UserFollowGroupVO> followGroups = userFollowService.getUserFollowGroups(userId);
+        List<UserFollowsWithGroupVO> followGroups = userFollowService.getUserFollowGroups(userId);
         return CommonResponse.success(followGroups);
     }
 
