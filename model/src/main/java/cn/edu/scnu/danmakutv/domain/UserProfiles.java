@@ -41,8 +41,8 @@ public class UserProfiles {
     private Integer coin;
 
     @TableField("create_at")
-    private LocalDateTime createdAt;
+    private LocalDateTime createAt;
 
     @TableField("update_at")
-    private LocalDateTime updatedAt;
+    private LocalDateTime updateAt;
 }

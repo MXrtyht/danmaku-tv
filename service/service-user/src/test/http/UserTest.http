@@ -3,8 +3,8 @@ POST http://localhost:8081/user/register
 Content-Type: application/json
 
 {
-  "phone": "1832040346",
-  "email": "1922382997@qq.com",
+  "phone": "1832014666",
+  "email": "192524341@qq.com",
   "password": "dnPviG4PPiyRciXY8oDnX2MFhI7IDn1HOf607XkzjGk8hjJKpL+DE2Y0vvv8G3+5NR4GMOTbtTQxbgNzw1OO5hOWCzx4SCzxHj4P21olJzHwad0icX+IWyBbANqMpkR5KCDUycVOMEYyyZa+FGs1GtSWQrHV9Mx2FGCLHTGeUSU="
 }
 
@@ -13,11 +13,19 @@ Content-Type: application/json
 # 测试关注接口
 POST http://localhost:8081/user/follow
 Content-Type: application/json
+token: eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAA_6tWKi5NUrJSSknMy03MLtUNDXYNUtJRSq0oULIyNDc1NjUxNDO11FEqLU4t8kxRsjKqBQA7ZJ38MgAAAA.Hx_lbnuRh9LIr0G8PuISLVhh_-rpSeaVRkdcWEfqCrJ6X-U2uOYPMsll_tE70M-qrzrxqY0iDCis-LGYw1cvIA
 
 {
   "userId": 2,
-  "followId": 3,
+  "followId": 10,
   "createdAt": "2025-07-01T00:00:00"
 }
+
+###
+
+# 测试查找用户关注
+GET http://localhost:8081/user/follow
+Content-Type: application/json
+token: eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAA_6tWKi5NUrJSSknMy03MLtUNDXYNUtJRSq0oULIyNDc1NjUxNDO11FEqLU4t8kxRsjKqBQA7ZJ38MgAAAA.Hx_lbnuRh9LIr0G8PuISLVhh_-rpSeaVRkdcWEfqCrJ6X-U2uOYPMsll_tE70M-qrzrxqY0iDCis-LGYw1cvIA
 
 ###

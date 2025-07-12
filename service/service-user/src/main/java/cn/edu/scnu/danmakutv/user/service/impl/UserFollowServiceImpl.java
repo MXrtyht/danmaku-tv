@@ -4,11 +4,14 @@ import cn.edu.scnu.danmakutv.common.exception.DanmakuException;
 import cn.edu.scnu.danmakutv.domain.FollowGroup;
 import cn.edu.scnu.danmakutv.domain.User;
 import cn.edu.scnu.danmakutv.domain.UserFollow;
+import cn.edu.scnu.danmakutv.domain.UserProfiles;
 import cn.edu.scnu.danmakutv.dto.UserFollowDTO;
 import cn.edu.scnu.danmakutv.user.mapper.UserFollowMapper;
 import cn.edu.scnu.danmakutv.user.service.FollowGroupService;
 import cn.edu.scnu.danmakutv.user.service.UserFollowService;
+import cn.edu.scnu.danmakutv.user.service.UserProfilesService;
 import cn.edu.scnu.danmakutv.user.service.UserService;
+import cn.edu.scnu.danmakutv.vo.UserFollowGroupVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
@@ -17,12 +20,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFollow> implements UserFollowService {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private UserProfilesService userProfilesService;
 
     @Resource
     private FollowGroupService followGroupService;
@@ -62,5 +72,64 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
         BeanUtils.copyProperties(userFollowDTO, userFollow);
 
         this.baseMapper.insert(userFollow);
+    }
+
+    // 先获取关注的用户列表
+    // 查询所有已关注的用户信息
+    // 根据关注分组进行分类
+    @Override
+    public List<UserFollowGroupVO> getUserFollowGroups (Long userId) {
+        List<UserFollowGroupVO> result = new ArrayList<>();
+
+        // 获取所有关注的用户
+        List<UserFollow> userFollows = this.baseMapper.selectList(
+                new QueryWrapper<>(UserFollow.class)
+                        .eq("user_id", userId)
+        );
+
+        if(userFollows.isEmpty()){
+            return result;
+        }
+
+        // 获取所有关注的用户的id
+        Set<Long> followUserIds = userFollows.stream()
+                .map(UserFollow::getFollowId)
+                .collect(Collectors.toSet());
+        // 查询所有关注的用户信息
+        List<UserProfiles> followUserProfiles = userProfilesService.getUserProfilesByUserIds(followUserIds.stream()
+                                                                                                          .toList());
+
+        // 获取所有关注分组
+        List<FollowGroup> followGroups = followGroupService.getFollowGroupsByUserId(userId);
+        followGroups.add (
+                // 添加默认分组
+                0, followGroupService.getById(1)
+        );
+
+        // 对关注分组进行分类
+        for(FollowGroup followGroup : followGroups){
+            UserFollowGroupVO userFollowGroupVO = new UserFollowGroupVO();
+
+            BeanUtils.copyProperties(followGroup, userFollowGroupVO);
+            userFollowGroupVO.setUserProfilesList(new ArrayList<>());
+
+            // 获取当前分组下 关注的用户
+            for(UserFollow userFollow : userFollows){
+                // 如果关注的用户在当前分组下
+                if(userFollow.getGroupId().equals(followGroup.getId())){
+                    userFollowGroupVO.getUserProfilesList().add(
+                            followUserProfiles.stream()
+                                              .filter(profile -> profile.getUserId().equals(userFollow.getFollowId()))
+                                              .findFirst()
+                                              .orElse(null)
+                    );
+                }
+            }
+
+            // 添加到结果列表
+            result.add(userFollowGroupVO);
+        }
+
+        return result;
     }
 }

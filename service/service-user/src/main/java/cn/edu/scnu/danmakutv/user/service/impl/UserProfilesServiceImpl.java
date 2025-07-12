@@ -12,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, UserProfiles> implements UserProfilesService {
@@ -28,7 +29,7 @@ public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, Use
         userProfiles.setBirthday(UserProfilesDefaultConstant.DEFAULT_BIRTHDAY);
         userProfiles.setCoin(UserProfilesDefaultConstant.DEFAULT_COIN);
         userProfiles.setSign(UserProfilesDefaultConstant.DEFAULT_SIGN);
-        userProfiles.setCreatedAt(LocalDateTime.now());
+        userProfiles.setCreateAt(LocalDateTime.now());
 
         baseMapper.insert(userProfiles);
     }
@@ -37,7 +38,7 @@ public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, Use
     public UserProfilesVO getUserProfilesByUserId (Long userId) {
         UserProfiles userProfiles = baseMapper.selectOne(
                 new QueryWrapper<>(UserProfiles.class)
-                        .eq("userId", userId)
+                        .eq("user_id", userId)
         );
 
         UserProfilesVO userProfilesVO = new UserProfilesVO();
@@ -50,10 +51,18 @@ public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, Use
     public void updateUserProfiles (Long userId, UserProfilesDTO userProfilesDTO) {
         UserProfiles userProfiles = baseMapper.selectOne(
                 new QueryWrapper<>(UserProfiles.class)
-                        .eq("userId", userId)
+                        .eq("user_id", userId)
         );
         BeanUtils.copyProperties(userProfilesDTO, userProfiles, "userId", "createAt");
-        userProfiles.setUpdatedAt(LocalDateTime.now());
+        userProfiles.setUpdateAt(LocalDateTime.now());
         baseMapper.updateById(userProfiles);
+    }
+
+    @Override
+    public List<UserProfiles> getUserProfilesByUserIds (List<Long> userIds) {
+        return this.baseMapper.selectList(
+                new QueryWrapper<>(UserProfiles.class)
+                        .in("user_id", userIds)
+        );
     }
 }
