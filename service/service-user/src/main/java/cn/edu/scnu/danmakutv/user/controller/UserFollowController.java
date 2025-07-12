@@ -2,8 +2,11 @@ package cn.edu.scnu.danmakutv.user.controller;
 
 import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
+import cn.edu.scnu.danmakutv.domain.FollowGroup;
 import cn.edu.scnu.danmakutv.domain.UserProfiles;
+import cn.edu.scnu.danmakutv.dto.CreateFollowGroupDTO;
 import cn.edu.scnu.danmakutv.dto.UserFollowDTO;
+import cn.edu.scnu.danmakutv.user.service.FollowGroupService;
 import cn.edu.scnu.danmakutv.user.service.UserFollowService;
 import cn.edu.scnu.danmakutv.vo.UserFollowGroupVO;
 import jakarta.annotation.Resource;
@@ -18,6 +21,9 @@ import java.util.Map;
 public class UserFollowController {
     @Resource
     private UserFollowService userFollowService;
+
+    @Resource
+    private FollowGroupService followGroupService;
 
     @Resource
     private AuthenticationSupport authenticationSupport;
@@ -46,5 +52,14 @@ public class UserFollowController {
 
         Map<UserProfiles, Boolean> fans = userFollowService.getFans(userId);
         return CommonResponse.success(fans);
+    }
+
+    // 新建用户关注分组
+    @PostMapping("/follow-group")
+    public CommonResponse<Long> createFollowGroup(@Valid @RequestBody CreateFollowGroupDTO createFollowGroupDTO) {
+        Long userId = authenticationSupport.getCurrentUserId();
+        createFollowGroupDTO.setUserId(userId);
+        Long groupId = followGroupService.createFollowGroup(createFollowGroupDTO);
+        return CommonResponse.success(groupId);
     }
 }
