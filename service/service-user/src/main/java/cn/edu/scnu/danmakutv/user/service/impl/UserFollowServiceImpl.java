@@ -20,9 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -128,6 +126,45 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
 
             // 添加到结果列表
             result.add(userFollowGroupVO);
+        }
+
+        return result;
+    }
+
+    // 获取粉丝列表
+    @Override
+    public Map<UserProfiles, Boolean> getFans (Long userId) {
+        // 查询所有粉丝
+        List<UserFollow> fans = this.baseMapper.selectList(
+                new QueryWrapper<>(UserFollow.class).eq("follow_id", userId)
+        );
+
+        if(fans.isEmpty()){
+            return null;
+        }
+
+        // 获取所有粉丝的id
+        Set<Long> fanUserIds = fans.stream().map(UserFollow::getUserId)
+                                   .collect(Collectors.toSet());
+
+        // 通过粉丝id获取粉丝用户信息
+        List<UserProfiles> fanUserProfiles = userProfilesService.getUserProfilesByUserIds(fanUserIds.stream()
+                                                                                                    .toList());
+        // 查看我是否关注了粉丝
+        List<UserFollow> followBackList = this.baseMapper.selectList(
+                new QueryWrapper<>(UserFollow.class)
+                        .eq("user_id", userId)
+                        .in("follow_id", fanUserIds)
+        );
+
+        // 提取我回关的粉丝id
+        Set<Long> followedBackIds = followBackList.stream()
+                                                  .map(UserFollow::getFollowId)
+                                                  .collect(Collectors.toSet());
+        // 将粉丝信息和是否回关的状态封装到Map中
+        Map<UserProfiles, Boolean> result = new HashMap<>();
+        for (UserProfiles profile : fanUserProfiles) {
+            result.put(profile, followedBackIds.contains(profile.getUserId()));
         }
 
         return result;

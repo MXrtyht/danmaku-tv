@@ -2,6 +2,7 @@ package cn.edu.scnu.danmakutv.user.controller;
 
 import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
+import cn.edu.scnu.danmakutv.domain.UserProfiles;
 import cn.edu.scnu.danmakutv.dto.UserFollowDTO;
 import cn.edu.scnu.danmakutv.user.service.UserFollowService;
 import cn.edu.scnu.danmakutv.vo.UserFollowGroupVO;
@@ -10,6 +11,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -35,5 +37,14 @@ public class UserFollowController {
 
         List<UserFollowGroupVO> followGroups = userFollowService.getUserFollowGroups(userId);
         return CommonResponse.success(followGroups);
+    }
+
+    // 获取粉丝列表
+    @GetMapping("/fans")
+    public CommonResponse<Map<UserProfiles, Boolean>> getFans(){
+        Long userId = authenticationSupport.getCurrentUserId();
+
+        Map<UserProfiles, Boolean> fans = userFollowService.getFans(userId);
+        return CommonResponse.success(fans);
     }
 }
