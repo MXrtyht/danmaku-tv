@@ -18,9 +18,9 @@ public class FollowGroup {
     @TableField("name")
     private String name; // 分组名称
 
-    @TableField("created_at")
+    @TableField("create_at")
     private String createdAt; // 分组创建时间
 
-    @TableField("updated_at")
+    @TableField("update_at")
     private String updatedAt; // 分组更新时间
 }

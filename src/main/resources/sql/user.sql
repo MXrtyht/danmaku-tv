@@ -30,8 +30,8 @@ CREATE TABLE IF NOT EXISTS `t_user_profiles`
     `announcement` TEXT                     DEFAULT NULL COMMENT '主页公告',
     `avatar`       VARCHAR(255)             DEFAULT NULL COMMENT '头像 URL',
     `coin`         INT UNSIGNED    NOT NULL DEFAULT 10 COMMENT '硬币数',
-    `created_at`   DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_at`   DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `create_at`   DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_at`   DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='用户信息表';
