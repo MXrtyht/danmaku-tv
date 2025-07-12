@@ -139,7 +139,7 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
                 new QueryWrapper<>(UserFollow.class).eq("follow_id", userId)
         );
 
-        if(fans.isEmpty()){
+        if (fans.isEmpty()) {
             return null;
         }
 

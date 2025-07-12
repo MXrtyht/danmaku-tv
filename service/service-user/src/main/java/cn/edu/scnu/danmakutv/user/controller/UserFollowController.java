@@ -47,7 +47,7 @@ public class UserFollowController {
 
     // 获取粉丝列表
     @GetMapping("/fans")
-    public CommonResponse<Map<UserProfiles, Boolean>> getFans(){
+    public CommonResponse<Map<UserProfiles, Boolean>> getFans () {
         Long userId = authenticationSupport.getCurrentUserId();
 
         Map<UserProfiles, Boolean> fans = userFollowService.getFans(userId);
@@ -56,7 +56,7 @@ public class UserFollowController {
 
     // 新建用户关注分组
     @PostMapping("/follow-group")
-    public CommonResponse<Long> createFollowGroup(@Valid @RequestBody CreateFollowGroupDTO createFollowGroupDTO) {
+    public CommonResponse<Long> createFollowGroup (@Valid @RequestBody CreateFollowGroupDTO createFollowGroupDTO) {
         Long userId = authenticationSupport.getCurrentUserId();
         createFollowGroupDTO.setUserId(userId);
         Long groupId = followGroupService.createFollowGroup(createFollowGroupDTO);

@@ -29,12 +29,12 @@ public class DanmakuController {
     public CommonResponse<List<Danmaku>> getDanmaku (@RequestParam Long videoId,
                                                      @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime startTime,
                                                      @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endTime) {
-        List<Danmaku> result ;
-        try{
+        List<Danmaku> result;
+        try {
             authenticationSupport.getCurrentUserId();
             // 已登录 允许时间段筛选
             result = danmakuService.getDanmaku(videoId, startTime, endTime);
-        }catch (Exception ignored){
+        } catch (Exception ignored) {
             // 为登录 则不允许
             result = danmakuService.getDanmaku(videoId, null, null);
         }

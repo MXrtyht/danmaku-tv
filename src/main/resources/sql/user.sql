@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS `t_user_profiles`;
 CREATE TABLE IF NOT EXISTS `t_user_profiles`
 (
     `id`           BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `user_id`          BIGINT UNSIGNED NOT NULL UNIQUE COMMENT '关联用户表 userId',
+    `user_id`      BIGINT UNSIGNED NOT NULL UNIQUE COMMENT '关联用户表 userId',
     `nickname`     VARCHAR(20)     NOT NULL COMMENT '昵称',
     `gender`       TINYINT(1)      NOT NULL DEFAULT 1 COMMENT '性别 (0:女, 1:男, 2:未知)',
     `birthday`     DATE            NOT NULL DEFAULT '1970-01-01' COMMENT '出生日期',
@@ -30,8 +30,8 @@ CREATE TABLE IF NOT EXISTS `t_user_profiles`
     `announcement` TEXT                     DEFAULT NULL COMMENT '主页公告',
     `avatar`       VARCHAR(255)             DEFAULT NULL COMMENT '头像 URL',
     `coin`         INT UNSIGNED    NOT NULL DEFAULT 10 COMMENT '硬币数',
-    `create_at`   DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_at`   DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `create_at`    DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_at`    DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='用户信息表';

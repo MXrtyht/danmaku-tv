@@ -34,7 +34,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
 
         // TODO 插入视频-tag关联表
         // TODO 返回视频ID
-        for(Long tag : userUploadVideoDTO.getTags()){
+        for (Long tag : userUploadVideoDTO.getTags()) {
             System.out.println("Tag ID: " + tag);
         }
         baseMapper.insert(video);

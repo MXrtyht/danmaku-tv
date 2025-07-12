@@ -7,7 +7,6 @@ import cn.edu.scnu.danmakutv.user.mapper.FollowGroupMapper;
 import cn.edu.scnu.danmakutv.user.service.FollowGroupService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -42,13 +41,13 @@ public class FollowGroupServiceImpl extends ServiceImpl<FollowGroupMapper, Follo
                         .eq("user_id", createFollowGroupDTO.getUserId())
                         .eq("name", createFollowGroupDTO.getName())
         );
-        if(!existingGroups.isEmpty()) {
+        if (!existingGroups.isEmpty()) {
             throw new DanmakuException("分组名称已存在", 400);
         }
 
         // 创建新的分组
         FollowGroup followGroup = new FollowGroup();
-        BeanUtils.copyProperties(createFollowGroupDTO,followGroup);
+        BeanUtils.copyProperties(createFollowGroupDTO, followGroup);
         this.baseMapper.insert(followGroup);
 
         return followGroup.getId();

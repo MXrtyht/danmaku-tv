@@ -13,7 +13,7 @@ public interface DanmakuService extends IService<Danmaku> {
     // 异步添加弹幕
     public void asyncAddDanmaku (Danmaku danmaku);
 
-        // 查询弹幕
+    // 查询弹幕
     List<Danmaku> getDanmaku (Long videoId, LocalDateTime startTime, LocalDateTime endTime);
 
     // 添加弹幕到redis

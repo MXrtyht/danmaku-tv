@@ -51,7 +51,7 @@ public class DanmakuServiceImpl extends ServiceImpl<DanmakuMapper, Danmaku> impl
             danmakuList = JSON.parseArray(redisValue, Danmaku.class);
 
             // 如果没有时间段, 返回所有结果
-            if (startTime == null || endTime == null){
+            if (startTime == null || endTime == null) {
                 return danmakuList;
             }
 

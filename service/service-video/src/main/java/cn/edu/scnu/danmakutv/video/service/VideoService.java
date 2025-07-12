@@ -19,7 +19,8 @@ public interface VideoService extends IService<Video> {
 
     /**
      * 上传视频
+     *
      * @param userUploadVideoDTO 视频上传的数据传输对象
      */
-    void uploadVideo(UserUploadVideoDTO userUploadVideoDTO);
+    void uploadVideo (UserUploadVideoDTO userUploadVideoDTO);
 }

@@ -21,7 +21,6 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -137,10 +136,10 @@ public class WebSocketService {
 
     // 定时任务，通知前端在线人数
     // fixedRate 单位毫秒
-    @Scheduled(fixedRate=10000)
-    private void noticeOnlineCount() throws IOException {
-        for(WebSocketService webSocketService : WEBSOCKET_MAP.values()){
-            if(webSocketService.session.isOpen()){
+    @Scheduled(fixedRate = 10000)
+    private void noticeOnlineCount () throws IOException {
+        for (WebSocketService webSocketService : WEBSOCKET_MAP.values()) {
+            if (webSocketService.session.isOpen()) {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("onlineCount", ONLINE_COUNT.get());
                 jsonObject.put("msg", "当前在线人数为" + ONLINE_COUNT.get());

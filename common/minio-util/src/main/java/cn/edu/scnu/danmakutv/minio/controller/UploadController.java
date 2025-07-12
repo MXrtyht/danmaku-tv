@@ -16,14 +16,15 @@ public class UploadController {
 
     /**
      * 单点上传
-     * @param file 上传的文件 前端: type = file 即可
+     *
+     * @param file       上传的文件 前端: type = file 即可
      * @param bucketName 桶名称
      * @return 上传后的文件名
      * @throws Exception 所有异常都抛出
      */
     @PostMapping("/single")
-    public String uploadFile(@RequestParam("file") MultipartFile file,
-                             @RequestParam("bucketName") String bucketName) throws Exception {
+    public String uploadFile (@RequestParam("file") MultipartFile file,
+                              @RequestParam("bucketName") String bucketName) throws Exception {
         return minioService.uploadFile(file, bucketName);
     }
 
@@ -38,24 +39,25 @@ public class UploadController {
      */
 
     @GetMapping(value = "/play/{bucketName}/{objectName}")
-    public void videoPlay(HttpServletRequest request, HttpServletResponse response,
-                          @PathVariable(value = "bucketName") String bucketName,
-                          @PathVariable(value = "objectName") String objectName) throws Exception{
+    public void videoPlay (HttpServletRequest request, HttpServletResponse response,
+                           @PathVariable(value = "bucketName") String bucketName,
+                           @PathVariable(value = "objectName") String objectName) throws Exception {
         minioService.videoPlay(request, response, bucketName, objectName);
     }
 
     /**
      * 分片视频流处理(对上面接口的封装)
-     * @param request 请求对象
-     * @param response 响应对象
+     *
+     * @param request    请求对象
+     * @param response   响应对象
      * @param bucketName 视频所在桶的位置
      * @param objectName 视频的文件名
      * @throws Exception 所有异常都抛出
      */
     @GetMapping("/video-slice/{bucketName}/{objectName}")
-    public void videoSlice(HttpServletRequest request, HttpServletResponse response,
-                           @PathVariable("bucketName") String bucketName,
-                           @PathVariable("objectName") String objectName) throws Exception {
+    public void videoSlice (HttpServletRequest request, HttpServletResponse response,
+                            @PathVariable("bucketName") String bucketName,
+                            @PathVariable("objectName") String objectName) throws Exception {
         minioService.videoSlice(request, response, bucketName, objectName);
     }
 }

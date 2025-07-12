@@ -1,6 +1,5 @@
 package cn.edu.scnu.danmakutv.dto;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.time.LocalDateTime;

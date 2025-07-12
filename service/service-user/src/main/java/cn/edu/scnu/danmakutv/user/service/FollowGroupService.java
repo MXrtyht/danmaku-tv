@@ -3,7 +3,6 @@ package cn.edu.scnu.danmakutv.user.service;
 import cn.edu.scnu.danmakutv.domain.FollowGroup;
 import cn.edu.scnu.danmakutv.dto.CreateFollowGroupDTO;
 import com.baomidou.mybatisplus.extension.service.IService;
-import jakarta.validation.Valid;
 
 import java.util.List;
 

@@ -47,7 +47,7 @@ public class VideoLikeController {
      * 获取视频点赞数量
      *
      * @param videoId 视频ID
-     * @return CommonResponse<Map<Long, Object>> 其中: "isLiked", isLiked 表示是否已点赞
+     * @return CommonResponse<Map < Long, Object>> 其中: "isLiked", isLiked 表示是否已点赞
      */
     @GetMapping("/like")
     public CommonResponse<Map<String, Object>> getVideoLikeCount (Long videoId) {

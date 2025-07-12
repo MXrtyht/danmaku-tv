@@ -10,7 +10,7 @@ CREATE TABLE `t_video`
     `title`       VARCHAR(100)    NOT NULL COMMENT '视频标题',
     `type`        TINYINT(1)      NOT NULL DEFAULT 0 COMMENT '视频类型 (0: 自制, 1: 转载)',
     `duration`    INT UNSIGNED    NOT NULL COMMENT '视频时长 (秒)',
-    `area`        TINYINT(1)     NOT NULL COMMENT '视频分区',
+    `area`        TINYINT(1)      NOT NULL COMMENT '视频分区',
     `description` TEXT                     DEFAULT NULL COMMENT '视频简介',
     `create_at`   DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '视频创建时间',
     `update_at`   DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '视频更新时间',
@@ -21,9 +21,9 @@ CREATE TABLE `t_video`
 DROP TABLE IF EXISTS `r_video_tag`;
 CREATE TABLE `r_video_tag`
 (
-    `id`        BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `video_id`  BIGINT UNSIGNED NOT NULL COMMENT '视频 ID',
-    `tag_id`    BIGINT UNSIGNED NOT NULL COMMENT '标签 ID',
+    `id`       BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `video_id` BIGINT UNSIGNED NOT NULL COMMENT '视频 ID',
+    `tag_id`   BIGINT UNSIGNED NOT NULL COMMENT '标签 ID',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='视频标签关联表';
