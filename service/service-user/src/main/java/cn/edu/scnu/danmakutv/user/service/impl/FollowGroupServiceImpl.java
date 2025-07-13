@@ -1,8 +1,8 @@
 package cn.edu.scnu.danmakutv.user.service.impl;
 
 import cn.edu.scnu.danmakutv.common.exception.DanmakuException;
-import cn.edu.scnu.danmakutv.domain.FollowGroup;
-import cn.edu.scnu.danmakutv.dto.CreateFollowGroupDTO;
+import cn.edu.scnu.danmakutv.domain.user.FollowGroup;
+import cn.edu.scnu.danmakutv.dto.user.CreateFollowGroupDTO;
 import cn.edu.scnu.danmakutv.user.mapper.FollowGroupMapper;
 import cn.edu.scnu.danmakutv.user.service.FollowGroupService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;

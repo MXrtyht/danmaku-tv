@@ -1,9 +1,9 @@
 package cn.edu.scnu.danmakutv.user.service;
 
-import cn.edu.scnu.danmakutv.domain.UserFollow;
-import cn.edu.scnu.danmakutv.domain.UserProfiles;
-import cn.edu.scnu.danmakutv.dto.UserFollowDTO;
-import cn.edu.scnu.danmakutv.vo.UserFollowsWithGroupVO;
+import cn.edu.scnu.danmakutv.domain.user.UserFollow;
+import cn.edu.scnu.danmakutv.domain.user.UserProfiles;
+import cn.edu.scnu.danmakutv.dto.user.UserFollowDTO;
+import cn.edu.scnu.danmakutv.vo.user.UserFollowsWithGroupVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

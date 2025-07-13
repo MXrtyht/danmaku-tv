@@ -1,31 +1,28 @@
 package cn.edu.scnu.danmakutv.user.controller;
 
 import cn.edu.scnu.common.utils.RSAUtil;
-import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
-import cn.edu.scnu.danmakutv.dto.UserLoginDTO;
-import cn.edu.scnu.danmakutv.dto.UserRegisterDTO;
+import cn.edu.scnu.danmakutv.dto.user.UserLoginDTO;
+import cn.edu.scnu.danmakutv.dto.user.UserRegisterDTO;
 import cn.edu.scnu.danmakutv.user.service.UserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = "{用户相关接口}")
+@Tag(name = "用户操作相关接口")
 @RestController
 @RequestMapping("/user")
 public class UserController {
     @Resource
     private UserService userService;
 
-    @Resource
-    private AuthenticationSupport authenticationSupport;
-
     // 获取RSA公钥
-    @ApiOperation(
-            value = "获取RSA公钥",
-            notes = "用于前端加密用户密码"
+    @Operation(
+            summary = "获取RSA公钥",
+            description = "用于前端加密用户密码"
     )
     @GetMapping("/rsa-pks")
     public CommonResponse<String> getRsaPublicKey () {
@@ -34,20 +31,29 @@ public class UserController {
     }
 
     // 注册
-    @ApiOperation(value = "用户注册")
+    @Operation(
+            summary = "用户注册",
+            description = "前端使用RSA加密用户密码后提交"
+    )
     @PostMapping("/register")
-    public CommonResponse<String> registerUser (@Valid @RequestBody UserRegisterDTO userRegisterDTO) {
+    public CommonResponse<String> registerUser (
+            @Valid @RequestBody @Parameter(description = "用户注册信息，包括手机号, 邮箱, 密码等")
+            UserRegisterDTO userRegisterDTO
+    ) {
         userService.registerUser(userRegisterDTO);
         return CommonResponse.success("注册成功");
     }
 
     // 登录
-    @ApiOperation(
-            value = "用户登录",
-            notes = "登录成功后返回JWT Token"
+    @Operation(
+            summary = "用户登录",
+            description = "登录成功后返回JWT Token"
     )
     @PostMapping("/login")
-    public CommonResponse<String> loginUser (@Valid @RequestBody UserLoginDTO userLoginDTO) {
+    public CommonResponse<String> loginUser (
+            @Valid @RequestBody @Parameter(description = "用户登录信息，包括手机号, 密码")
+            UserLoginDTO userLoginDTO
+    ) {
         String token = userService.loginUser(userLoginDTO);
         return CommonResponse.success(token);
     }

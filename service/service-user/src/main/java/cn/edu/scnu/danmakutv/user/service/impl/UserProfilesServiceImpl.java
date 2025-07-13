@@ -1,11 +1,11 @@
 package cn.edu.scnu.danmakutv.user.service.impl;
 
 import cn.edu.scnu.danmakutv.constant.UserProfilesDefaultConstant;
-import cn.edu.scnu.danmakutv.domain.UserProfiles;
-import cn.edu.scnu.danmakutv.dto.UserProfilesDTO;
+import cn.edu.scnu.danmakutv.domain.user.UserProfiles;
+import cn.edu.scnu.danmakutv.dto.user.UserProfilesDTO;
 import cn.edu.scnu.danmakutv.user.mapper.UserProfilesMapper;
 import cn.edu.scnu.danmakutv.user.service.UserProfilesService;
-import cn.edu.scnu.danmakutv.vo.UserProfilesVO;
+import cn.edu.scnu.danmakutv.vo.user.UserProfilesVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;

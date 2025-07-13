@@ -1,17 +1,17 @@
 package cn.edu.scnu.danmakutv.user.service.impl;
 
 import cn.edu.scnu.danmakutv.common.exception.DanmakuException;
-import cn.edu.scnu.danmakutv.domain.FollowGroup;
-import cn.edu.scnu.danmakutv.domain.User;
-import cn.edu.scnu.danmakutv.domain.UserFollow;
-import cn.edu.scnu.danmakutv.domain.UserProfiles;
-import cn.edu.scnu.danmakutv.dto.UserFollowDTO;
+import cn.edu.scnu.danmakutv.domain.user.FollowGroup;
+import cn.edu.scnu.danmakutv.domain.user.User;
+import cn.edu.scnu.danmakutv.domain.user.UserFollow;
+import cn.edu.scnu.danmakutv.domain.user.UserProfiles;
+import cn.edu.scnu.danmakutv.dto.user.UserFollowDTO;
 import cn.edu.scnu.danmakutv.user.mapper.UserFollowMapper;
 import cn.edu.scnu.danmakutv.user.service.FollowGroupService;
 import cn.edu.scnu.danmakutv.user.service.UserFollowService;
 import cn.edu.scnu.danmakutv.user.service.UserProfilesService;
 import cn.edu.scnu.danmakutv.user.service.UserService;
-import cn.edu.scnu.danmakutv.vo.UserFollowsWithGroupVO;
+import cn.edu.scnu.danmakutv.vo.user.UserFollowsWithGroupVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;

@@ -1,7 +1,7 @@
 package cn.edu.scnu.danmakutv.user.service;
 
-import cn.edu.scnu.danmakutv.domain.FollowGroup;
-import cn.edu.scnu.danmakutv.dto.CreateFollowGroupDTO;
+import cn.edu.scnu.danmakutv.domain.user.FollowGroup;
+import cn.edu.scnu.danmakutv.dto.user.CreateFollowGroupDTO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

@@ -1,8 +1,8 @@
 package cn.edu.scnu.danmakutv.user.service;
 
-import cn.edu.scnu.danmakutv.domain.UserProfiles;
-import cn.edu.scnu.danmakutv.dto.UserProfilesDTO;
-import cn.edu.scnu.danmakutv.vo.UserProfilesVO;
+import cn.edu.scnu.danmakutv.domain.user.UserProfiles;
+import cn.edu.scnu.danmakutv.dto.user.UserProfilesDTO;
+import cn.edu.scnu.danmakutv.vo.user.UserProfilesVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
