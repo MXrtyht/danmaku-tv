@@ -2,19 +2,20 @@ package cn.edu.scnu.danmakutv.video.controller;
 
 import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
-import cn.edu.scnu.danmakutv.dto.UserUploadVideoDTO;
+import cn.edu.scnu.danmakutv.dto.video.UserUploadVideoDTO;
 import cn.edu.scnu.danmakutv.video.service.VideoService;
-import cn.edu.scnu.danmakutv.vo.VideoVO;
+import cn.edu.scnu.danmakutv.vo.video.VideoVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = "视频操作相关接口")
+@Tag(name = "视频操作相关接口")
 @RestController
 @RequestMapping("/video")
 public class VideoController {
@@ -30,12 +31,15 @@ public class VideoController {
      * @param size 分页大小
      * @return 包含视频列表的分页结果
      */
-    @ApiOperation(
-            value = "查询所有视频",
-            notes = "查询所有视频, 返回分页结果"
+    @Operation(
+            summary = "查询所有视频",
+            description = "查询所有视频, 返回分页结果"
     )
     @GetMapping("/all")
-    public CommonResponse<IPage<VideoVO>> selectAllVideo (@Size(min = 1) int page, @Size(min = 4) int size) {
+    public CommonResponse<IPage<VideoVO>> selectAllVideo (
+            @Size(min = 1) @Parameter(description = "分页页码, 从1开始") int page,
+            @Size(min = 4) @Parameter(description = "分页大小, 最小每页4个") int size
+    ) {
         // QueryWrapper 设置为 null ，查询所有视频
         IPage<VideoVO> result = videoService.selectVideo(page, size, null);
         return CommonResponse.success(result);
@@ -47,8 +51,15 @@ public class VideoController {
      * @param size 分页大小
      * @return 包含当前用户视频列表的分页结果
      */
+    @Operation(
+            summary = "查询当前用户所有视频",
+            description = "查询视频, 返回分页结果"
+    )
     @GetMapping("/user")
-    public CommonResponse<IPage<VideoVO>> selectUserVideo (@Size(min = 1) int page, @Size(min = 4) int size) {
+    public CommonResponse<IPage<VideoVO>> selectUserVideo (
+            @Size(min = 1) @Parameter(description = "分页页码, 从1开始") int page,
+            @Size(min = 4) @Parameter(description = "分页大小, 最小每页4个") int size
+    ) {
         Long userId = authenticationSupport.getCurrentUserId();
 
         // 构造查询条件, 查询当前用户的视频
@@ -65,11 +76,14 @@ public class VideoController {
      * @param userUploadVideoDTO 请去该类看具体字段
      * @return 响应
      */
-    @ApiOperation(
-            value = "上传视频"
+    @Operation(
+            summary = "上传视频"
     )
     @PostMapping("/user")
-    public CommonResponse<String> uploadVideo (@Valid @RequestBody UserUploadVideoDTO userUploadVideoDTO) {
+    public CommonResponse<String> uploadVideo (
+            @Valid @RequestBody @Parameter(description = "用户上传视频DTO, 包含视频标题, 描述, 存储路径等信息")
+            UserUploadVideoDTO userUploadVideoDTO
+    ) {
         Long userId = authenticationSupport.getCurrentUserId();
         userUploadVideoDTO.setUserId(userId);
         videoService.uploadVideo(userUploadVideoDTO);

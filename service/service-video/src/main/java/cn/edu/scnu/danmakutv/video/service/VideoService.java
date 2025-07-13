@@ -1,8 +1,8 @@
 package cn.edu.scnu.danmakutv.video.service;
 
-import cn.edu.scnu.danmakutv.domain.Video;
-import cn.edu.scnu.danmakutv.dto.UserUploadVideoDTO;
-import cn.edu.scnu.danmakutv.vo.VideoVO;
+import cn.edu.scnu.danmakutv.domain.video.Video;
+import cn.edu.scnu.danmakutv.dto.video.UserUploadVideoDTO;
+import cn.edu.scnu.danmakutv.vo.video.VideoVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;

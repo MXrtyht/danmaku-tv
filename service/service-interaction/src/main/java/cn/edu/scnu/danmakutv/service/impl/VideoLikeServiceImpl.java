@@ -1,7 +1,7 @@
 package cn.edu.scnu.danmakutv.service.impl;
 
 import cn.edu.scnu.danmakutv.common.exception.DanmakuException;
-import cn.edu.scnu.danmakutv.domain.VideoLike;
+import cn.edu.scnu.danmakutv.domain.video.VideoLike;
 import cn.edu.scnu.danmakutv.mapper.VideoLikeMapper;
 import cn.edu.scnu.danmakutv.service.VideoLikeService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;

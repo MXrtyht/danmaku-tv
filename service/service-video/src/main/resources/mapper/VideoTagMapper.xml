@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="cn.edu.scnu.danmakutv.video.mapper.VideoTagMapper">
-    <select id="selectTagsByVideoId" resultType="cn.edu.scnu.danmakutv.domain.VideoTag">
+    <select id="selectTagsByVideoId" resultType="cn.edu.scnu.danmakutv.domain.video.VideoTag">
         SELECT *
         FROM t_tag t
                  LEFT JOIN r_video_tag r ON t.id = r.tag_id
