@@ -41,7 +41,7 @@ public class UserFollowController {
             summary = "关注用户",
             description = "关注指定用户并添加到分组, groupId = 1 为默认分组"
     )
-    @PostMapping("/follows")
+    @PostMapping("/follow")
     public CommonResponse<String> followUser (
             @Valid @RequestBody @Parameter(description = "用户关注DTO，包括被关注用户ID和分组ID")
             UserFollowDTO userFollowDTO
