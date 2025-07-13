@@ -3,14 +3,15 @@ package cn.edu.scnu.danmakutv.controller;
 import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
 import cn.edu.scnu.danmakutv.service.VideoLikeService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-@Api(tags = "互动相关接口")
+@Tag(name = "互动相关接口")
 @RestController
 @RequestMapping("/video")
 public class VideoLikeController {
@@ -26,11 +27,9 @@ public class VideoLikeController {
      * @param videoId 视频ID
      * @return 响应
      */
-    @ApiOperation(
-            value = "视频点赞"
-    )
+    @Operation(summary = "视频点赞")
     @PostMapping("/like")
-    public CommonResponse<String> addVideoLike (Long videoId) {
+    public CommonResponse<String> addVideoLike (@Parameter(description = "视频id") Long videoId) {
         Long userId = authenticationSupport.getCurrentUserId();
         videoLikeService.addVideoLike(userId, videoId);
         return CommonResponse.success("");
@@ -42,10 +41,9 @@ public class VideoLikeController {
      * @param videoId 视频ID
      * @return 响应
      */
-    @ApiOperation(
-            value = "取消视频点赞")
+    @Operation(summary = "取消视频点赞")
     @DeleteMapping("/like")
-    public CommonResponse<String> deleteVideoLike (Long videoId) {
+    public CommonResponse<String> deleteVideoLike (@Parameter(description = "视频id") Long videoId) {
         Long userId = authenticationSupport.getCurrentUserId();
         videoLikeService.deleteVideoLike(userId, videoId);
         return CommonResponse.success("");
@@ -57,12 +55,12 @@ public class VideoLikeController {
      * @param videoId 视频ID
      * @return CommonResponse<Map < Long, Object>> 其中: "isLiked", isLiked 表示是否已点赞
      */
-    @ApiOperation(
-            value = "获取视频点赞数量",
-            notes = "返回视频的点赞数量和当前用户是否已点赞"
+    @Operation(
+            summary = "获取视频点赞数量",
+            description = "返回视频的点赞数量和当前用户是否已点赞"
     )
     @GetMapping("/like")
-    public CommonResponse<Map<String, Object>> getVideoLikeCount (Long videoId) {
+    public CommonResponse<Map<String, Object>> getVideoLikeCount (@Parameter(description = "视频id") Long videoId) {
         Long userId = null;
         try {
             userId = authenticationSupport.getCurrentUserId();

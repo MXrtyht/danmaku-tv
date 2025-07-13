@@ -2,7 +2,7 @@ package cn.edu.scnu.danmakutv.websocket;
 
 import cn.edu.scnu.common.utils.RocketMQUtil;
 import cn.edu.scnu.danmakutv.common.authentication.JwtHelper;
-import cn.edu.scnu.danmakutv.domain.Danmaku;
+import cn.edu.scnu.danmakutv.domain.interaction.Danmaku;
 import cn.edu.scnu.danmakutv.service.DanmakuService;
 import com.alibaba.fastjson.JSONObject;
 import io.netty.util.internal.StringUtil;

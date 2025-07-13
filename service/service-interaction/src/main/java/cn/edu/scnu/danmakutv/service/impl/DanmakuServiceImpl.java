@@ -1,6 +1,6 @@
 package cn.edu.scnu.danmakutv.service.impl;
 
-import cn.edu.scnu.danmakutv.domain.Danmaku;
+import cn.edu.scnu.danmakutv.domain.interaction.Danmaku;
 import cn.edu.scnu.danmakutv.mapper.DanmakuMapper;
 import cn.edu.scnu.danmakutv.service.DanmakuService;
 import com.alibaba.fastjson.JSON;

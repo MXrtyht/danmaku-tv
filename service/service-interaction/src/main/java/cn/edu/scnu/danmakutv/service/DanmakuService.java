@@ -1,6 +1,6 @@
 package cn.edu.scnu.danmakutv.service;
 
-import cn.edu.scnu.danmakutv.domain.Danmaku;
+import cn.edu.scnu.danmakutv.domain.interaction.Danmaku;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.time.LocalDateTime;

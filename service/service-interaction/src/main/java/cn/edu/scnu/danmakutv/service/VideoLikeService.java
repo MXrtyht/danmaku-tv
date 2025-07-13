@@ -1,6 +1,6 @@
 package cn.edu.scnu.danmakutv.service;
 
-import cn.edu.scnu.danmakutv.domain.video.VideoLike;
+import cn.edu.scnu.danmakutv.domain.interaction.VideoLike;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.Map;
