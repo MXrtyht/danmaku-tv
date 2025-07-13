@@ -1,15 +1,16 @@
 package cn.edu.scnu.danmakutv.minio.controller;
 
 import cn.edu.scnu.danmakutv.minio.service.impl.MinioService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-@Api(tags = "文件处理相关接口")
+@Tag(name = "文件处理相关接口")
 @RestController
 @RequestMapping("/upload")
 public class UploadController {
@@ -25,13 +26,15 @@ public class UploadController {
      * @return 上传后的文件名
      * @throws Exception 所有异常都抛出
      */
-    @ApiOperation(
-            value = "单点上传",
-            notes = "上传单个文件到指定的桶中"
+    @Operation(
+            summary = "单点上传",
+            description = "上传单个文件到指定的桶中"
     )
     @PostMapping("/single")
-    public String uploadFile (@RequestParam("file") MultipartFile file,
-                              @RequestParam("bucketName") String bucketName) throws Exception {
+    public String uploadFile (
+            @Parameter(description = "要上传的文件") @RequestParam("file") MultipartFile file,
+            @Parameter(description = "指定的桶的名称") @RequestParam("bucketName") String bucketName
+    ) throws Exception {
         return minioService.uploadFile(file, bucketName);
     }
 
@@ -47,7 +50,8 @@ public class UploadController {
     @GetMapping(value = "/play/{bucketName}/{objectName}")
     public void videoPlay (HttpServletRequest request, HttpServletResponse response,
                            @PathVariable(value = "bucketName") String bucketName,
-                           @PathVariable(value = "objectName") String objectName) throws Exception {
+                           @PathVariable(value = "objectName") String objectName
+    ) throws Exception {
         minioService.videoPlay(request, response, bucketName, objectName);
     }
 
@@ -60,13 +64,16 @@ public class UploadController {
      * @param objectName 视频的文件名
      * @throws Exception 所有异常都抛出
      */
-    @ApiOperation(
-            value = "分片视频流处理"
+    @Operation(
+            summary = "分片视频流处理"
     )
     @GetMapping("/video-slice/{bucketName}/{objectName}")
-    public void videoSlice (HttpServletRequest request, HttpServletResponse response,
-                            @PathVariable("bucketName") String bucketName,
-                            @PathVariable("objectName") String objectName) throws Exception {
+    public void videoSlice (
+            @Parameter(description = "请求") HttpServletRequest request,
+            @Parameter(description = "响应") HttpServletResponse response,
+            @Parameter(description = "桶名称") @PathVariable("bucketName") String bucketName,
+            @Parameter(description = "视频名称") @PathVariable("objectName") String objectName
+    ) throws Exception {
         minioService.videoSlice(request, response, bucketName, objectName);
     }
 }
