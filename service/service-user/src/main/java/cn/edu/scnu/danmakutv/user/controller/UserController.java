@@ -6,10 +6,13 @@ import cn.edu.scnu.danmakutv.common.response.CommonResponse;
 import cn.edu.scnu.danmakutv.dto.UserLoginDTO;
 import cn.edu.scnu.danmakutv.dto.UserRegisterDTO;
 import cn.edu.scnu.danmakutv.user.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+@Api(tags = "{用户相关接口}")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -20,6 +23,10 @@ public class UserController {
     private AuthenticationSupport authenticationSupport;
 
     // 获取RSA公钥
+    @ApiOperation(
+            value = "获取RSA公钥",
+            notes = "用于前端加密用户密码"
+    )
     @GetMapping("/rsa-pks")
     public CommonResponse<String> getRsaPublicKey () {
         String rsaPublicKey = RSAUtil.getPublicKeyStr();
@@ -27,6 +34,7 @@ public class UserController {
     }
 
     // 注册
+    @ApiOperation(value = "用户注册")
     @PostMapping("/register")
     public CommonResponse<String> registerUser (@Valid @RequestBody UserRegisterDTO userRegisterDTO) {
         userService.registerUser(userRegisterDTO);
@@ -34,6 +42,10 @@ public class UserController {
     }
 
     // 登录
+    @ApiOperation(
+            value = "用户登录",
+            notes = "登录成功后返回JWT Token"
+    )
     @PostMapping("/login")
     public CommonResponse<String> loginUser (@Valid @RequestBody UserLoginDTO userLoginDTO) {
         String token = userService.loginUser(userLoginDTO);

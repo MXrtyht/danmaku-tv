@@ -7,11 +7,14 @@ import cn.edu.scnu.danmakutv.video.service.VideoService;
 import cn.edu.scnu.danmakutv.vo.VideoVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 import org.springframework.web.bind.annotation.*;
 
+@Api(tags = "视频操作相关接口")
 @RestController
 @RequestMapping("/video")
 public class VideoController {
@@ -27,6 +30,10 @@ public class VideoController {
      * @param size 分页大小
      * @return 包含视频列表的分页结果
      */
+    @ApiOperation(
+            value = "查询所有视频",
+            notes = "查询所有视频, 返回分页结果"
+    )
     @GetMapping("/all")
     public CommonResponse<IPage<VideoVO>> selectAllVideo (@Size(min = 1) int page, @Size(min = 4) int size) {
         // QueryWrapper 设置为 null ，查询所有视频
@@ -58,6 +65,9 @@ public class VideoController {
      * @param userUploadVideoDTO 请去该类看具体字段
      * @return 响应
      */
+    @ApiOperation(
+            value = "上传视频"
+    )
     @PostMapping("/user")
     public CommonResponse<String> uploadVideo (@Valid @RequestBody UserUploadVideoDTO userUploadVideoDTO) {
         Long userId = authenticationSupport.getCurrentUserId();
