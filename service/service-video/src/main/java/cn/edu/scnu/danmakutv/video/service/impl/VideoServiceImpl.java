@@ -3,6 +3,7 @@ package cn.edu.scnu.danmakutv.video.service.impl;
 import cn.edu.scnu.danmakutv.domain.video.Video;
 import cn.edu.scnu.danmakutv.dto.video.UserUploadVideoDTO;
 import cn.edu.scnu.danmakutv.video.mapper.VideoMapper;
+import cn.edu.scnu.danmakutv.video.mapper.VideoTagRelationMapper;
 import cn.edu.scnu.danmakutv.video.service.VideoService;
 import cn.edu.scnu.danmakutv.vo.video.VideoVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -12,11 +13,19 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 
 @Service
 public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements VideoService {
+    private final VideoMapper videoMapper;
+
+    private final VideoTagRelationMapper videoTagRelationMapper;
+
+    public VideoServiceImpl(VideoMapper videoMapper, VideoTagRelationMapper videoTagRelationMapper) {
+        this.videoMapper = videoMapper;
+        this.videoTagRelationMapper = videoTagRelationMapper;
+    }
+
     /**
      * 查询视频列表
      *
@@ -53,5 +62,19 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         }
         baseMapper.insert(video);
         Long videoId = video.getId();
+    }
+
+    /**
+     * 删除视频
+     * @param videoId 视频ID
+     */
+    @Transactional
+    @Override
+    public void deleteVideo(Long videoId) {
+        // 1. 删除视频标签关联关系
+        videoTagRelationMapper.deleteByVideoId(videoId);
+
+        // 2. 删除视频记录
+        videoMapper.deleteById(videoId);
     }
 }

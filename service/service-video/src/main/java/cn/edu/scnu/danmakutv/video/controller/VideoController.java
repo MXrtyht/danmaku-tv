@@ -89,4 +89,11 @@ public class VideoController {
         videoService.uploadVideo(userUploadVideoDTO);
         return CommonResponse.success("视频上传成功");
     }
+
+    @Operation(summary = "删除视频")
+    @DeleteMapping("/{id}")
+    public CommonResponse<String> deleteVideo(@PathVariable Long id) {
+        videoService.deleteVideo(id);
+        return CommonResponse.success("视频删除成功");
+    }
 }
