@@ -65,7 +65,7 @@ public class MinioService {
             );
         }
 
-        minioClient.close();
+        // minioClient.close();
         return uniqueFileName;
     }
 
@@ -87,7 +87,7 @@ public class MinioService {
                              .build()
         );
 
-        minioClient.close();
+        // minioClient.close();
         return file;
     }
 
@@ -109,7 +109,7 @@ public class MinioService {
                                 .build()
         );
 
-        minioClient.close();
+        // minioClient.close();
         return true;
     }
 

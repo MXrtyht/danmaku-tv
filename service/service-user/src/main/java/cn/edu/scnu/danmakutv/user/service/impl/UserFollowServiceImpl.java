@@ -108,10 +108,10 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
 
         // 获取所有关注分组
         List<FollowGroup> followGroups = followGroupService.getFollowGroupsByUserId(userId);
-        followGroups.add(
-                // 添加默认分组
-                0, followGroupService.getById(1)
-        );
+        // followGroups.add(
+        //         // 添加默认分组
+        //         0, followGroupService.getById(1)
+        // );
 
         // 对关注分组进行分类
         for (FollowGroup followGroup : followGroups) {
@@ -183,5 +183,26 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
         }
 
         return result;
+    }
+
+    /**
+     * 获取用户的总关注数量
+     * @param userId 用户ID
+     * @return 总关注数量
+     */
+    @Override
+    public Long getTotalFollowCount (Long userId) {
+        // 查询用户的关注数量
+        return this.baseMapper.selectCount(
+                new QueryWrapper<>(UserFollow.class).eq("user_id", userId)
+        );
+    }
+
+    @Override
+    public Long getTotalFansCount (Long userId) {
+        // 查询用户的粉丝数量
+        return this.baseMapper.selectCount(
+                new QueryWrapper<>(UserFollow.class).eq("follow_id", userId)
+        );
     }
 }
