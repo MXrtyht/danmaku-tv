@@ -5,16 +5,20 @@ import cn.edu.scnu.danmakutv.common.response.CommonResponse;
 import cn.edu.scnu.danmakutv.domain.user.FollowGroup;
 import cn.edu.scnu.danmakutv.domain.user.UserProfiles;
 import cn.edu.scnu.danmakutv.dto.user.CreateFollowGroupDTO;
+import cn.edu.scnu.danmakutv.dto.user.UnfollowDTO;
+import cn.edu.scnu.danmakutv.dto.user.UpdateFollowGroupDTO;
 import cn.edu.scnu.danmakutv.dto.user.UserFollowDTO;
 import cn.edu.scnu.danmakutv.user.service.FollowGroupService;
 import cn.edu.scnu.danmakutv.user.service.UserFollowService;
 import cn.edu.scnu.danmakutv.vo.user.UserFollowsWithGroupVO;
+import cn.edu.scnu.danmakutv.vo.user.UserProfilesVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.util.List;
 import java.util.Map;
@@ -112,5 +116,50 @@ public class UserFollowController {
         Long userId = authenticationSupport.getCurrentUserId();
         List<FollowGroup> followGroups = followGroupService.getFollowGroupsByUserId(userId);
         return CommonResponse.success(followGroups);
+    }
+
+    @Operation(summary = "修改关注分组信息")
+    @PutMapping("/follow-group")
+    public CommonResponse<String> updateFollowGroup(
+            @Valid @RequestBody @Parameter(description = "更新关注分组DTO")
+            UpdateFollowGroupDTO updateFollowGroupDTO
+    ) {
+        Long userId = authenticationSupport.getCurrentUserId();
+        followGroupService.updateFollowGroup(userId, updateFollowGroupDTO);
+        return CommonResponse.success("分组信息更新成功");
+    }
+
+    @Operation(summary = "删除关注分组")
+    @DeleteMapping("/follow-group/{id}")
+    public CommonResponse<String> deleteFollowGroup(
+            @PathVariable @Parameter(description = "分组ID") Long id
+    ) {
+        Long userId = authenticationSupport.getCurrentUserId();
+        followGroupService.deleteFollowGroup(userId, id);
+        return CommonResponse.success("分组删除成功");
+    }
+
+    @Operation(summary = "取消关注用户")
+    @PostMapping("/unfollow")
+    public CommonResponse<String> unfollowUser(
+            @Valid @RequestBody @Parameter(description = "取消关注DTO")
+            UnfollowDTO unfollowDTO
+    ) {
+        Long userId = authenticationSupport.getCurrentUserId();
+        userFollowService.unfollow(userId, unfollowDTO.getFollowId());
+        return CommonResponse.success("取消关注成功");
+    }
+
+    @Operation(summary = "根据分组ID获取关注用户列表",
+            description = "分页获取指定分组中的关注用户列表")
+    @GetMapping("/follows/{groupId}")
+    public CommonResponse<Page<UserProfilesVO>> getFollowsByGroupId(
+            @PathVariable @Parameter(description = "分组ID") Long groupId,
+            @RequestParam(defaultValue = "1") @Parameter(description = "页码") Integer page,
+            @RequestParam(defaultValue = "10") @Parameter(description = "每页数量") Integer size
+    ) {
+        Long userId = authenticationSupport.getCurrentUserId();
+        Page<UserProfilesVO> result = userFollowService.getFollowsByGroupId(userId, groupId, page, size);
+        return CommonResponse.success(result);
     }
 }

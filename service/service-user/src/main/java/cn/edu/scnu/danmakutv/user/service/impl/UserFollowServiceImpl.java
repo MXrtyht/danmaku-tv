@@ -12,12 +12,14 @@ import cn.edu.scnu.danmakutv.user.service.UserFollowService;
 import cn.edu.scnu.danmakutv.user.service.UserProfilesService;
 import cn.edu.scnu.danmakutv.user.service.UserService;
 import cn.edu.scnu.danmakutv.vo.user.UserFollowsWithGroupVO;
+import cn.edu.scnu.danmakutv.vo.user.UserProfilesVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -183,5 +185,88 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
         }
 
         return result;
+    }
+
+    @Override
+    public void transferGroupToDefault(Long userId, Long oldGroupId) {
+        // 获取用户的默认分组（名称为"默认分组"）
+        FollowGroup defaultGroup = followGroupService.getOne(
+                new QueryWrapper<>(FollowGroup.class)
+                        .eq("user_id", userId)
+                        .eq("name", "默认分组")
+        );
+
+        if (defaultGroup == null) {
+            throw new DanmakuException("默认分组不存在", 500);
+        }
+
+        // 创建更新对象
+        UserFollow updateEntity = new UserFollow();
+        updateEntity.setGroupId(defaultGroup.getId());
+
+        // 执行更新
+        this.baseMapper.update(
+                updateEntity,
+                new QueryWrapper<>(UserFollow.class)
+                        .eq("user_id", userId)
+                        .eq("group_id", oldGroupId)
+        );
+    }
+
+    @Override
+    @Transactional
+    public void unfollow(Long userId, Long followId) {
+        int deleted = this.baseMapper.delete(
+                new QueryWrapper<>(UserFollow.class)
+                        .eq("user_id", userId)
+                        .eq("follow_id", followId)
+        );
+        if (deleted == 0) {
+            throw new DanmakuException("未找到关注关系", 400);
+        }
+    }
+
+    @Override
+    public Page<UserProfilesVO> getFollowsByGroupId(Long userId, Long groupId, Integer page, Integer size) {
+        // 验证分组是否属于当前用户
+        FollowGroup group = followGroupService.getById(groupId);
+        if (group == null || !group.getUserId().equals(userId)) {
+            throw new DanmakuException("分组不存在或无权访问", 400);
+        }
+
+        // 创建分页对象
+        Page<UserFollow> pageParam = new Page<>(page, size);
+
+        // 查询该分组下的关注关系
+        Page<UserFollow> userFollows = this.baseMapper.selectPage(
+                pageParam,
+                new QueryWrapper<>(UserFollow.class)
+                        .eq("user_id", userId)
+                        .eq("group_id", groupId)
+        );
+
+        // 获取关注的用户ID列表
+        List<Long> followIds = userFollows.getRecords().stream()
+                .map(UserFollow::getFollowId)
+                .collect(Collectors.toList());
+
+        if (followIds.isEmpty()) {
+            return new Page<>(page, size, 0);
+        }
+
+        // 查询用户资料
+        List<UserProfiles> profiles = userProfilesService.getUserProfilesByUserIds(followIds);
+
+        // 转换为VO
+        List<UserProfilesVO> voList = profiles.stream().map(profile -> {
+            UserProfilesVO vo = new UserProfilesVO();
+            BeanUtils.copyProperties(profile, vo);
+            return vo;
+        }).collect(Collectors.toList());
+
+        // 构建分页结果
+        Page<UserProfilesVO> resultPage = new Page<>(page, size, userFollows.getTotal());
+        resultPage.setRecords(voList);
+        return resultPage;
     }
 }
