@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin
 @Tag(name = "用户关注 相关接口")
 @RestController
 @RequestMapping("/user")
@@ -112,5 +113,29 @@ public class UserFollowController {
         Long userId = authenticationSupport.getCurrentUserId();
         List<FollowGroup> followGroups = followGroupService.getFollowGroupsByUserId(userId);
         return CommonResponse.success(followGroups);
+    }
+
+    /**
+     * 获取当前用户的总关注数
+     * @return 当前用户的总关注数
+     */
+    @Operation(summary = "获取当前用户的总关注数")
+    @GetMapping("/follow-count")
+    public CommonResponse<Long> getTotalFollowCount() {
+        Long userId = authenticationSupport.getCurrentUserId();
+        Long totalFollowCount = userFollowService.getTotalFollowCount(userId);
+        return CommonResponse.success(totalFollowCount);
+    }
+
+    /**
+     * 获取当前用户的总粉丝数
+     * @return 当前用户的总粉丝数
+     */
+    @Operation(summary = "获取当前用户的总粉丝数")
+    @GetMapping("/fans-count")
+    public CommonResponse<Long> getTotalFansCount() {
+        Long userId = authenticationSupport.getCurrentUserId();
+        Long totalFansCount = userFollowService.getTotalFansCount(userId);
+        return CommonResponse.success(totalFansCount);
     }
 }

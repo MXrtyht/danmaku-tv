@@ -15,4 +15,8 @@ public interface UserFollowService extends IService<UserFollow> {
     List<UserFollowsWithGroupVO> getUserFollowGroups (Long userId);
 
     Map<UserProfiles, Boolean> getFans (Long userId);
+
+    Long getTotalFollowCount (Long userId);
+
+    Long getTotalFansCount (Long userId);
 }
