@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+@CrossOrigin
 @Tag(name = "文件处理相关接口")
 @RestController
 @RequestMapping("/upload")

@@ -12,6 +12,7 @@ import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin
 @Tag(name = "用户信息操作相关接口")
 @RestController
 @RequestMapping("/user")

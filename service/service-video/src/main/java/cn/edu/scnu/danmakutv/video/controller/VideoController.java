@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin
 @Tag(name = "视频操作相关接口")
 @RestController
 @RequestMapping("/video")

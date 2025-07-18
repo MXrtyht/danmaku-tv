@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@CrossOrigin
 @Tag(name = "弹幕操作相关接口")
 @RequestMapping("/video")
 @RestController
