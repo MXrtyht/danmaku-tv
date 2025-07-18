@@ -82,6 +82,11 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         videoMapper.deleteById(videoId);
     }
 
+    /**
+     * 根据视频id获取视频信息
+     * @param id  视频ID
+     * @return VideoDetailDTO
+     */
     @Override
     public VideoDetailDTO getVideoById(Long id) {
         // 1. 查询视频基本信息

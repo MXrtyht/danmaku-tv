@@ -106,7 +106,7 @@ public class VideoController {
     /**
      * 根据视频id获取视频信息
      * @param id 视频 ID
-     * @return 响应
+     * @return 响应（VideoDetailDTO）
      */
     @Operation(summary = "根据视频id获取视频信息")
     @GetMapping("/{id}")
