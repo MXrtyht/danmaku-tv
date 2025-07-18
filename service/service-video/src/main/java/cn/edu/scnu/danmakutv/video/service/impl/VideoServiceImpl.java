@@ -2,7 +2,9 @@ package cn.edu.scnu.danmakutv.video.service.impl;
 
 import cn.edu.scnu.danmakutv.domain.video.Video;
 import cn.edu.scnu.danmakutv.dto.video.UserUploadVideoDTO;
+import cn.edu.scnu.danmakutv.dto.video.VideoDetailDTO;
 import cn.edu.scnu.danmakutv.video.mapper.VideoMapper;
+import cn.edu.scnu.danmakutv.video.mapper.VideoTagMapper;
 import cn.edu.scnu.danmakutv.video.mapper.VideoTagRelationMapper;
 import cn.edu.scnu.danmakutv.video.service.VideoService;
 import cn.edu.scnu.danmakutv.vo.video.VideoVO;
@@ -14,15 +16,17 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements VideoService {
     private final VideoMapper videoMapper;
-
+    private final VideoTagMapper videoTagMapper;
     private final VideoTagRelationMapper videoTagRelationMapper;
 
-    public VideoServiceImpl(VideoMapper videoMapper, VideoTagRelationMapper videoTagRelationMapper) {
+    public VideoServiceImpl(VideoMapper videoMapper, VideoTagMapper videoTagMapper, VideoTagRelationMapper videoTagRelationMapper) {
         this.videoMapper = videoMapper;
+        this.videoTagMapper = videoTagMapper;
         this.videoTagRelationMapper = videoTagRelationMapper;
     }
 
@@ -76,5 +80,32 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
 
         // 2. 删除视频记录
         videoMapper.deleteById(videoId);
+    }
+
+    @Override
+    public VideoDetailDTO getVideoById(Long id) {
+        // 1. 查询视频基本信息
+        Video video = videoMapper.selectById(id);
+        if (video == null) {
+            throw new RuntimeException("视频不存在");
+        }
+
+        // 2. 查询关联标签名称列表
+        List<String> tags = videoTagMapper.selectTagsByVideoId(id);
+
+        // 3. 组装DTO
+        VideoDetailDTO dto = new VideoDetailDTO();
+        dto.setId(video.getId());
+        dto.setUserId(video.getUserId());
+        dto.setVideoUrl(video.getVideoUrl());
+        dto.setCoverUrl(video.getCoverUrl());
+        dto.setTitle(video.getTitle());
+        dto.setType(video.isType());
+        dto.setDuration(video.getDuration());
+        dto.setArea(video.getArea());
+        dto.setTags(tags);
+        dto.setCreatedAt(video.getCreatedAt());
+
+        return dto;
     }
 }

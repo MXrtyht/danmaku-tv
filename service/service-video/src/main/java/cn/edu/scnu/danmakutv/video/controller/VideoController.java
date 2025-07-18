@@ -3,6 +3,7 @@ package cn.edu.scnu.danmakutv.video.controller;
 import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
 import cn.edu.scnu.danmakutv.dto.video.UserUploadVideoDTO;
+import cn.edu.scnu.danmakutv.dto.video.VideoDetailDTO;
 import cn.edu.scnu.danmakutv.video.service.VideoService;
 import cn.edu.scnu.danmakutv.vo.video.VideoVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -90,10 +91,27 @@ public class VideoController {
         return CommonResponse.success("视频上传成功");
     }
 
+    /**
+     * 删除视频
+     * @param id 视频 ID
+     * @return 响应
+     */
     @Operation(summary = "删除视频")
     @DeleteMapping("/{id}")
     public CommonResponse<String> deleteVideo(@PathVariable Long id) {
         videoService.deleteVideo(id);
         return CommonResponse.success("视频删除成功");
+    }
+
+    /**
+     * 根据视频id获取视频信息
+     * @param id 视频 ID
+     * @return 响应
+     */
+    @Operation(summary = "根据视频id获取视频信息")
+    @GetMapping("/{id}")
+    public CommonResponse<VideoDetailDTO> getVideo(@PathVariable Long id) {
+        VideoDetailDTO video = videoService.getVideoById(id);
+        return CommonResponse.success(video);
     }
 }

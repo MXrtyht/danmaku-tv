@@ -7,5 +7,5 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface VideoTagMapper extends BaseMapper<VideoTag> {
-    List<VideoTag> selectTagsByVideoId (@Param("videoId") Long videoId);
+    List<String> selectTagsByVideoId (@Param("videoId") Long videoId);
 }

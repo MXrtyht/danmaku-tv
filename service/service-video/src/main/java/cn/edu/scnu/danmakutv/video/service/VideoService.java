@@ -2,6 +2,7 @@ package cn.edu.scnu.danmakutv.video.service;
 
 import cn.edu.scnu.danmakutv.domain.video.Video;
 import cn.edu.scnu.danmakutv.dto.video.UserUploadVideoDTO;
+import cn.edu.scnu.danmakutv.dto.video.VideoDetailDTO;
 import cn.edu.scnu.danmakutv.vo.video.VideoVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -29,4 +30,11 @@ public interface VideoService extends IService<Video> {
      * @param videoId 视频ID
      */
     void deleteVideo(Long videoId);
+
+    /**
+     * 根据视频id获取视频信息
+     * @param id  视频ID
+     * @return  视频详情信息
+     */
+    VideoDetailDTO getVideoById(Long id);
 }
