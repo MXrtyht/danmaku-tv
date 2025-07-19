@@ -54,4 +54,20 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         baseMapper.insert(video);
         Long videoId = video.getId();
     }
+
+    /**
+     * 根据视频ID获取视频信息
+     * @param videoId 视频ID
+     * @return 视频信息对象
+     */
+    @Override
+    public VideoVO getVideoById (Long videoId) {
+        Video video        = baseMapper.selectById(videoId);
+        if (video == null) {
+            throw new RuntimeException("视频不存在");
+        }
+        VideoVO videoVO = new VideoVO();
+        BeanUtils.copyProperties(video, videoVO);
+        return videoVO;
+    }
 }

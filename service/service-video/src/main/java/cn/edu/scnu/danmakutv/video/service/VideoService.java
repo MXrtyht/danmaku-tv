@@ -23,4 +23,12 @@ public interface VideoService extends IService<Video> {
      * @param userUploadVideoDTO 视频上传的数据传输对象
      */
     void uploadVideo (UserUploadVideoDTO userUploadVideoDTO);
+
+    /**
+     * 根据视频ID获取视频信息
+     *
+     * @param videoId 视频ID
+     * @return 视频信息对象
+     */
+    VideoVO getVideoById (Long videoId);
 }

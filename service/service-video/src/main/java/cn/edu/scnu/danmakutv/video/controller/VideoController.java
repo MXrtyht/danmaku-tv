@@ -90,4 +90,15 @@ public class VideoController {
         videoService.uploadVideo(userUploadVideoDTO);
         return CommonResponse.success("视频上传成功");
     }
+
+    @Operation(
+            summary = "根据视频ID查询视频"
+    )
+    @GetMapping("/id")
+    public CommonResponse<VideoVO> getVideoById (
+            @Parameter(description = "视频ID") @RequestParam Long videoId
+    ) {
+        VideoVO video = videoService.getVideoById(videoId);
+        return CommonResponse.success(video);
+    }
 }
