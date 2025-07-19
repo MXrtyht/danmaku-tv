@@ -38,3 +38,11 @@ CREATE TABLE `t_tag`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='视频标签表';
 
+DROP TABLE IF EXISTS `t_area`;
+CREATE TABLE `t_area`
+(
+    `id`   BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `name` VARCHAR(50)     NOT NULL COMMENT '分区名称',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='视频分区表';
