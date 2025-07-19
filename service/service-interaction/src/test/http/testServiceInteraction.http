@@ -48,3 +48,16 @@ GET http://localhost:8084/danmaku?videoId=1&startTime=2025-07-01 00:00:00&endTim
 GET http://localhost:8084/danmaku?videoId=1
 
 ###
+
+POST localhost:8084/video/collection
+token: eyJhbGciOiJIUzUxMiIsInppcCI6IkdaSVAifQ.H4sIAAAAAAAA_6tWKi5NUrJSSknMy03MLtUNDXYNUtJRSq0oULIyNDc1MTYzMDG01FEqLU4t8kxRsjKqBQApbKFzMgAAAA.JY-47Koh-umd2HdWahmte7j78TF88lcvnlJ2bY6Xl7tE-VLs3Jetk7GBe2BVneZMhwTHzrrJI8EBlRoz_727LA
+Content-Type: application/json
+
+{
+  "userId": 2,
+  "videoId": 1,
+  "groupId": 1,
+  "createAt": ""
+}
+
+###

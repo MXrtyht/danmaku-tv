@@ -6,6 +6,9 @@ import cn.edu.scnu.danmakutv.vo.video.VideoVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import jakarta.validation.constraints.Size;
+
+import java.util.List;
 
 public interface VideoService extends IService<Video> {
     /**
@@ -23,4 +26,19 @@ public interface VideoService extends IService<Video> {
      * @param userUploadVideoDTO 视频上传的数据传输对象
      */
     void uploadVideo (UserUploadVideoDTO userUploadVideoDTO);
+
+    /**
+     * 根据视频ID获取视频信息
+     *
+     * @param videoId 视频ID
+     * @return 视频信息对象
+     */
+    VideoVO getVideoById (Long videoId);
+
+    /**
+     * 根据视频ID数组获取视频列表
+     * @param videoIds 视频ID数组
+     * @return 包含视频信息的分页结果
+     */
+    List<Video> getVideosByIds (@Size(min = 1) Long[] videoIds);
 }
