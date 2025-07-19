@@ -6,4 +6,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 public interface VideoCollectionService extends IService<VideoCollection> {
     void addVideoCollection (AddVideoCollectionDTO addVideoCollectionDTO);
+
+    void deleteVideoCollection (Long userId, Long videoId);
 }

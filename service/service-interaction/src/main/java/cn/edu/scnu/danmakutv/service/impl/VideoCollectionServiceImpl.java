@@ -54,4 +54,20 @@ public class VideoCollectionServiceImpl extends ServiceImpl<VideoCollectionMappe
 
         this.baseMapper.insert(videoCollection);
     }
+
+    @Override
+    public void deleteVideoCollection (Long userId, Long videoId) {
+        if (videoId == null) {
+            throw new DanmakuException("视频ID不能为空", 400);
+        }
+
+        int rowsAffected = this.baseMapper.delete(
+                new QueryWrapper<VideoCollection>()
+                        .eq("user_id", userId)
+                        .eq("video_id", videoId)
+        );
+        if (rowsAffected == 0) {
+            throw new DanmakuException("取消收藏失败，可能视频未被收藏", 400);
+        }
+    }
 }

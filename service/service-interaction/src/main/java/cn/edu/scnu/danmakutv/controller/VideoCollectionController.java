@@ -6,6 +6,7 @@ import cn.edu.scnu.danmakutv.dto.interaction.AddVideoCollectionDTO;
 import cn.edu.scnu.danmakutv.service.CollectionGroupService;
 import cn.edu.scnu.danmakutv.service.VideoCollectionService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +20,10 @@ public class VideoCollectionController {
     private VideoCollectionService videoCollectionService;
 
     @Resource
-    private CollectionGroupService collectionGroupService;
-
-    @Resource
     private AuthenticationSupport authenticationSupport;
 
     @Operation(summary = "根据视频id添加到收藏")
-    @PostMapping("/collection")
+    @PostMapping("/add-collection")
     public CommonResponse<String> addVideoCollection (
             @RequestBody AddVideoCollectionDTO addVideoCollectionDTO
     ) {
@@ -34,5 +32,15 @@ public class VideoCollectionController {
 
         videoCollectionService.addVideoCollection(addVideoCollectionDTO);
         return CommonResponse.success("收藏成功");
+    }
+
+    @Operation(summary = "根据视频id取消收藏")
+    @PostMapping("/delete-collection")
+    public CommonResponse<String> deleteVideoCollection (
+        @RequestBody @Parameter(description = "视频id", required = true) Long videoId
+    ) {
+        Long userId = authenticationSupport.getCurrentUserId();
+        videoCollectionService.deleteVideoCollection(userId, videoId);
+        return CommonResponse.success("取消收藏成功");
     }
 }
