@@ -2,6 +2,7 @@ package cn.edu.scnu.danmakutv.video.controller;
 
 import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
+import cn.edu.scnu.danmakutv.domain.video.Video;
 import cn.edu.scnu.danmakutv.dto.video.UserUploadVideoDTO;
 import cn.edu.scnu.danmakutv.video.service.VideoService;
 import cn.edu.scnu.danmakutv.vo.video.VideoVO;
@@ -14,6 +15,8 @@ import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin
 @Tag(name = "视频操作相关接口")
@@ -28,6 +31,7 @@ public class VideoController {
 
     /**
      * 查询所有视频
+     *
      * @param page 分页页码
      * @param size 分页大小
      * @return 包含视频列表的分页结果
@@ -48,6 +52,7 @@ public class VideoController {
 
     /**
      * 查询当前用户上传的视频
+     *
      * @param page 分页页码
      * @param size 分页大小
      * @return 包含当前用户视频列表的分页结果
@@ -72,8 +77,10 @@ public class VideoController {
     }
 
     // 上传视频 前端先去MinioService的uploadFile接口上传视频 得到视频的存储路径再调用该接口
+
     /**
      * 上传视频
+     *
      * @param userUploadVideoDTO 请去该类看具体字段
      * @return 响应
      */
@@ -100,5 +107,14 @@ public class VideoController {
     ) {
         VideoVO video = videoService.getVideoById(videoId);
         return CommonResponse.success(video);
+    }
+
+    @Operation(summary = "根据视频id列表批量查询视频")
+    @PostMapping("/batch")
+    public CommonResponse<List<Video>> getVideosByIds (
+            @RequestBody @Parameter(description = "视频ID列表") @Size(min = 1) Long[] videoIds
+    ) {
+        List<Video> result = videoService.getVideosByIds(videoIds);
+        return CommonResponse.success(result);
     }
 }
