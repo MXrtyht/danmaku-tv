@@ -2,6 +2,7 @@ package cn.edu.scnu.danmakutv.controller;
 
 import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
+import cn.edu.scnu.danmakutv.domain.interaction.CollectionGroup;
 import cn.edu.scnu.danmakutv.dto.interaction.AddVideoCollectionDTO;
 import cn.edu.scnu.danmakutv.service.CollectionGroupService;
 import cn.edu.scnu.danmakutv.service.VideoCollectionService;
@@ -21,6 +22,9 @@ import java.util.List;
 public class VideoCollectionController {
     @Resource
     private VideoCollectionService videoCollectionService;
+
+    @Resource
+    private  CollectionGroupService collectionGroupService;
 
     @Resource
     private AuthenticationSupport authenticationSupport;
@@ -47,11 +51,20 @@ public class VideoCollectionController {
         return CommonResponse.success("取消收藏成功");
     }
 
+    @Operation(summary = "以分组形式获取用户收藏的视频")
     @GetMapping("/collected-videos")
     public CommonResponse<List<CollectedVideosWithGroupVO>> getUserCollectedVideos (
     ) {
         Long userId = authenticationSupport.getCurrentUserId();
         List<CollectedVideosWithGroupVO> collectedVideos = videoCollectionService.getUserCollectedVideos(userId);
         return CommonResponse.success(collectedVideos);
+    }
+
+    @Operation(summary = "获取用户收藏分组列表")
+    @GetMapping("/collection-groups")
+    public CommonResponse<List<CollectionGroup>> getUserCollectionGroups () {
+        Long userId = authenticationSupport.getCurrentUserId();
+        List<CollectionGroup> collectionGroups = collectionGroupService.getCollectionGroupsByUserId(userId);
+        return CommonResponse.success(collectionGroups);
     }
 }
