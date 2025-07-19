@@ -1,7 +1,9 @@
 package cn.edu.scnu.danmakutv.video.service.impl;
 
+import cn.edu.scnu.common.utils.IpUtil;
 import cn.edu.scnu.danmakutv.domain.video.Video;
 import cn.edu.scnu.danmakutv.domain.video.VideoTagRelation;
+import cn.edu.scnu.danmakutv.domain.video.VideoView;
 import cn.edu.scnu.danmakutv.dto.video.RecommendedVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UpdateVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UserUploadVideoDTO;
@@ -15,12 +17,15 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import eu.bitwalker.useragentutils.UserAgent;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -192,5 +197,50 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
 
             return dto;
         }).collect(Collectors.toList());
+    }
+
+    /**
+     * 添加视频观看记录
+     * @param videoView 视频观看记录
+     * @param request
+     */
+    @Override
+    public void addVideoView(VideoView videoView, HttpServletRequest request) {
+        Long videoId = videoView.getVideoId();
+        Long userId = videoView.getUserId();
+        //生成clientId
+        String agent = request.getHeader("User-Agent");
+        UserAgent userAgent= UserAgent.parseUserAgentString(agent);
+        String clientId = String.valueOf(userAgent.getId());
+        String ip= IpUtil.getIpAddr(request);
+        Map<String,Object> params = new HashMap<>();
+        if(userId!=null){
+            params.put("userId",userId);
+        }else {
+            params.put("ip",ip);
+            params.put("clientId",clientId);
+        }
+        Date now = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        params.put("today",sdf.format(now));
+        params.put("videoId",videoId);
+        //添加观看记录
+        VideoView dbVideoView = videoMapper.getVideoView(params);
+        if(dbVideoView==null){
+            videoView.setIp(ip);
+            videoView.setClientId(clientId);
+            videoView.setCreatedAt(new Date());
+            videoMapper.addVideoView(videoView);
+        }
+    }
+
+    /**
+     * 获取视频播放量
+     * @param videoId
+     * @return
+     */
+    @Override
+    public Integer getVideoViewCounts(Long videoId) {
+        return videoMapper.getVideoViewCounts(videoId);
     }
 }

@@ -28,4 +28,23 @@
                     column="id"/>
     </resultMap>
 
+    <select id="getVideoView" parameterType="java.util.Map" resultType="cn.edu.scnu.danmakutv.domain.video.VideoView">
+        select * from t_video_view where videoId = #{videoId}
+        <if test="userId == null and clientId != null">
+            and clientId = #{clientId} and userId is null
+        </if>
+        <if test="userId != null">
+            and userId = #{userId}
+        </if>
+        <if test="ip != null and ip != ''">
+            and ip = #{ip}
+        </if>
+        <if test="today != null and today != ''">
+            and DATE_FORMAT(createTime, '%Y-%m-%d') = #{today}
+        </if>
+    </select>
+
+    <select id="getVideoViewCounts" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        select count(1) from t_video_view where videoId = #{videoId}
+    </select>
 </mapper>

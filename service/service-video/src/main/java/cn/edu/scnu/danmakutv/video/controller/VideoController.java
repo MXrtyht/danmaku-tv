@@ -2,6 +2,7 @@ package cn.edu.scnu.danmakutv.video.controller;
 
 import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
+import cn.edu.scnu.danmakutv.domain.video.VideoView;
 import cn.edu.scnu.danmakutv.dto.video.RecommendedVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UpdateVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UserUploadVideoDTO;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 import org.springframework.web.bind.annotation.*;
@@ -149,5 +151,38 @@ public class VideoController {
     ) {
         List<RecommendedVideoDTO> videos = videoService.getRecommendedVideos(tagIds, limit);
         return CommonResponse.success(videos);
+    }
+
+    /**
+     * 添加视频观看记录
+     * @param videoView 视频观看记录
+     * @param request
+     * @return
+     */
+    @Operation(summary = "添加视频观看记录")
+    @PostMapping("/video-views")
+    public CommonResponse<String> addVideoView(@RequestBody VideoView videoView,
+                                               HttpServletRequest request){
+        Long userId;
+        try {
+            userId = authenticationSupport.getCurrentUserId();
+            videoView.setUserId(userId);
+            videoService.addVideoView(videoView,request);
+        }catch (Exception e){
+            videoService.addVideoView(videoView,request);
+        }
+        return CommonResponse.success("成功添加视频观看记录");
+    }
+
+    /**
+     * 查询视频播放量
+     * @param videoId
+     * @return 视频播放量
+     */
+    @Operation(summary = "查询视频播放量")
+    @GetMapping("/video-view-counts")
+    public CommonResponse<Integer> getVideoViewCounts(@RequestParam Long videoId){
+        Integer count=videoService.getVideoViewCounts(videoId);
+        return CommonResponse.success(count);
     }
 }

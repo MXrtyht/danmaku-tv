@@ -1,6 +1,7 @@
 package cn.edu.scnu.danmakutv.video.service;
 
 import cn.edu.scnu.danmakutv.domain.video.Video;
+import cn.edu.scnu.danmakutv.domain.video.VideoView;
 import cn.edu.scnu.danmakutv.dto.video.RecommendedVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UpdateVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UserUploadVideoDTO;
@@ -9,6 +10,7 @@ import cn.edu.scnu.danmakutv.vo.video.VideoVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 
@@ -56,4 +58,18 @@ public interface VideoService extends IService<Video> {
      * @return List<RecommendedVideoDTO>
      */
     List<RecommendedVideoDTO> getRecommendedVideos(List<Long> tagIds, int limit);
+
+    /**
+     * 添加视频观看记录
+     * @param videoView 视频观看记录
+     * @param request
+     */
+    void addVideoView(VideoView videoView, HttpServletRequest request);
+
+    /**
+     * 获取视频播放量
+     * @param videoId
+     * @return
+     */
+    Integer getVideoViewCounts(Long videoId);
 }
