@@ -12,6 +12,7 @@ import cn.edu.scnu.danmakutv.user.service.FollowGroupService;
 import cn.edu.scnu.danmakutv.user.service.UserFollowService;
 import cn.edu.scnu.danmakutv.user.service.UserProfilesService;
 import cn.edu.scnu.danmakutv.user.service.UserService;
+import cn.edu.scnu.danmakutv.vo.user.UserFanDTO;
 import cn.edu.scnu.danmakutv.vo.user.UserFollowsWithGroupVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -150,14 +151,14 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
      * @return 包含粉丝用户信息和是否已关注的Map
      */
     @Override
-    public Map<UserProfiles, Boolean> getFans (Long userId) {
+    public List<UserFanDTO> getFans(Long userId) {
         // 查询所有粉丝
         List<UserFollow> fans = this.baseMapper.selectList(
                 new QueryWrapper<>(UserFollow.class).eq("follow_id", userId)
         );
 
         if (fans.isEmpty()) {
-            return null;
+            return new ArrayList<>(); // 返回空列表而不是null
         }
 
         // 获取所有粉丝的id
@@ -178,10 +179,14 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
         Set<Long> followedBackIds = followBackList.stream()
                                                   .map(UserFollow::getFollowId)
                                                   .collect(Collectors.toSet());
-        // 将粉丝信息和是否回关的状态封装到Map中
-        Map<UserProfiles, Boolean> result = new HashMap<>();
+
+        // 将粉丝信息和是否回关的状态封装到UserFanDTO中
+        List<UserFanDTO> result = new ArrayList<>();
         for (UserProfiles profile : fanUserProfiles) {
-            result.put(profile, followedBackIds.contains(profile.getUserId()));
+            UserFanDTO fanDTO = new UserFanDTO();
+            fanDTO.setUserProfiles(profile);
+            fanDTO.setIsFollowBack(followedBackIds.contains(profile.getUserId()));
+            result.add(fanDTO);
         }
 
         return result;
@@ -236,5 +241,21 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
                         .eq("user_id", userId)
                         .eq("follow_id", followId)
         );
+    }
+
+    @Override
+    public void deleteFollowGroup (Long userId, Long groupId) {
+        // 先取关分组下的所有用户
+        this.baseMapper.delete(
+                new QueryWrapper<>(UserFollow.class)
+                        .eq("user_id", userId)
+                        .eq("group_id", groupId)
+        );
+
+        // 删除分组
+        boolean isDeleted = followGroupService.removeById(groupId);
+        if (!isDeleted) {
+            throw new DanmakuException("删除关注分组失败，可能分组不存在", 400);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package cn.edu.scnu.danmakutv.user.controller;
 
 import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
+import cn.edu.scnu.danmakutv.common.exception.DanmakuException;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
 import cn.edu.scnu.danmakutv.domain.user.FollowGroup;
 import cn.edu.scnu.danmakutv.domain.user.UserProfiles;
@@ -9,6 +10,7 @@ import cn.edu.scnu.danmakutv.dto.user.UserFollowDTO;
 import cn.edu.scnu.danmakutv.dto.user.UserUnfollowDTO;
 import cn.edu.scnu.danmakutv.user.service.FollowGroupService;
 import cn.edu.scnu.danmakutv.user.service.UserFollowService;
+import cn.edu.scnu.danmakutv.vo.user.UserFanDTO;
 import cn.edu.scnu.danmakutv.vo.user.UserFollowsWithGroupVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -93,10 +95,10 @@ public class UserFollowController {
             description = "获取当前用户的所有粉丝及是否已关注"
     )
     @GetMapping("/fans")
-    public CommonResponse<Map<UserProfiles, Boolean>> getFans () {
+    public CommonResponse<List<UserFanDTO>> getFans () {
         Long userId = authenticationSupport.getCurrentUserId();
 
-        Map<UserProfiles, Boolean> fans = userFollowService.getFans(userId);
+        List<UserFanDTO> fans = userFollowService.getFans(userId);
         return CommonResponse.success(fans);
     }
 
@@ -151,5 +153,19 @@ public class UserFollowController {
         Long userId = authenticationSupport.getCurrentUserId();
         Long totalFansCount = userFollowService.getTotalFansCount(userId);
         return CommonResponse.success(totalFansCount);
+    }
+
+    @Operation(summary = "删除用户关注分组, 会一并将分组下的用户取关")
+    @PostMapping("/delete-follow-group")
+    public CommonResponse<String> deleteFollowGroup (
+            @RequestBody @Parameter(description = "收藏分组ID", required = true)
+            Long groupId
+    ){
+        Long userId = authenticationSupport.getCurrentUserId();
+        if( groupId == null || groupId <= 1 ){
+            throw new DanmakuException("不能删除默认分组", 400);
+        }
+        userFollowService.deleteFollowGroup(userId, groupId);
+        return CommonResponse.success("删除成功");
     }
 }
