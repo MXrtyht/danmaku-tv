@@ -2,6 +2,7 @@ package cn.edu.scnu.danmakutv.video.controller;
 
 import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
+import cn.edu.scnu.danmakutv.dto.video.RecommendedVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UpdateVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UserUploadVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.VideoDetailDTO;
@@ -16,6 +17,8 @@ import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "视频操作相关接口")
 @RestController
@@ -130,5 +133,21 @@ public class VideoController {
     ) {
         videoService.updateVideo(id, dto);
         return CommonResponse.success("视频更新");
+    }
+
+    /**
+     * 视频相关推荐
+     * @param tagIds
+     * @param limit
+     * @return
+     */
+    @Operation(summary = "视频相关推荐")
+    @GetMapping("/recommendations")
+    public CommonResponse<List<RecommendedVideoDTO>> getRecommendedVideos(
+            @RequestParam List<Long> tagIds,
+            @RequestParam(defaultValue = "10") int limit
+    ) {
+        List<RecommendedVideoDTO> videos = videoService.getRecommendedVideos(tagIds, limit);
+        return CommonResponse.success(videos);
     }
 }

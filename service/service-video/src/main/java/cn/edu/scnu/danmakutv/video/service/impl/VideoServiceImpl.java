@@ -2,6 +2,7 @@ package cn.edu.scnu.danmakutv.video.service.impl;
 
 import cn.edu.scnu.danmakutv.domain.video.Video;
 import cn.edu.scnu.danmakutv.domain.video.VideoTagRelation;
+import cn.edu.scnu.danmakutv.dto.video.RecommendedVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UpdateVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UserUploadVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.VideoDetailDTO;
@@ -18,7 +19,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements VideoService {
@@ -148,5 +151,46 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
                 videoTagRelationMapper.insert(relation);
             });
         }
+    }
+
+    /**
+     * 视频相关推荐
+     * @param tagIds 视频标签列表
+     * @param limit 返回的推荐视频数量限制
+     * @return List<RecommendedVideoDTO>
+     */
+    @Override
+    public List<RecommendedVideoDTO> getRecommendedVideos(List<Long> tagIds, int limit) {
+        if (tagIds == null || tagIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // 1. 查询包含相同标签的视频ID列表（按匹配标签数排序）
+        List<Long> videoIds = videoTagRelationMapper.findVideoIdsByTagIds(tagIds, limit);
+
+        // 2. 查询视频详细信息
+        if (videoIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<Video> videos = videoMapper.selectBatchIds(videoIds);
+
+        // 3. 组装DTO
+        return videos.stream().map(video -> {
+            RecommendedVideoDTO dto = new RecommendedVideoDTO();
+            dto.setId(video.getId());
+            dto.setTitle(video.getTitle());
+            dto.setVideoUrl(video.getVideoUrl());
+            dto.setCoverUrl(video.getCoverUrl());
+            dto.setType(video.isType());
+            dto.setDuration(video.getDuration());
+            dto.setArea(video.getArea());
+            dto.setCreatedAt(video.getCreatedAt());
+
+            // 查询视频标签
+            List<String> tags = videoTagMapper.selectTagsByVideoId(video.getId());
+            dto.setTags(tags);
+
+            return dto;
+        }).collect(Collectors.toList());
     }
 }

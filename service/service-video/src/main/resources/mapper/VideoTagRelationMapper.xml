@@ -11,4 +11,16 @@
         WHERE video_id = #{videoId}
     </delete>
 
+    <!-- 根据视频标签列表查找被推荐视频ID -->
+    <select id="findVideoIdsByTagIds" resultType="long">
+        SELECT vtr.video_id
+        FROM r_video_tag vtr
+        WHERE vtr.tag_id IN
+        <foreach item="tagId" collection="tagIds" open="(" separator="," close=")">
+            #{tagId}
+        </foreach>
+        GROUP BY vtr.video_id
+        ORDER BY COUNT(*) DESC
+        LIMIT #{limit}
+    </select>
 </mapper>
