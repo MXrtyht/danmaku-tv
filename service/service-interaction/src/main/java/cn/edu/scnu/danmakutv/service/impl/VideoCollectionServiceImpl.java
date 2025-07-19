@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -75,6 +76,7 @@ public class VideoCollectionServiceImpl extends ServiceImpl<VideoCollectionMappe
 
     /**
      * 获取用户收藏分组和对应的视频id列表
+     *
      * @param userId 用户id
      * @return 包含用户收藏分组和对应的视频id列表
      */
@@ -88,14 +90,14 @@ public class VideoCollectionServiceImpl extends ServiceImpl<VideoCollectionMappe
                         .eq("user_id", userId)
         );
 
-        if(videoCollections.isEmpty()) {
+        if (videoCollections.isEmpty()) {
             return collectedVideos; // 如果没有收藏的视频，直接返回空列表
         }
 
         // 获取所有收藏的视频的id
         Set<Long> videoIds = videoCollections.stream()
-                .map(VideoCollection::getVideoId)
-                .collect(Collectors.toSet());
+                                             .map(VideoCollection::getVideoId)
+                                             .collect(Collectors.toSet());
 
         // 获取所有的关注分组
         List<CollectionGroup> collectionGroups = collectionGroupService.getCollectionGroupsByUserId(userId);
@@ -109,9 +111,9 @@ public class VideoCollectionServiceImpl extends ServiceImpl<VideoCollectionMappe
 
             // 获取当前分组下 收藏的视频
             // 先遍历收藏的视频
-            for(VideoCollection videoCollection : videoCollections) {
+            for (VideoCollection videoCollection : videoCollections) {
                 // 如果收藏的视频在当前分组下
-                if(videoCollection.getGroupId().equals(collectionGroup.getId())) {
+                if (videoCollection.getGroupId().equals(collectionGroup.getId())) {
                     // 将视频id添加到当前分组的视频列表中
                     collectedVideosWithGroupVO.getVideoIdList().add(videoCollection.getVideoId());
                 }
@@ -122,5 +124,28 @@ public class VideoCollectionServiceImpl extends ServiceImpl<VideoCollectionMappe
         }
 
         return collectedVideos;
+    }
+
+    /**
+     * 删除用户收藏分组, 及其下收藏的视频
+     *
+     * @param userId
+     * @param groupId
+     * @return
+     */
+    @Transactional
+    @Override
+    public void deleteCollectionGroup (Long userId, Long groupId) {
+        // 先删除分组下收藏的视频
+        this.baseMapper.delete(
+                new QueryWrapper<VideoCollection>()
+                        .eq("user_id", userId)
+                        .eq("group_id", groupId)
+        );
+        // 再删除分组
+        boolean isDeleted = collectionGroupService.removeById(groupId);
+        if (!isDeleted) {
+            throw new DanmakuException("删除收藏分组失败", 400);
+        }
     }
 }

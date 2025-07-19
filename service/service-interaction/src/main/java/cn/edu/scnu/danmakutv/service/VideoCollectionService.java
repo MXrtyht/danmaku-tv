@@ -13,4 +13,6 @@ public interface VideoCollectionService extends IService<VideoCollection> {
     void deleteVideoCollection (Long userId, Long videoId);
 
     List<CollectedVideosWithGroupVO> getUserCollectedVideos (Long userId);
+
+    void deleteCollectionGroup (Long userId, Long groupId);
 }
