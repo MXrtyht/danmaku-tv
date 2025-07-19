@@ -45,8 +45,8 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         Video video = new Video();
 
         BeanUtils.copyProperties(userUploadVideoDTO, video);
-        video.setCreatedAt(LocalDateTime.now());
-        video.setUpdatedAt(LocalDateTime.now());
+        video.setCreateAt(LocalDateTime.now());
+        video.setUpdateAt(LocalDateTime.now());
 
         // TODO 插入视频-tag关联表
         // TODO 返回视频ID

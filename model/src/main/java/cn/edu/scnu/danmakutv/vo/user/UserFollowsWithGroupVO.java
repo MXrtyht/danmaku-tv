@@ -20,10 +20,10 @@ public class UserFollowsWithGroupVO {
     private String name; // 分组名称
 
     @Schema(description = "分组创建时间")
-    private String createdAt; // 分组创建时间
+    private String createAt; // 分组创建时间
 
     @Schema(description = "分组更新时间")
-    private String updatedAt; // 分组更新时间
+    private String updateAt; // 分组更新时间
 
     @Schema(description = "分组内用户列表")
     private List<UserProfiles> userProfilesList; // 分组内用户列表

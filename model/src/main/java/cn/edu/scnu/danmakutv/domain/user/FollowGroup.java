@@ -25,9 +25,9 @@ public class FollowGroup {
 
     @Schema(description = "分组创建时间")
     @TableField("create_at")
-    private String createdAt; // 分组创建时间
+    private String createAt; // 分组创建时间
 
     @Schema(description = "分组更新时间")
     @TableField("update_at")
-    private String updatedAt; // 分组更新时间
+    private String updateAt; // 分组更新时间
 }

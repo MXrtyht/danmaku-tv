@@ -1,11 +1,11 @@
 package cn.edu.scnu.danmakutv.video.mapper;
 
-import cn.edu.scnu.danmakutv.domain.video.VideoTag;
+import cn.edu.scnu.danmakutv.domain.video.Tag;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-public interface VideoTagMapper extends BaseMapper<VideoTag> {
-    List<VideoTag> selectTagsByVideoId (@Param("videoId") Long videoId);
+public interface VideoTagMapper extends BaseMapper<Tag> {
+    List<Tag> selectTagsByVideoId (@Param("videoId") Long videoId);
 }

@@ -1,6 +1,6 @@
 package cn.edu.scnu.danmakutv.vo.video;
 
-import cn.edu.scnu.danmakutv.domain.video.VideoTag;
+import cn.edu.scnu.danmakutv.domain.video.Tag;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -32,14 +32,14 @@ public class VideoVO {
     @Schema(description = "类型, 0自制, 1转载")
     private boolean type;
 
-    @Schema(description = "视频时常 单位秒")
+    @Schema(description = "视频时长 单位秒")
     private int duration;
 
     @Schema(description = "视频分区")
     private Integer area;
 
     @Schema(description = "视频标签列表")
-    private List<VideoTag> tags;
+    private List<Tag> tags;
 
     @Schema(description = "创建时间")
     private LocalDateTime createAt;

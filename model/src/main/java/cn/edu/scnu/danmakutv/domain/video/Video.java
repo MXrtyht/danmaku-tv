@@ -51,9 +51,9 @@ public class Video {
 
     @Schema(description = "创建时间")
     @TableField("create_at")
-    private LocalDateTime createdAt;
+    private LocalDateTime createAt;
 
     @Schema(description = "更新时间")
     @TableField("update_at")
-    private LocalDateTime updatedAt;
+    private LocalDateTime updateAt;
 }

@@ -10,7 +10,7 @@ import lombok.Data;
 @Schema(name = "视频标签")
 @Data
 @TableName("t_tag")
-public class VideoTag {
+public class Tag {
 
     @Schema(description = "id")
     @TableId(type = IdType.AUTO)

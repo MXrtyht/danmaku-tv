@@ -23,7 +23,7 @@
         <result column="area" property="area"/>
         <result column="create_at" property="createAt"/>
         <result column="update_at" property="updateAt"/>
-        <collection property="tags" ofType="cn.edu.scnu.danmakutv.domain.video.VideoTag"
+        <collection property="tags" ofType="cn.edu.scnu.danmakutv.domain.video.Tag"
                     select="cn.edu.scnu.danmakutv.video.mapper.VideoTagMapper.selectTagsByVideoId"
                     column="id"/>
     </resultMap>
