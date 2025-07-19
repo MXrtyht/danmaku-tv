@@ -5,11 +5,14 @@ import cn.edu.scnu.danmakutv.common.response.CommonResponse;
 import cn.edu.scnu.danmakutv.dto.interaction.AddVideoCollectionDTO;
 import cn.edu.scnu.danmakutv.service.CollectionGroupService;
 import cn.edu.scnu.danmakutv.service.VideoCollectionService;
+import cn.edu.scnu.danmakutv.vo.interaction.CollectedVideosWithGroupVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin
 @Tag(name = "视频收藏相关接口")
@@ -42,5 +45,13 @@ public class VideoCollectionController {
         Long userId = authenticationSupport.getCurrentUserId();
         videoCollectionService.deleteVideoCollection(userId, videoId);
         return CommonResponse.success("取消收藏成功");
+    }
+
+    @GetMapping("/collected-videos")
+    public CommonResponse<List<CollectedVideosWithGroupVO>> getUserCollectedVideos (
+    ) {
+        Long userId = authenticationSupport.getCurrentUserId();
+        List<CollectedVideosWithGroupVO> collectedVideos = videoCollectionService.getUserCollectedVideos(userId);
+        return CommonResponse.success(collectedVideos);
     }
 }
