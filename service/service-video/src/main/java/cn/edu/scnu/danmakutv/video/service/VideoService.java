@@ -1,6 +1,7 @@
 package cn.edu.scnu.danmakutv.video.service;
 
 import cn.edu.scnu.danmakutv.domain.video.Video;
+import cn.edu.scnu.danmakutv.dto.video.UpdateVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UserUploadVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.VideoDetailDTO;
 import cn.edu.scnu.danmakutv.vo.video.VideoVO;
@@ -37,4 +38,11 @@ public interface VideoService extends IService<Video> {
      * @return  视频详情信息
      */
     VideoDetailDTO getVideoById(Long id);
+
+    /**
+     * 修改视频信息
+     * @param id 要修改视频的ID
+     * @param dto UpdateVideoDTO
+     */
+    void updateVideo(Long id, UpdateVideoDTO dto);
 }

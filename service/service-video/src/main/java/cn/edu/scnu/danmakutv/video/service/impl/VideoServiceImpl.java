@@ -1,6 +1,8 @@
 package cn.edu.scnu.danmakutv.video.service.impl;
 
 import cn.edu.scnu.danmakutv.domain.video.Video;
+import cn.edu.scnu.danmakutv.domain.video.VideoTagRelation;
+import cn.edu.scnu.danmakutv.dto.video.UpdateVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UserUploadVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.VideoDetailDTO;
 import cn.edu.scnu.danmakutv.video.mapper.VideoMapper;
@@ -112,5 +114,39 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         dto.setCreatedAt(video.getCreatedAt());
 
         return dto;
+    }
+
+    /**
+     * 修改视频信息
+     * @param id 要修改视频的ID
+     * @param dto UpdateVideoDTO
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateVideo(Long id, UpdateVideoDTO dto) {
+        // 1. 检查视频是否存在
+        Video video = videoMapper.selectById(id);
+        if (video == null) {
+            throw new RuntimeException("视频不存在");
+        }
+
+        // 2. 更新视频基本信息
+        video.setTitle(dto.getTitle());
+        video.setCoverUrl(dto.getCoverUrl());
+        video.setType(dto.getType());
+        video.setArea(dto.getArea());
+        video.setUpdatedAt(LocalDateTime.now());
+        videoMapper.updateById(video);
+
+        // 3. 更新标签关联（先删除旧关联，再添加新关联）
+        videoTagRelationMapper.deleteByVideoId(id); // 先删除旧关联
+        if (dto.getTags() != null && !dto.getTags().isEmpty()) {
+            dto.getTags().forEach(tagId -> {
+                VideoTagRelation relation = new VideoTagRelation();
+                relation.setVideoId(id);
+                relation.setTagId(tagId);
+                videoTagRelationMapper.insert(relation);
+            });
+        }
     }
 }

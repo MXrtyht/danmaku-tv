@@ -17,9 +17,9 @@ public class VideoTagRelation {
 
     @Schema(description = "视频id")
     @TableField("video_id")
-    private String videoId;
+    private Long videoId;
 
     @Schema(description = "标签id")
     @TableField("tag_id")
-    private String tagId;
+    private Long tagId;
 }

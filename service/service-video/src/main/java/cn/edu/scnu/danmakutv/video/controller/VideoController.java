@@ -2,6 +2,7 @@ package cn.edu.scnu.danmakutv.video.controller;
 
 import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
+import cn.edu.scnu.danmakutv.dto.video.UpdateVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UserUploadVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.VideoDetailDTO;
 import cn.edu.scnu.danmakutv.video.service.VideoService;
@@ -113,5 +114,21 @@ public class VideoController {
     public CommonResponse<VideoDetailDTO> getVideo(@PathVariable Long id) {
         VideoDetailDTO video = videoService.getVideoById(id);
         return CommonResponse.success(video);
+    }
+
+    /**
+     * 修改视频信息
+     * @param id 要修改视频的ID
+     * @param dto UpdateVideoDTO
+     * @return
+     */
+    @Operation(summary = "修改视频信息")
+    @PutMapping("/{id}")
+    public CommonResponse<String> updateVideo(
+            @PathVariable Long id,
+            @RequestBody @Valid UpdateVideoDTO dto
+    ) {
+        videoService.updateVideo(id, dto);
+        return CommonResponse.success("视频更新");
     }
 }
