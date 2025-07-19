@@ -33,6 +33,10 @@ public class Video {
     @TableField("title")
     private String title;
 
+    @Schema(description = "简介")
+    @TableField("description")
+    private String description;
+
     @Schema(description = "视频类型, 0自制, 1转载")
     @TableField("type")
     private boolean type;

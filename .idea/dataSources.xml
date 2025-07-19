@@ -44,33 +44,6 @@
       <jdbc-url>jdbc:redis://localhost:6379/0</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="danmaku-tv@localhost" uuid="fd1998e8-04b2-4702-ae9d-9324af7557e3">
-      <driver-ref>mysql.8</driver-ref>
-      <synchronize>true</synchronize>
-      <imported>true</imported>
-      <remarks>$PROJECT_DIR$/common/minio-util/src/main/resources/application-dev.properties</remarks>
-      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/danmaku-tv?characterEncoding=utf-8&amp;useSSL=false</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
-    <data-source source="LOCAL" name="danmaku-tv@localhost" uuid="57b01444-9fb0-475b-9162-bbcc28c48396">
-      <driver-ref>mysql.8</driver-ref>
-      <synchronize>true</synchronize>
-      <imported>true</imported>
-      <remarks>$PROJECT_DIR$/service/service-interaction/src/main/resources/application-dev.properties</remarks>
-      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/danmaku-tv?characterEncoding=utf-8&amp;useSSL=false</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
-    <data-source source="LOCAL" name="danmaku-tv@localhost" uuid="6b59cb81-62c3-4c5e-8904-3754a6f6a15c">
-      <driver-ref>mysql.8</driver-ref>
-      <synchronize>true</synchronize>
-      <imported>true</imported>
-      <remarks>$PROJECT_DIR$/service/service-user/src/main/resources/application-dev.properties</remarks>
-      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/danmaku-tv?characterEncoding=utf-8&amp;useSSL=false</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
     <data-source source="LOCAL" name="0@localhost" uuid="f31df04e-56d4-4f01-b402-31c638b5d44b">
       <driver-ref>redis</driver-ref>
       <synchronize>true</synchronize>

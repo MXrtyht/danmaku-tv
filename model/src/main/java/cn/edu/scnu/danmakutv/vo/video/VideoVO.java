@@ -26,6 +26,9 @@ public class VideoVO {
     @Schema(description = "标题")
     private String title;
 
+    @Schema(description = "简介")
+    private  String description;
+
     @Schema(description = "类型, 0自制, 1转载")
     private boolean type;
 

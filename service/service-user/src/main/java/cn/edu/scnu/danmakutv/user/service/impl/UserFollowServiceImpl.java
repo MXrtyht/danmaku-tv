@@ -6,6 +6,7 @@ import cn.edu.scnu.danmakutv.domain.user.User;
 import cn.edu.scnu.danmakutv.domain.user.UserFollow;
 import cn.edu.scnu.danmakutv.domain.user.UserProfiles;
 import cn.edu.scnu.danmakutv.dto.user.UserFollowDTO;
+import cn.edu.scnu.danmakutv.dto.user.UserUnfollowDTO;
 import cn.edu.scnu.danmakutv.user.mapper.UserFollowMapper;
 import cn.edu.scnu.danmakutv.user.service.FollowGroupService;
 import cn.edu.scnu.danmakutv.user.service.UserFollowService;
@@ -15,6 +16,7 @@ import cn.edu.scnu.danmakutv.vo.user.UserFollowsWithGroupVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -198,11 +200,41 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
         );
     }
 
+    /**
+     * 查询用户粉丝数量
+     * @param userId 用户id
+     * @return 粉丝数量
+     */
     @Override
     public Long getTotalFansCount (Long userId) {
         // 查询用户的粉丝数量
         return this.baseMapper.selectCount(
                 new QueryWrapper<>(UserFollow.class).eq("follow_id", userId)
+        );
+    }
+
+    /**
+     * 移除已关注的用户
+     * @param unfollowDTO 包含用户ID和被关注用户ID
+     */
+    @Override
+    public void removeUserFollow (@Valid UserUnfollowDTO unfollowDTO) {
+        Long userId = unfollowDTO.getUserId();
+        Long followId = unfollowDTO.getFollowId();
+
+        UserFollow userFollow = this.baseMapper.selectOne(
+                new QueryWrapper<>(UserFollow.class)
+                        .eq("user_id", userId)
+                        .eq("follow_id", followId)
+        );
+        if (userFollow == null) {
+            throw new DanmakuException("关注关系不存在", 400);
+        }
+        // 删除关注关系
+        this.baseMapper.delete(
+                new QueryWrapper<>(UserFollow.class)
+                        .eq("user_id", userId)
+                        .eq("follow_id", followId)
         );
     }
 }

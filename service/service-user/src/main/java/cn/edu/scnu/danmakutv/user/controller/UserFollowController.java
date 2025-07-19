@@ -6,6 +6,7 @@ import cn.edu.scnu.danmakutv.domain.user.FollowGroup;
 import cn.edu.scnu.danmakutv.domain.user.UserProfiles;
 import cn.edu.scnu.danmakutv.dto.user.CreateFollowGroupDTO;
 import cn.edu.scnu.danmakutv.dto.user.UserFollowDTO;
+import cn.edu.scnu.danmakutv.dto.user.UserUnfollowDTO;
 import cn.edu.scnu.danmakutv.user.service.FollowGroupService;
 import cn.edu.scnu.danmakutv.user.service.UserFollowService;
 import cn.edu.scnu.danmakutv.vo.user.UserFollowsWithGroupVO;
@@ -52,6 +53,19 @@ public class UserFollowController {
 
         userFollowService.addUserFollow(userFollowDTO);
         return CommonResponse.success("关注成功");
+    }
+
+    @Operation(summary = "取消关注用户")
+    @PostMapping("/unfollow")
+    public CommonResponse<String> unfollowUser (
+            @Valid @RequestBody @Parameter(description = "用户关注DTO，包括被关注用户ID和分组ID")
+            UserUnfollowDTO unfollowDTO
+    ) {
+        Long userId = authenticationSupport.getCurrentUserId();
+        unfollowDTO.setUserId(userId);
+
+        userFollowService.removeUserFollow(unfollowDTO);
+        return CommonResponse.success("取消关注成功");
     }
 
     /**
