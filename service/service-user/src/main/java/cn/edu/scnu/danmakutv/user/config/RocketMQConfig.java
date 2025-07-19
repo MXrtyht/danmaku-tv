@@ -1,0 +1,61 @@
+package cn.edu.scnu.danmakutv.user.config;
+
+import cn.edu.scnu.danmakutv.domain.user.UserFollow;
+import cn.edu.scnu.danmakutv.domain.user.UserMoments;
+import cn.edu.scnu.danmakutv.domain.user.UserProfiles;
+import cn.edu.scnu.danmakutv.user.constant.UserMomentsConstant;
+import cn.edu.scnu.danmakutv.user.service.UserFollowService;
+import com.alibaba.fastjson.JSONObject;
+import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
+import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
+import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
+import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
+import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.common.message.MessageExt;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
+
+import java.util.List;
+import java.util.Map;
+
+@Configuration
+public class RocketMQConfig {
+    private String nameServerAddr;
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+    @Autowired
+    private UserFollowService userFollowService;
+
+    @Bean("momentsProducer")
+    public DefaultMQProducer momentsProducer() throws Exception {
+        DefaultMQProducer producer = new DefaultMQProducer(UserMomentsConstant.GROUP_MOMENTS);
+        producer.setNamesrvAddr(nameServerAddr);
+        producer.start();
+        return producer;
+    }
+
+    @Bean("momentsConsumer")
+    public DefaultMQPushConsumer momentsConsumer() throws Exception {
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(UserMomentsConstant.GROUP_MOMENTS);
+        consumer.setNamesrvAddr(nameServerAddr);
+        consumer.subscribe(UserMomentsConstant.TOPIC_MOMENTS, "*");
+        consumer.registerMessageListener(new MessageListenerConcurrently() {
+            @Override
+            public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
+                MessageExt msg = msgs.get(0);
+                if(msg == null)
+                    return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+                String bodyStr = new String(msg.getBody());
+                UserMoments userMoments = JSONObject.toJavaObject(JSONObject.parseObject(bodyStr), UserMoments.class);
+                Long userId = userMoments.getUserId();
+                Map<UserProfiles, Boolean> profilesMap = userFollowService.getFans(userId);
+                return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+            }
+        });
+        consumer.start();
+        return consumer;
+    }
+}
