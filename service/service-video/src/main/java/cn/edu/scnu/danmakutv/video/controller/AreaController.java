@@ -3,11 +3,9 @@ package cn.edu.scnu.danmakutv.video.controller;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
 import cn.edu.scnu.danmakutv.domain.video.Area;
 import cn.edu.scnu.danmakutv.video.service.AreaService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,8 +23,8 @@ public class AreaController {
 
     @Operation(summary = "获取所有视频分区")
     @GetMapping("/all-area")
-    public CommonResponse<List<Area>> getAllAreas() {
-        List<Area> areas = areaService.list();
+    public CommonResponse<List<Area>> getAllAreas () {
+        List<Area> areas = areaService.getAllAreas();
         return CommonResponse.success(areas);
     }
 }

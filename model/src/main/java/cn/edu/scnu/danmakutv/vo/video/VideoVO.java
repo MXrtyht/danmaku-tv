@@ -15,7 +15,7 @@ public class VideoVO {
     private Long id;
 
     @Schema(description = "用户id")
-    private String userId;
+    private Long userId;
 
     @Schema(description = "视频url")
     private String videoUrl;
@@ -33,13 +33,13 @@ public class VideoVO {
     private boolean type;
 
     @Schema(description = "视频时长 单位秒")
-    private int duration;
+    private Integer duration;
 
     @Schema(description = "视频分区")
     private Integer area;
 
     @Schema(description = "视频标签列表")
-    private List<Tag> tags;
+    private List<String> tags;
 
     @Schema(description = "创建时间")
     private LocalDateTime createAt;

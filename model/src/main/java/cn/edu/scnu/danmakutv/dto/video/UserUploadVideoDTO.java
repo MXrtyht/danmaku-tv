@@ -28,7 +28,7 @@ public class UserUploadVideoDTO {
     @Schema(description = "类型, 0自制, 1转载")
     private boolean type; // true:原创，false:转载
 
-    @Schema(description = "视频时常 单位秒")
+    @Schema(description = "视频时长 单位秒")
     private Integer duration;
 
     @Schema(description = "视频分区")
@@ -36,5 +36,5 @@ public class UserUploadVideoDTO {
 
     @Schema(description = "视频标签id列表")
     @Size(min = 1, max = 10, message = "标签数量必须在1到10之间")
-    private List<Long> tags; // 标签id列表
+    private List<String> tags; // 标签id列表
 }
