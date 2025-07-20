@@ -33,7 +33,7 @@ public class VideoLikeController {
     public CommonResponse<String> addVideoLike (@Parameter(description = "视频id") Long videoId) {
         Long userId = authenticationSupport.getCurrentUserId();
         videoLikeService.addVideoLike(userId, videoId);
-        return CommonResponse.success("");
+        return CommonResponse.success("点赞成功");
     }
 
     /**

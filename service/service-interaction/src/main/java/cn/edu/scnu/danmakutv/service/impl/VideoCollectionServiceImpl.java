@@ -148,4 +148,66 @@ public class VideoCollectionServiceImpl extends ServiceImpl<VideoCollectionMappe
             throw new DanmakuException("删除收藏分组失败", 400);
         }
     }
+
+    /**
+     * 用户指定分组下的所有收藏
+     *
+     * @param userId 用户ID
+     * @param groupId 分组ID
+     * @return 用户指定分组下的所有收藏
+     */
+    @Override
+    public List<VideoCollection> getUserCollectionsByGroupId (Long userId, Long groupId) {
+        if (groupId == null || groupId <= 0) {
+            throw new DanmakuException("分组ID不能为空或非法", 400);
+        }
+
+        // 检查分组是否存在
+        CollectionGroup collectionGroup = collectionGroupService.getById(groupId);
+        if ( collectionGroup == null || (collectionGroup.getUserId() != null && !collectionGroup.getUserId().equals(userId)) ) {
+            throw new DanmakuException("分组不存在或不属于当前用户", 400);
+        }
+
+        // 查询该分组下的所有收藏
+        return this.baseMapper.selectList(
+                new QueryWrapper<VideoCollection>()
+                        .eq("user_id", userId)
+                        .eq("group_id", groupId)
+        );
+    }
+
+    /**
+     * 获取视频收藏数量
+     * @param videoId 视频ID
+     * @return 视频收藏数量
+     */
+    @Override
+    public Long getVideoCollectCount (Long videoId) {
+        if (videoId == null || videoId <= 0) {
+            throw new DanmakuException("视频ID不能为空或非法", 400);
+        }
+
+        // 查询视频收藏数量
+        return this.baseMapper.selectCount(
+                new QueryWrapper<VideoCollection>()
+                        .eq("video_id", videoId)
+        );
+    }
+
+    @Override
+    public Long isVideoCollected (Long userId, Long videoId) {
+        if (userId == null || videoId == null) {
+            throw new DanmakuException("用户ID或视频ID不能为空", 400);
+        }
+
+        // 查询是否已收藏
+        VideoCollection videoCollection = this.baseMapper.selectOne(
+                new QueryWrapper<VideoCollection>()
+                        .eq("user_id", userId)
+                        .eq("video_id", videoId)
+        );
+
+        // 如果已收藏，返回分组ID，否则返回null
+        return videoCollection != null ? videoCollection.getGroupId() : null;
+    }
 }
