@@ -5,12 +5,14 @@ import cn.edu.scnu.danmakutv.domain.user.UserMoments;
 import cn.edu.scnu.danmakutv.user.constant.UserMomentsConstant;
 import cn.edu.scnu.danmakutv.user.mapper.UserMomentsMapper;
 import cn.edu.scnu.danmakutv.user.service.UserMomentsService;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.rocketmq.common.message.Message;
 import org.springframework.context.ApplicationContext;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -21,6 +23,8 @@ import java.util.List;
 public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserMoments> implements UserMomentsService {
     @Autowired()
     private ApplicationContext applicationContext;
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public void addUserMoments(UserMoments userMoments) throws Exception {
@@ -33,6 +37,8 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
 
     @Override
     public List<UserMoments> getUserSubscribedMoments(Long userId) throws Exception {
-        return List.of();
+        String key = "subscribed-" + userId;
+        String listStr = redisTemplate.opsForValue().get(key);
+        return JSONArray.parseArray(listStr, UserMoments.class);
     }
 }
