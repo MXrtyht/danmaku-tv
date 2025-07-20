@@ -18,7 +18,7 @@ public interface VideoService extends IService<Video> {
      * @param size 每页显示条数
      * @return 分页视频信息
      */
-    IPage<VideoVO> selectVideo (int page, int size, QueryWrapper<?> wrapper);
+    IPage<VideoVO> selectVideo (int page, int size, QueryWrapper<Video> wrapper);
 
     /**
      * 上传视频
@@ -37,6 +37,7 @@ public interface VideoService extends IService<Video> {
 
     /**
      * 根据视频ID数组获取视频列表
+     *
      * @param videoIds 视频ID数组
      * @return 包含视频信息的分页结果
      */

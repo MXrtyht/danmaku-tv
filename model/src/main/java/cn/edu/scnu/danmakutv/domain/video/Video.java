@@ -33,6 +33,10 @@ public class Video {
     @TableField("title")
     private String title;
 
+    @Schema(description = "简介")
+    @TableField("description")
+    private String description;
+
     @Schema(description = "视频类型, 0自制, 1转载")
     @TableField("type")
     private boolean type;
@@ -47,9 +51,9 @@ public class Video {
 
     @Schema(description = "创建时间")
     @TableField("create_at")
-    private LocalDateTime createdAt;
+    private LocalDateTime createAt;
 
     @Schema(description = "更新时间")
     @TableField("update_at")
-    private LocalDateTime updatedAt;
+    private LocalDateTime updateAt;
 }

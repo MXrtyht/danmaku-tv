@@ -69,8 +69,9 @@ public class VideoController {
         Long userId = authenticationSupport.getCurrentUserId();
 
         // 构造查询条件, 查询当前用户的视频
-        QueryWrapper<VideoVO> wrapper = new QueryWrapper<>();
+        QueryWrapper<Video> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id", userId);
+
         IPage<VideoVO> result = videoService.selectVideo(page, size, wrapper);
 
         return CommonResponse.success(result);

@@ -1,6 +1,5 @@
 package cn.edu.scnu.danmakutv.vo.interaction;
 
-import cn.edu.scnu.danmakutv.domain.user.UserProfiles;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -19,10 +18,10 @@ public class CollectedVideosWithGroupVO {
     private String name; // 分组名称
 
     @Schema(description = "分组创建时间")
-    private String createdAt; // 分组创建时间
+    private String createAt; // 分组创建时间
 
     @Schema(description = "分组更新时间")
-    private String updatedAt; // 分组更新时间
+    private String updateAt; // 分组更新时间
 
     @Schema(description = "分组视频id列表")
     private List<Long> videoIdList; // 分组内视频id列表
