@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @CrossOrigin
-@Tag(name = "互动相关接口")
+@Tag(name = "视频点赞相关接口")
 @RestController
 @RequestMapping("/video")
 public class VideoLikeController {
