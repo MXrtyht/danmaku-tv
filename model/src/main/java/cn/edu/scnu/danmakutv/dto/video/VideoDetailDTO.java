@@ -38,5 +38,5 @@ public class VideoDetailDTO {
     private List<String> tags; // 标签名称列表
 
     @Schema(description = "创建时间")
-    private LocalDateTime createdAt;
+    private LocalDateTime createAt;
 }

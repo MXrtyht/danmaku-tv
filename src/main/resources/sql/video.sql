@@ -38,19 +38,6 @@ CREATE TABLE `t_tag`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='视频标签表';
 
--- 视频观看表
-DROP TABLE IF EXISTS `t_video_view`;
-CREATE TABLE `t_video_view`
-(
-    `id`    bigint unsigned not null auto_increment comment '主键id',
-    `video_id` BIGINT UNSIGNED NOT NULL COMMENT '视频 ID',
-    `user_id`     BIGINT UNSIGNED NOT NULL COMMENT '用户 ID',
-    `client_id` varchar(500) character set utf8 collate utf8_general_ci default null comment '客户端id',
-    `ip` varchar(50) character set utf8 collate utf8_general_ci default null comment 'ip',
-    `create_at` datetime    default null comment '创建时间',
-    primary key (`id`)
-) ENGINE = InnoDB auto_increment=3 default charset =utf8mb4 comment ='视频观看表';
-
 -- 视频分区表
 DROP TABLE IF EXISTS `t_area`;
 CREATE TABLE `t_area`
@@ -60,3 +47,18 @@ CREATE TABLE `t_area`
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='视频分区表';
+
+-- 视频观看表
+DROP TABLE IF EXISTS `t_video_view`;
+CREATE TABLE `t_video_view`
+(
+    `id`        bigint unsigned not null auto_increment comment '主键id',
+    `video_id`  BIGINT UNSIGNED NOT NULL COMMENT '视频 ID',
+    `user_id`   BIGINT UNSIGNED NOT NULL COMMENT '用户 ID',
+    `client_id` varchar(500) character set utf8 collate utf8_general_ci default null comment '客户端id',
+    `ip`        varchar(50) character set utf8 collate utf8_general_ci  default null comment 'ip',
+    `create_at` datetime                                                default null comment '创建时间',
+    primary key (`id`)
+) ENGINE = InnoDB
+  auto_increment = 3
+  default charset = utf8mb4 comment ='视频观看表';

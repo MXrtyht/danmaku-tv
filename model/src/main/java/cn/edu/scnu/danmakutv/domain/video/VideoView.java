@@ -36,5 +36,5 @@ public class VideoView {
 
     @Schema(description = "创建时间")
     @TableField("create_at")
-    private Date createdAt;
+    private LocalDateTime createAt;
 }

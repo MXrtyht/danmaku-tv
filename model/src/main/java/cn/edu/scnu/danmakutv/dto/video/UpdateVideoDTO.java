@@ -11,6 +11,9 @@ import java.util.List;
 @Schema(name = "修改视频信息DTO")
 @Data
 public class UpdateVideoDTO {
+    @Schema(description = "视频ID")
+    private Long id; // 视频ID
+
     @Schema(description = "视频标题")
     private String title;
 
@@ -28,5 +31,5 @@ public class UpdateVideoDTO {
     private List<Long> tags; // 标签ID列表
 
     @Schema(description = "更新时间")
-    private LocalDateTime updatedAt;
+    private LocalDateTime updateAt;
 }
