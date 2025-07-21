@@ -33,10 +33,14 @@ public class VideoViewController {
     @Operation(summary = "添加视频观看记录")
     @PostMapping("/video-views")
     public CommonResponse<String> addVideoView (
-            @RequestBody VideoView videoView,
+            @RequestBody Long videoId,
             HttpServletRequest request
     ) {
         Long userId;
+
+        VideoView videoView = new VideoView();
+        videoView.setVideoId(videoId);
+
         try {
             userId = authenticationSupport.getCurrentUserId();
             videoView.setUserId(userId);
