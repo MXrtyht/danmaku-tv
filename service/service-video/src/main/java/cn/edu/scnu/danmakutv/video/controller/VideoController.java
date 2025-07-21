@@ -2,11 +2,13 @@ package cn.edu.scnu.danmakutv.video.controller;
 
 import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
+import cn.edu.scnu.danmakutv.domain.elasticsearch.VideoEs;
 import cn.edu.scnu.danmakutv.domain.video.VideoView;
 import cn.edu.scnu.danmakutv.dto.video.RecommendedVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UpdateVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UserUploadVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.VideoDetailDTO;
+import cn.edu.scnu.danmakutv.video.service.ElasticSearchService;
 import cn.edu.scnu.danmakutv.video.service.VideoService;
 import cn.edu.scnu.danmakutv.vo.video.VideoVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -31,6 +33,9 @@ public class VideoController {
 
     @Resource
     private VideoService videoService;
+
+    @Resource
+    private ElasticSearchService elasticSearchService;
 
     /**
      * 查询所有视频
@@ -93,7 +98,9 @@ public class VideoController {
     ) {
         Long userId = authenticationSupport.getCurrentUserId();
         userUploadVideoDTO.setUserId(userId);
-        videoService.uploadVideo(userUploadVideoDTO);
+        Long videoId=videoService.uploadVideo(userUploadVideoDTO);
+        //在es中添加一条数据
+        elasticSearchService.addVideoEs(userUploadVideoDTO,videoId);
         return CommonResponse.success("视频上传成功");
     }
 
@@ -184,5 +191,17 @@ public class VideoController {
     public CommonResponse<Integer> getVideoViewCounts(@RequestParam Long videoId){
         Integer count=videoService.getVideoViewCounts(videoId);
         return CommonResponse.success(count);
+    }
+
+    /**
+     * 根据tag搜索相应视频
+     * @param tags
+     * @return
+     */
+    @Operation(summary = "根据tag搜索相应视频")
+    @GetMapping("/search")
+    public CommonResponse<List<VideoEs>> searchVideo(@RequestParam List<String> tags){
+        List<VideoEs> videoEsList=elasticSearchService.findByTagsIn(tags);
+        return CommonResponse.success(videoEsList);
     }
 }

@@ -1,13 +1,12 @@
-package cn.edu.scnu.danmakutv.video.mapper;
+package cn.edu.scnu.danmakutv.video.service;
 
 import cn.edu.scnu.danmakutv.domain.video.VideoTagRelation;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Mapper;
+import com.baomidou.mybatisplus.extension.service.IService;
 import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
-@Mapper
-public interface VideoTagRelationMapper extends BaseMapper<VideoTagRelation> {
+public interface VideoTagRelationService extends IService<VideoTagRelation> {
     /**
      * 根据视频ID删除标签关联关系
      * @param videoId 视频ID
@@ -22,4 +21,6 @@ public interface VideoTagRelationMapper extends BaseMapper<VideoTagRelation> {
      * @return 被推荐视频id列表
      */
     List<Long> findVideoIdsByTagIds(@Param("tagIds") List<Long> tagIds, @Param("limit") int limit);
+
+    void insert(VideoTagRelation relation);
 }

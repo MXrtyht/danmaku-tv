@@ -9,20 +9,20 @@ import cn.edu.scnu.danmakutv.dto.video.UpdateVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UserUploadVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.VideoDetailDTO;
 import cn.edu.scnu.danmakutv.video.mapper.VideoMapper;
-import cn.edu.scnu.danmakutv.video.mapper.VideoTagMapper;
-import cn.edu.scnu.danmakutv.video.mapper.VideoTagRelationMapper;
 import cn.edu.scnu.danmakutv.video.service.VideoService;
+import cn.edu.scnu.danmakutv.video.service.VideoTagRelationService;
+import cn.edu.scnu.danmakutv.video.service.VideoTagService;
 import cn.edu.scnu.danmakutv.vo.video.VideoVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import eu.bitwalker.useragentutils.UserAgent;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -31,13 +31,15 @@ import java.util.stream.Collectors;
 @Service
 public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements VideoService {
     private final VideoMapper videoMapper;
-    private final VideoTagMapper videoTagMapper;
-    private final VideoTagRelationMapper videoTagRelationMapper;
 
-    public VideoServiceImpl(VideoMapper videoMapper, VideoTagMapper videoTagMapper, VideoTagRelationMapper videoTagRelationMapper) {
+    @Resource
+    private VideoTagRelationService videoTagRelationService;
+
+    @Resource
+    private VideoTagService videoTagService;
+
+    public VideoServiceImpl(VideoMapper videoMapper) {
         this.videoMapper = videoMapper;
-        this.videoTagMapper = videoTagMapper;
-        this.videoTagRelationMapper = videoTagRelationMapper;
     }
 
     /**
@@ -62,7 +64,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
      */
     @Transactional
     @Override
-    public void uploadVideo (UserUploadVideoDTO userUploadVideoDTO) {
+    public Long uploadVideo (UserUploadVideoDTO userUploadVideoDTO) {
         Video video = new Video();
 
         BeanUtils.copyProperties(userUploadVideoDTO, video);
@@ -76,6 +78,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         }
         baseMapper.insert(video);
         Long videoId = video.getId();
+        return videoId;
     }
 
     /**
@@ -86,10 +89,10 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     @Override
     public void deleteVideo(Long videoId) {
         // 1. 删除视频标签关联关系
-        videoTagRelationMapper.deleteByVideoId(videoId);
+        videoTagRelationService.deleteByVideoId(videoId);
 
         // 2. 删除视频记录
-        videoMapper.deleteById(videoId);
+        baseMapper.deleteById(videoId);
     }
 
     /**
@@ -100,13 +103,13 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     @Override
     public VideoDetailDTO getVideoById(Long id) {
         // 1. 查询视频基本信息
-        Video video = videoMapper.selectById(id);
+        Video video = baseMapper.selectById(id);
         if (video == null) {
             throw new RuntimeException("视频不存在");
         }
 
         // 2. 查询关联标签名称列表
-        List<String> tags = videoTagMapper.selectTagsByVideoId(id);
+        List<String> tags = videoTagService.selectTagsByVideoId(id);
 
         // 3. 组装DTO
         VideoDetailDTO dto = new VideoDetailDTO();
@@ -133,7 +136,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     @Transactional(rollbackFor = Exception.class)
     public void updateVideo(Long id, UpdateVideoDTO dto) {
         // 1. 检查视频是否存在
-        Video video = videoMapper.selectById(id);
+        Video video = baseMapper.selectById(id);
         if (video == null) {
             throw new RuntimeException("视频不存在");
         }
@@ -144,16 +147,16 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         video.setType(dto.getType());
         video.setArea(dto.getArea());
         video.setUpdatedAt(LocalDateTime.now());
-        videoMapper.updateById(video);
+        baseMapper.updateById(video);
 
         // 3. 更新标签关联（先删除旧关联，再添加新关联）
-        videoTagRelationMapper.deleteByVideoId(id); // 先删除旧关联
+        videoTagRelationService.deleteByVideoId(id); // 先删除旧关联
         if (dto.getTags() != null && !dto.getTags().isEmpty()) {
             dto.getTags().forEach(tagId -> {
                 VideoTagRelation relation = new VideoTagRelation();
                 relation.setVideoId(id);
                 relation.setTagId(tagId);
-                videoTagRelationMapper.insert(relation);
+                videoTagRelationService.insert(relation);
             });
         }
     }
@@ -171,13 +174,13 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         }
 
         // 1. 查询包含相同标签的视频ID列表（按匹配标签数排序）
-        List<Long> videoIds = videoTagRelationMapper.findVideoIdsByTagIds(tagIds, limit);
+        List<Long> videoIds = videoTagRelationService.findVideoIdsByTagIds(tagIds, limit);
 
         // 2. 查询视频详细信息
         if (videoIds.isEmpty()) {
             return Collections.emptyList();
         }
-        List<Video> videos = videoMapper.selectBatchIds(videoIds);
+        List<Video> videos = baseMapper.selectBatchIds(videoIds);
 
         // 3. 组装DTO
         return videos.stream().map(video -> {
@@ -192,7 +195,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
             dto.setCreatedAt(video.getCreatedAt());
 
             // 查询视频标签
-            List<String> tags = videoTagMapper.selectTagsByVideoId(video.getId());
+            List<String> tags = videoTagService.selectTagsByVideoId(video.getId());
             dto.setTags(tags);
 
             return dto;
@@ -225,12 +228,12 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         params.put("today",sdf.format(now));
         params.put("videoId",videoId);
         //添加观看记录
-        VideoView dbVideoView = videoMapper.getVideoView(params);
+        VideoView dbVideoView = baseMapper.getVideoView(params);
         if(dbVideoView==null){
             videoView.setIp(ip);
             videoView.setClientId(clientId);
             videoView.setCreatedAt(new Date());
-            videoMapper.addVideoView(videoView);
+            baseMapper.addVideoView(videoView);
         }
     }
 
@@ -241,6 +244,6 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
      */
     @Override
     public Integer getVideoViewCounts(Long videoId) {
-        return videoMapper.getVideoViewCounts(videoId);
+        return baseMapper.getVideoViewCounts(videoId);
     }
 }
