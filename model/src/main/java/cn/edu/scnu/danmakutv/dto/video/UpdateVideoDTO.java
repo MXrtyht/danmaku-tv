@@ -1,18 +1,16 @@
 package cn.edu.scnu.danmakutv.dto.video;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Schema(name = "修改视频信息DTO")
 @Data
 public class UpdateVideoDTO {
     @Schema(description = "视频ID")
-    private Long id; // 视频ID
+    private Long videoId; // 视频ID
 
     @Schema(description = "视频标题")
     private String title;
@@ -28,8 +26,5 @@ public class UpdateVideoDTO {
 
     @Schema(description = "视频标签ID列表")
     @Size(max = 10, message = "标签数量不能超过10个")
-    private List<Long> tags; // 标签ID列表
-
-    @Schema(description = "更新时间")
-    private LocalDateTime updateAt;
+    private List<String> tags; // 标签ID列表
 }

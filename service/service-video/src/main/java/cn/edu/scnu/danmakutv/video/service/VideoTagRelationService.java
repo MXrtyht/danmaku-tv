@@ -7,6 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface VideoTagRelationService extends IService<VideoTagRelation> {
+    /**
+     * 批量添加视频与标签的关联关系
+     * @param videoId 视频ID
+     * @param tagIds 标签ID列表
+     */
     void addVideoTagRelation (Long videoId, List<Long> tagIds);
 
     /**
@@ -17,6 +22,12 @@ public interface VideoTagRelationService extends IService<VideoTagRelation> {
      */
     void deleteByVideoId (Long videoId);
 
+    /**
+     * 根据视频ID查找其标签ID列表
+     *
+     * @param videoId 视频ID
+     * @return 标签ID列表
+     */
     @Transactional(readOnly = true)
     List<Long> getIdsByVideoId (Long videoId);
 
@@ -28,6 +39,4 @@ public interface VideoTagRelationService extends IService<VideoTagRelation> {
      * @return 被推荐视频id列表
      */
     List<Long> findVideoIdsByTagIds (List<Long> tagIds, Long limit);
-
-    void insert (VideoTagRelation relation);
 }

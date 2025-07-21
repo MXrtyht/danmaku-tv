@@ -110,9 +110,4 @@ public class VideoTagRelationServiceImpl extends ServiceImpl<VideoTagRelationMap
                               .map(Map.Entry::getKey)
                               .collect(Collectors.toList());
     }
-
-    @Override
-    public void insert (VideoTagRelation relation) {
-        baseMapper.insert(relation);
-    }
 }

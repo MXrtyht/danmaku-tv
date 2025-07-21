@@ -2,7 +2,6 @@ package cn.edu.scnu.danmakutv.video.service.impl;
 
 import cn.edu.scnu.danmakutv.common.exception.DanmakuException;
 import cn.edu.scnu.danmakutv.domain.video.Video;
-import cn.edu.scnu.danmakutv.domain.video.VideoTagRelation;
 import cn.edu.scnu.danmakutv.dto.video.GetRecommendedVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UpdateVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UserUploadVideoDTO;
@@ -184,35 +183,60 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     /**
      * 修改视频信息
      *
-     * @param dto UpdateVideoDTO
+     * @param updateVideoDTO UpdateVideoDTO
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateVideo (UpdateVideoDTO dto) {
+    public void updateVideo (UpdateVideoDTO updateVideoDTO) {
         // 1. 检查视频是否存在
-        Video video = baseMapper.selectById(dto.getId());
+        Video video = baseMapper.selectById(updateVideoDTO.getVideoId());
         if (video == null) {
             throw new RuntimeException("视频不存在");
         }
 
-        // 2. 更新视频基本信息
-        video.setTitle(dto.getTitle());
-        video.setCoverUrl(dto.getCoverUrl());
-        video.setType(dto.getType());
-        video.setArea(dto.getArea());
-        video.setUpdateAt(LocalDateTime.now());
-        baseMapper.updateById(video);
+        // 3. 只更新非空字段
+        boolean hasUpdate = false;
+
+        if (updateVideoDTO.getTitle() != null && !updateVideoDTO.getTitle().trim().isEmpty()) {
+            video.setTitle(updateVideoDTO.getTitle().trim());
+            hasUpdate = true;
+        }
+
+        if (updateVideoDTO.getCoverUrl() != null && !updateVideoDTO.getCoverUrl().trim().isEmpty()) {
+            video.setCoverUrl(updateVideoDTO.getCoverUrl().trim());
+            hasUpdate = true;
+        }
+
+        if (updateVideoDTO.getType() != null) {
+            video.setType(updateVideoDTO.getType());
+            hasUpdate = true;
+        }
+
+        if (updateVideoDTO.getArea() <= 1) {
+            throw new DanmakuException("视频分区不存在", 400);
+        }
+        if (updateVideoDTO.getArea() != null) {
+            video.setArea(updateVideoDTO.getArea());
+            hasUpdate = true;
+        }
+
+        // 设置更新时间
+        if (hasUpdate) {
+            video.setUpdateAt(LocalDateTime.now());
+            baseMapper.updateById(video);
+        }
 
         // 3. 更新标签关联（先删除旧关联，再添加新关联）
-        videoTagRelationService.deleteByVideoId(dto.getId()); // 先删除旧关联
-        if (dto.getTags() != null && !dto.getTags().isEmpty()) {
-            dto.getTags().forEach(tagId -> {
-                VideoTagRelation relation = new VideoTagRelation();
-                relation.setVideoId(dto.getId());
-                relation.setTagId(tagId);
-                videoTagRelationService.insert(relation);
-            });
-        }
+        videoTagRelationService.deleteByVideoId(updateVideoDTO.getVideoId());
+
+        // 设置视频标签
+        // 拿到传过来的tag名称表
+        List<String> tagNames = updateVideoDTO.getTags();
+        // 根据标签名称获取标签ID列表
+        List<Long> tagIds = tagService.findTagIdsByNames(tagNames);
+
+        // 添加新的标签关联
+        videoTagRelationService.addVideoTagRelation(video.getId(), tagIds);
     }
 
     /**

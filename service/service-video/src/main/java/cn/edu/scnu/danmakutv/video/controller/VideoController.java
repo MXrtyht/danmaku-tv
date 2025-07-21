@@ -129,7 +129,7 @@ public class VideoController {
     }
 
     /**
-     * 删除视频(暂时不使用)
+     * 删除视频
      *
      * @return 响应
      */
@@ -144,13 +144,13 @@ public class VideoController {
     }
 
     /**
-     * 修改视频信息(暂时不使用)
+     * 修改视频信息(
      *
      * @param dto UpdateVideoDTO
      * @return 响应
      */
     @Operation(summary = "修改视频信息")
-    @PutMapping("/{id}")
+    @PostMapping("/update-video")
     public CommonResponse<String> updateVideo (
             @RequestBody @Valid UpdateVideoDTO dto
     ) {

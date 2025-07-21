@@ -29,7 +29,7 @@
 //     @Override
 //     public void addVideoEs (UserUploadVideoDTO userUploadVideoDTO, Long videoId) {
 //         // VideoEs videoEs = new VideoEs();
-//         // videoEs.setId(videoId);
+//         // videoEs.setVideoId(videoId);
 //         // videoEs.setTitle(userUploadVideoDTO.getTitle());
 //         // videoEs.setArea(userUploadVideoDTO.getArea());
 //         // // 查询标签名称并设置
