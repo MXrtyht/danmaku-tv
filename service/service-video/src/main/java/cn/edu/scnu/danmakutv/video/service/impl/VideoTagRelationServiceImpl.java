@@ -85,7 +85,7 @@ public class VideoTagRelationServiceImpl extends ServiceImpl<VideoTagRelationMap
      * @param limit  返回的视频ID数量限制
      * @return 被推荐视频id列表，按标签命中数降序排列
      */
-    public List<Long> findVideoIdsByTagIds(List<Long> tagIds, Long limit) {
+    public List<Long> findVideoIdsByTagIds (List<Long> tagIds, Long limit) {
         if (tagIds == null || tagIds.isEmpty()) {
             return Collections.emptyList();
         }

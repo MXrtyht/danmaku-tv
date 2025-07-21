@@ -19,6 +19,7 @@ public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, Use
 
     /**
      * 添加用户个人资料
+     *
      * @param userId 用户ID
      */
     @Override
@@ -40,6 +41,7 @@ public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, Use
 
     /**
      * 根据用户ID获取用户个人资料
+     *
      * @param userId 用户ID
      * @return 返回用户个人资料
      */
@@ -58,7 +60,8 @@ public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, Use
 
     /**
      * 更新用户个人资料
-     * @param userId 用户ID
+     *
+     * @param userId          用户ID
      * @param userProfilesDTO 包含更新信息的DTO
      */
     @Override
@@ -74,6 +77,7 @@ public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, Use
 
     /**
      * 根据用户ID列表获取用户个人资料
+     *
      * @param userIds 用户ID列表
      * @return 返回用户个人资料列表
      */

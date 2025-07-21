@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-@Schema( name = "用户关注分组")
+@Schema(name = "用户关注分组")
 @Data
 @TableName("t_follow_group")
 public class FollowGroup {

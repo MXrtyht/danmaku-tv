@@ -9,8 +9,9 @@ import java.util.List;
 public interface VideoTagRelationService extends IService<VideoTagRelation> {
     /**
      * 批量添加视频与标签的关联关系
+     *
      * @param videoId 视频ID
-     * @param tagIds 标签ID列表
+     * @param tagIds  标签ID列表
      */
     void addVideoTagRelation (Long videoId, List<Long> tagIds);
 

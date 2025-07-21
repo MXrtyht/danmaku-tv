@@ -1,6 +1,5 @@
 package cn.edu.scnu.danmakutv.vo.video;
 
-import cn.edu.scnu.danmakutv.domain.video.Tag;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -27,7 +26,7 @@ public class VideoVO {
     private String title;
 
     @Schema(description = "简介")
-    private  String description;
+    private String description;
 
     @Schema(description = "类型, 0自制, 1转载")
     private boolean type;

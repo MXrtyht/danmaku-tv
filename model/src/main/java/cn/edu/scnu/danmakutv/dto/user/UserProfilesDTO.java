@@ -6,7 +6,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
-@Schema( name = "用户个人资料 DTO")
+@Schema(name = "用户个人资料 DTO")
 @Data
 public class UserProfilesDTO {
 
