@@ -26,8 +26,8 @@ CREATE TABLE `t_video_collection`
 DROP TABLE IF EXISTS `t_collection_group`;
 CREATE TABLE `t_collection_group`
 (
-    `id`      BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `user_id` BIGINT UNSIGNED COMMENT '用户ID',
+    `id`        BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `user_id`   BIGINT UNSIGNED COMMENT '用户ID',
     `name`      VARCHAR(50)     NOT NULL COMMENT '分组名称',
     `create_at` DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_at` DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',

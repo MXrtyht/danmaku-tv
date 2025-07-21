@@ -28,6 +28,7 @@ public class UserProfilesController {
 
     /**
      * 获取用户信息
+     *
      * @return 用户信息
      */
     @Operation(summary = "获取用户信息", description = "根据当前登录用户的ID获取个人信息")
@@ -40,6 +41,7 @@ public class UserProfilesController {
 
     /**
      * 更新用户信息
+     *
      * @param userProfilesDTO 包含用户信息的DTO
      * @return 响应消息
      */
@@ -56,7 +58,7 @@ public class UserProfilesController {
 
     @Operation(summary = "批量获取用户信息")
     @PostMapping("/batch")
-    public CommonResponse<List<UserProfiles>> getUserProfilesByUserIds(
+    public CommonResponse<List<UserProfiles>> getUserProfilesByUserIds (
             @RequestBody @Parameter(description = "用户ID列表") List<Long> userIds
     ) {
         List<UserProfiles> userProfiles = userProfilesService.getUserProfilesByUserIds(userIds);

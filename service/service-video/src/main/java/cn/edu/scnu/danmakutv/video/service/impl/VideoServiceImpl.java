@@ -170,7 +170,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     @Override
     public void deleteVideo (Long userId, Long videoId) {
         Video video = baseMapper.selectById(videoId);
-        if(video == null || !video.getUserId().equals(userId) ) {
+        if (video == null || !video.getUserId().equals(userId)) {
             throw new RuntimeException("无权限删除该视频");
         }
         // 1. 删除视频标签关联关系
@@ -257,7 +257,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         // 2. 根据视频ID列表批量获取视频信息
         List<Video> recommendedVideos = this.getVideosByIds(videoIds);
 
-          // 3. 过滤掉当前视频本身
+        // 3. 过滤掉当前视频本身
         return recommendedVideos.stream()
                                 .filter(video -> !Objects.equals(video.getId(), videoId))
                                 .collect(Collectors.toList());

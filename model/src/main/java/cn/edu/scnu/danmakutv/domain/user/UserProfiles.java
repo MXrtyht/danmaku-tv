@@ -11,7 +11,7 @@ import lombok.Data;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Schema( name = "用户个人资料")
+@Schema(name = "用户个人资料")
 @Data
 @TableName("t_user_profiles")
 public class UserProfiles {

@@ -3,8 +3,6 @@ package cn.edu.scnu.danmakutv.dto.user;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 @Schema(description = "用户关注信息")
 @Data
 public class UserUnfollowDTO {

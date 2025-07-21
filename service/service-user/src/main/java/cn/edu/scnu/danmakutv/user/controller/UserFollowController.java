@@ -4,7 +4,6 @@ import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.common.exception.DanmakuException;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
 import cn.edu.scnu.danmakutv.domain.user.FollowGroup;
-import cn.edu.scnu.danmakutv.domain.user.UserProfiles;
 import cn.edu.scnu.danmakutv.dto.user.CreateFollowGroupDTO;
 import cn.edu.scnu.danmakutv.dto.user.UserFollowDTO;
 import cn.edu.scnu.danmakutv.dto.user.UserUnfollowDTO;
@@ -20,7 +19,6 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @CrossOrigin
 @Tag(name = "用户关注 相关接口")
@@ -38,6 +36,7 @@ public class UserFollowController {
 
     /**
      * 关注用户
+     *
      * @param userFollowDTO 包含被关注用户ID和分组ID
      * @return 响应
      */
@@ -72,6 +71,7 @@ public class UserFollowController {
 
     /**
      * 获取用户关注列表
+     *
      * @return 包含用户关注分组和用户列表
      */
     @Operation(
@@ -88,6 +88,7 @@ public class UserFollowController {
 
     /**
      * 获取用户粉丝列表
+     *
      * @return 包含粉丝用户信息和是否已关注的Map
      */
     @Operation(
@@ -104,6 +105,7 @@ public class UserFollowController {
 
     /**
      * 创建关注分组
+     *
      * @param createFollowGroupDTO 包含用户id和分组名称
      * @return 新创建的分组ID
      */
@@ -121,6 +123,7 @@ public class UserFollowController {
 
     /**
      * 获取用户的关注分组列表
+     *
      * @return 关注分组列表
      */
     @Operation(summary = "获取当前用户关注分组列表")
@@ -133,11 +136,12 @@ public class UserFollowController {
 
     /**
      * 获取当前用户的总关注数
+     *
      * @return 当前用户的总关注数
      */
     @Operation(summary = "获取当前用户的总关注数")
     @GetMapping("/follow-count")
-    public CommonResponse<Long> getTotalFollowCount() {
+    public CommonResponse<Long> getTotalFollowCount () {
         Long userId = authenticationSupport.getCurrentUserId();
         Long totalFollowCount = userFollowService.getTotalFollowCount(userId);
         return CommonResponse.success(totalFollowCount);
@@ -145,11 +149,12 @@ public class UserFollowController {
 
     /**
      * 获取当前用户的总粉丝数
+     *
      * @return 当前用户的总粉丝数
      */
     @Operation(summary = "获取当前用户的总粉丝数")
     @GetMapping("/fans-count")
-    public CommonResponse<Long> getTotalFansCount() {
+    public CommonResponse<Long> getTotalFansCount () {
         Long userId = authenticationSupport.getCurrentUserId();
         Long totalFansCount = userFollowService.getTotalFansCount(userId);
         return CommonResponse.success(totalFansCount);
@@ -160,9 +165,9 @@ public class UserFollowController {
     public CommonResponse<String> deleteFollowGroup (
             @RequestBody @Parameter(description = "收藏分组ID", required = true)
             Long groupId
-    ){
+    ) {
         Long userId = authenticationSupport.getCurrentUserId();
-        if( groupId == null || groupId <= 1 ){
+        if (groupId == null || groupId <= 1) {
             throw new DanmakuException("不能删除默认分组", 400);
         }
         userFollowService.deleteFollowGroup(userId, groupId);

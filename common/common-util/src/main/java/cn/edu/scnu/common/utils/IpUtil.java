@@ -1,7 +1,7 @@
 package cn.edu.scnu.common.utils;
-import lombok.extern.slf4j.Slf4j;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.net.InetAddress;
@@ -18,7 +18,7 @@ public class IpUtil {
     /**
      * 获取当前网络ip
      */
-    public static String getIpAddr(HttpServletRequest request) {
+    public static String getIpAddr (HttpServletRequest request) {
         String ipAddress = request.getHeader("x-forwarded-for");
         if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader("Proxy-Client-IP");
@@ -39,7 +39,7 @@ public class IpUtil {
                 ipAddress = inet.getHostAddress();
             }
         }
-        //对于通过多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割  //"***.***.***.***".length() = 15
+        // 对于通过多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割  //"***.***.***.***".length() = 15
         if (ipAddress != null && ipAddress.length() > 15) {
             if (ipAddress.indexOf(",") > 0) {
                 ipAddress = ipAddress.substring(0, ipAddress.indexOf(","));
@@ -51,7 +51,7 @@ public class IpUtil {
     /**
      * 获取真实IP
      */
-    public static String getRealIp(HttpServletRequest request) {
+    public static String getRealIp (HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
         return checkIp(ip) ? ip : (
                 checkIp(ip = request.getHeader("Proxy-Client-IP")) ? ip : (
@@ -62,14 +62,14 @@ public class IpUtil {
     /**
      * 校验IP
      */
-    private static boolean checkIp(String ip) {
+    private static boolean checkIp (String ip) {
         return !StringUtils.isEmpty(ip) && !"unknown".equalsIgnoreCase(ip);
     }
 
     /**
      * 获取操作系统,浏览器及浏览器版本信息
      */
-    public static Map<String, String> getOsAndBrowserInfo(HttpServletRequest request) {
+    public static Map<String, String> getOsAndBrowserInfo (HttpServletRequest request) {
         String userAgent = request.getHeader("User-Agent");
         String user = userAgent.toLowerCase();
         String os;
@@ -136,13 +136,13 @@ public class IpUtil {
     /**
      * 判断是否是内网IP
      */
-    public static boolean internalIp(String ip) {
+    public static boolean internalIp (String ip) {
         byte[] addr = textToNumericFormatV4(ip);
         return internalIp(addr) || "127.0.0.1".equals(ip);
     }
 
-    private static boolean internalIp(byte[] addr) {
-        if (StringUtils.isBlank( new String(addr)) || addr.length < 2) {
+    private static boolean internalIp (byte[] addr) {
+        if (StringUtils.isBlank(new String(addr)) || addr.length < 2) {
             return true;
         }
         final byte b0 = addr[0];
@@ -178,7 +178,7 @@ public class IpUtil {
      * @param text IPv4地址
      * @return byte 字节
      */
-    public static byte[] textToNumericFormatV4(String text) {
+    public static byte[] textToNumericFormatV4 (String text) {
         if (text.length() == 0) {
             return null;
         }
@@ -249,7 +249,7 @@ public class IpUtil {
     /**
      * 获取IP
      */
-    public static String getHostIp() {
+    public static String getHostIp () {
         try {
             return InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
@@ -261,7 +261,7 @@ public class IpUtil {
     /**
      * 获取主机名
      */
-    public static String getHostName() {
+    public static String getHostName () {
         try {
             return InetAddress.getLocalHost().getHostName();
         } catch (UnknownHostException e) {

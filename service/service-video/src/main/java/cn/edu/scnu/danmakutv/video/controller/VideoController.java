@@ -7,7 +7,6 @@ import cn.edu.scnu.danmakutv.domain.video.Video;
 import cn.edu.scnu.danmakutv.dto.video.GetRecommendedVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UpdateVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UserUploadVideoDTO;
-// import cn.edu.scnu.danmakutv.video.service.ElasticSearchService;
 import cn.edu.scnu.danmakutv.video.service.VideoService;
 import cn.edu.scnu.danmakutv.vo.video.VideoVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
