@@ -35,6 +35,18 @@ CREATE TABLE `t_collection_group`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='视频收藏分组表';
 
+DROP TABLE IF EXISTS `t_video_comment`;
+CREATE TABLE `t_video_comment`
+(
+    `id`        BIGINT UNSIGNED                                       NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `user_id`   BIGINT UNSIGNED                                       NOT NULL COMMENT '用户ID',
+    `video_id`  BIGINT UNSIGNED                                       NOT NULL COMMENT '视频ID',
+    `content`   TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '评论内容',
+    `create_at` DATETIME                                              NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='视频评论表';
+
 DROP TABLE IF EXISTS `t_danmaku`;
 CREATE TABLE `t_danmaku`
 (
