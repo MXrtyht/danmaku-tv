@@ -4,6 +4,7 @@ import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.common.exception.DanmakuException;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
 import cn.edu.scnu.danmakutv.domain.interaction.CollectionGroup;
+import cn.edu.scnu.danmakutv.domain.interaction.VideoCollection;
 import cn.edu.scnu.danmakutv.dto.interaction.AddVideoCollectionDTO;
 import cn.edu.scnu.danmakutv.service.CollectionGroupService;
 import cn.edu.scnu.danmakutv.service.VideoCollectionService;
@@ -69,6 +70,16 @@ public class VideoCollectionController {
         return CommonResponse.success(collectionGroups);
     }
 
+    @Operation(summary = "根据收藏分组ID获取用户收藏的视频")
+    @GetMapping("/collections-by-group")
+    public CommonResponse<List<VideoCollection>> getUserCollectionsByCollectionGroupId(
+            @RequestParam @Parameter(description = "收藏分组ID", required = true) Long groupId
+    ) {
+        Long userId = authenticationSupport.getCurrentUserId();
+        List<VideoCollection> videoCollections = videoCollectionService.getUserCollectionsByGroupId(userId, groupId);
+        return CommonResponse.success(videoCollections);
+    }
+
     @Operation(summary = "添加用户收藏分组")
     @PostMapping("/add-collection-group")
     public CommonResponse<String> addCollectionGroup (
@@ -98,5 +109,20 @@ public class VideoCollectionController {
         }
         videoCollectionService.deleteCollectionGroup(userId, groupId);
         return CommonResponse.success("删除成功");
+    }
+
+    @Operation(summary = "获取视频收藏数量")
+    @GetMapping("/video-collect-count")
+    public CommonResponse<Long> getVideoCollectCount(@RequestParam Long videoId) {
+        Long count = videoCollectionService.getVideoCollectCount(videoId);
+        return CommonResponse.success(count);
+    }
+
+    @Operation(summary = "获取某个视频用户是否已收藏; 已收藏 则返回相应的分组id, 否则返回null")
+    @GetMapping("/is-video-collected")
+    public CommonResponse<Long> isVideoCollected (@RequestParam Long videoId) {
+        Long userId = authenticationSupport.getCurrentUserId();
+        Long groupId = videoCollectionService.isVideoCollected(userId, videoId);
+        return CommonResponse.success(groupId);
     }
 }

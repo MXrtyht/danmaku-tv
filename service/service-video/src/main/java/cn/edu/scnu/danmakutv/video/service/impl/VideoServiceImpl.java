@@ -2,6 +2,8 @@ package cn.edu.scnu.danmakutv.video.service.impl;
 
 import cn.edu.scnu.danmakutv.common.exception.DanmakuException;
 import cn.edu.scnu.danmakutv.domain.video.Video;
+import cn.edu.scnu.danmakutv.dto.video.GetRecommendedVideoDTO;
+import cn.edu.scnu.danmakutv.dto.video.UpdateVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UserUploadVideoDTO;
 import cn.edu.scnu.danmakutv.video.mapper.VideoMapper;
 import cn.edu.scnu.danmakutv.video.service.AreaService;
@@ -21,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +36,8 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
 
     @Resource
     private AreaService areaService;
+
+    // 以上可能要修改
 
     /**
      * 分页查询视频列表
@@ -80,7 +85,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
      */
     @Transactional
     @Override
-    public void uploadVideo (UserUploadVideoDTO userUploadVideoDTO) {
+    public Long uploadVideo (UserUploadVideoDTO userUploadVideoDTO) {
         Video video = new Video();
 
         // 复制属性
@@ -110,6 +115,8 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
 
         // 插入视频-tag关联表
         videoTagRelationService.addVideoTagRelation(video.getId(), tagIds);
+
+        return video.getId();
     }
 
     /**
@@ -140,17 +147,119 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     }
 
     /**
-     * 根据视频ID数组获取视频列表
+     * 根据视频ID数组批量获取视频
      *
      * @param videoIds 视频ID数组
      * @return 视频列表
      */
     @Override
-    public List<Video> getVideosByIds (@Size(min = 1) Long[] videoIds) {
-        if (videoIds == null || videoIds.length == 0) {
+    public List<Video> getVideosByIds (@Size(min = 1) List<Long> videoIds) {
+        if (videoIds == null || videoIds.isEmpty()) {
             throw new IllegalArgumentException("视频ID列表不能为空");
         }
-        List<Video> videos = baseMapper.selectByIds(List.of(videoIds));
+        List<Video> videos = baseMapper.selectByIds(videoIds);
         return videos;
+    }
+
+    /**
+     * 删除视频
+     *
+     * @param videoId 视频ID
+     */
+    @Transactional
+    @Override
+    public void deleteVideo (Long userId, Long videoId) {
+        Video video = baseMapper.selectById(videoId);
+        if(video == null || !video.getUserId().equals(userId) ) {
+            throw new RuntimeException("无权限删除该视频");
+        }
+        // 1. 删除视频标签关联关系
+        videoTagRelationService.deleteByVideoId(videoId);
+
+        // 2. 删除视频记录
+        baseMapper.deleteById(videoId);
+    }
+
+    /**
+     * 修改视频信息
+     *
+     * @param updateVideoDTO UpdateVideoDTO
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateVideo (UpdateVideoDTO updateVideoDTO) {
+        // 1. 检查视频是否存在
+        Video video = baseMapper.selectById(updateVideoDTO.getVideoId());
+        if (video == null) {
+            throw new RuntimeException("视频不存在");
+        }
+
+        // 3. 只更新非空字段
+        boolean hasUpdate = false;
+
+        if (updateVideoDTO.getTitle() != null && !updateVideoDTO.getTitle().trim().isEmpty()) {
+            video.setTitle(updateVideoDTO.getTitle().trim());
+            hasUpdate = true;
+        }
+
+        if (updateVideoDTO.getCoverUrl() != null && !updateVideoDTO.getCoverUrl().trim().isEmpty()) {
+            video.setCoverUrl(updateVideoDTO.getCoverUrl().trim());
+            hasUpdate = true;
+        }
+
+        if (updateVideoDTO.getType() != null) {
+            video.setType(updateVideoDTO.getType());
+            hasUpdate = true;
+        }
+
+        if (updateVideoDTO.getArea() <= 1) {
+            throw new DanmakuException("视频分区不存在", 400);
+        }
+        if (updateVideoDTO.getArea() != null) {
+            video.setArea(updateVideoDTO.getArea());
+            hasUpdate = true;
+        }
+
+        // 设置更新时间
+        if (hasUpdate) {
+            video.setUpdateAt(LocalDateTime.now());
+            baseMapper.updateById(video);
+        }
+
+        // 3. 更新标签关联（先删除旧关联，再添加新关联）
+        videoTagRelationService.deleteByVideoId(updateVideoDTO.getVideoId());
+
+        // 设置视频标签
+        // 拿到传过来的tag名称表
+        List<String> tagNames = updateVideoDTO.getTags();
+        // 根据标签名称获取标签ID列表
+        List<Long> tagIds = tagService.findTagIdsByNames(tagNames);
+
+        // 添加新的标签关联
+        videoTagRelationService.addVideoTagRelation(video.getId(), tagIds);
+    }
+
+    /**
+     * 视频相关推荐
+     *
+     * @param getRecommendedVideoDTO 推荐视频的查询参数, 包含视频ID和限制数量
+     * @return List<Video> 推荐视频列表
+     */
+    @Override
+    public List<Video> getRecommendedVideos (GetRecommendedVideoDTO getRecommendedVideoDTO) {
+        Long videoId = getRecommendedVideoDTO.getVideoId();
+        Long limit = getRecommendedVideoDTO.getLimit();
+        List<Long> tagIds = videoTagRelationService.getIdsByVideoId(videoId);
+
+        // 1. 查询包含相同标签的视频ID列表（按匹配标签数排序）
+        List<Long> videoIds = videoTagRelationService.findVideoIdsByTagIds(tagIds, limit);
+
+        // 2. 根据视频ID列表批量获取视频信息
+        List<Video> recommendedVideos = this.getVideosByIds(videoIds);
+
+          // 3. 过滤掉当前视频本身
+        return recommendedVideos.stream()
+                                .filter(video -> !Objects.equals(video.getId(), videoId))
+                                .collect(Collectors.toList());
     }
 }

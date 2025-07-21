@@ -2,8 +2,12 @@ package cn.edu.scnu.danmakutv.video.controller;
 
 import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
+import cn.edu.scnu.danmakutv.domain.elasticsearch.VideoEs;
 import cn.edu.scnu.danmakutv.domain.video.Video;
+import cn.edu.scnu.danmakutv.dto.video.GetRecommendedVideoDTO;
+import cn.edu.scnu.danmakutv.dto.video.UpdateVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UserUploadVideoDTO;
+// import cn.edu.scnu.danmakutv.video.service.ElasticSearchService;
 import cn.edu.scnu.danmakutv.video.service.VideoService;
 import cn.edu.scnu.danmakutv.vo.video.VideoVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -28,6 +32,9 @@ public class VideoController {
 
     @Resource
     private VideoService videoService;
+
+    // @Resource
+    // private ElasticSearchService elasticSearchService;
 
     /**
      * 查询所有视频
@@ -95,7 +102,9 @@ public class VideoController {
     ) {
         Long userId = authenticationSupport.getCurrentUserId();
         userUploadVideoDTO.setUserId(userId);
-        videoService.uploadVideo(userUploadVideoDTO);
+        Long videoId = videoService.uploadVideo(userUploadVideoDTO);
+        // 在es中添加一条数据
+        // elasticSearchService.addVideoEs(userUploadVideoDTO, videoId);
         return CommonResponse.success("视频上传成功");
     }
 
@@ -113,9 +122,70 @@ public class VideoController {
     @Operation(summary = "根据视频id列表批量查询视频")
     @PostMapping("/batch")
     public CommonResponse<List<Video>> getVideosByIds (
-            @RequestBody @Parameter(description = "视频ID列表") @Size(min = 1) Long[] videoIds
+            @RequestBody @Parameter(description = "视频ID列表") @Size(min = 1) List<Long> videoIds
     ) {
         List<Video> result = videoService.getVideosByIds(videoIds);
         return CommonResponse.success(result);
+    }
+
+    /**
+     * 删除视频
+     *
+     * @return 响应
+     */
+    @Operation(summary = "删除视频")
+    @PostMapping("/delete-video")
+    public CommonResponse<String> deleteVideo (
+            @RequestBody Long videoId
+    ) {
+        Long userId = authenticationSupport.getCurrentUserId();
+        videoService.deleteVideo(userId, videoId);
+        return CommonResponse.success("视频删除成功");
+    }
+
+    /**
+     * 修改视频信息(
+     *
+     * @param dto UpdateVideoDTO
+     * @return 响应
+     */
+    @Operation(summary = "修改视频信息")
+    @PostMapping("/update-video")
+    public CommonResponse<String> updateVideo (
+            @RequestBody @Valid UpdateVideoDTO dto
+    ) {
+        Long userId = authenticationSupport.getCurrentUserId();
+        videoService.updateVideo(dto);
+        return CommonResponse.success("视频更新");
+    }
+
+    /**
+     * 视频相关推荐
+     *
+     * @param getRecommendedVideoDTO 推荐视频的查询参数, 包含标签ID列表和限制数量
+     * @return 推荐视频列表
+     */
+    @Operation(summary = "视频相关推荐")
+    @PostMapping("/recommendations")
+    public CommonResponse<List<Video>> getRecommendedVideos (
+            @RequestBody @Parameter(description = "推荐视频DTO, 包含标签ID列表和限制数量")
+            GetRecommendedVideoDTO getRecommendedVideoDTO
+    ) {
+        List<Video> videos = videoService.getRecommendedVideos(getRecommendedVideoDTO);
+        return CommonResponse.success(videos);
+    }
+
+    /**
+     * 根据tag搜索相应视频
+     *
+     * @param tags
+     * @return
+     */
+    @Operation(summary = "根据tag搜索相应视频")
+    @GetMapping("/search")
+    public CommonResponse<List<VideoEs>> searchVideo (@RequestParam List<String> tags) {
+        // List<VideoEs> videoEsList = elasticSearchService.findByTagsIn(tags);
+        // return CommonResponse.success(videoEsList);
+        return CommonResponse.success(null);
     }
 }
