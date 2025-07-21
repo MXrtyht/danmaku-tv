@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.edu.scnu.danmakutv.video.mapper.VideoMapper">
+
+    <!-- 查询所有视频 -->
+    <select id="selectVideo" resultType="cn.edu.scnu.danmakutv.vo.video.VideoVO" resultMap="VideoWithTagsMap">
+        SELECT * FROM t_video
+        <where>
+            ${ew.sqlSegment}
+        </where>
+    </select>
+    <resultMap id="VideoWithTagsMap" type="cn.edu.scnu.danmakutv.vo.video.VideoVO">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="video_url" property="videoUrl"/>
+        <result column="cover_url" property="coverUrl"/>
+        <result column="title" property="title"/>
+        <result column="type" property="type"/>
+        <result column="duration" property="duration"/>
+        <result column="area" property="area"/>
+        <result column="create_at" property="createAt"/>
+        <result column="update_at" property="updateAt"/>
+        <collection property="tags" ofType="cn.edu.scnu.danmakutv.domain.video.VideoTag"
+                    select="cn.edu.scnu.danmakutv.video.mapper.VideoTagMapper.selectTagsByVideoId"
+                    column="id"/>
+    </resultMap>
+
+    <select id="getVideoView" parameterType="java.util.Map" resultType="cn.edu.scnu.danmakutv.domain.video.VideoView">
+        select * from t_video_view where videoId = #{videoId}
+        <if test="userId == null and clientId != null">
+            and clientId = #{clientId} and userId is null
+        </if>
+        <if test="userId != null">
+            and userId = #{userId}
+        </if>
+        <if test="ip != null and ip != ''">
+            and ip = #{ip}
+        </if>
+        <if test="today != null and today != ''">
+            and DATE_FORMAT(createTime, '%Y-%m-%d') = #{today}
+        </if>
+    </select>
+
+    <select id="getVideoViewCounts" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        select count(1) from t_video_view where videoId = #{videoId}
+    </select>
+</mapper>
