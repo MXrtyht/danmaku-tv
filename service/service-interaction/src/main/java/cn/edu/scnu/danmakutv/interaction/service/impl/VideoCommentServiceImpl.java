@@ -63,7 +63,7 @@ public class VideoCommentServiceImpl extends ServiceImpl<VideoCommentMapper, Vid
         // 分页查询视频评论
         IPage<VideoComment> pageRequest = new Page<>(page, size);
         QueryWrapper<VideoComment> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("video_id", videoId);
+        queryWrapper.eq("video_id", videoId).orderByDesc("create_at");
 
         IPage<VideoComment> videoCommentIPage = this.baseMapper.selectPage(pageRequest, queryWrapper);
 

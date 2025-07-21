@@ -1,6 +1,7 @@
 package cn.edu.scnu.danmakutv.user.controller;
 
 import cn.edu.scnu.common.utils.RSAUtil;
+import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
 import cn.edu.scnu.danmakutv.dto.user.UserLoginDTO;
 import cn.edu.scnu.danmakutv.dto.user.UserRegisterDTO;
@@ -19,6 +20,9 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Resource
     private UserService userService;
+
+    @Resource
+    private AuthenticationSupport authenticationSupport;
 
     // 获取RSA公钥
     @Operation(
@@ -59,4 +63,10 @@ public class UserController {
         return CommonResponse.success(token);
     }
 
+    @Operation(summary = "获取当前用户id")
+    @GetMapping("/current-user-id")
+    public CommonResponse<Long> getCurrentUserId () {
+        Long userId = authenticationSupport.getCurrentUserId();
+        return CommonResponse.success(userId);
+    }
 }
