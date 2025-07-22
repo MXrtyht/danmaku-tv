@@ -5,6 +5,8 @@ import cn.edu.scnu.danmakutv.domain.user.UserMoments;
 import cn.edu.scnu.danmakutv.domain.user.UserProfiles;
 import cn.edu.scnu.danmakutv.user.constant.UserMomentsConstant;
 import cn.edu.scnu.danmakutv.user.service.UserFollowService;
+import cn.edu.scnu.danmakutv.vo.user.UserFanDTO;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import io.netty.util.internal.StringUtil;
@@ -58,9 +60,9 @@ public class RocketMQConfig {
                 String bodyStr = new String(msg.getBody());
                 UserMoments userMoments = JSONObject.toJavaObject(JSONObject.parseObject(bodyStr), UserMoments.class);
                 Long userId = userMoments.getUserId();
-                Map<UserProfiles, Boolean> profilesMap = userFollowService.getFans(userId);
-                for(UserProfiles fan : profilesMap.keySet()) {
-                    String key = "subscribed-" + fan.getUserId();
+                List<UserFanDTO> userFanDTO = userFollowService.getFans(userId);
+                for(UserFanDTO fan : userFanDTO) {
+                    String key = "subscribed-" + fan.getUserProfiles().getUserId();
                     String subscribedListStr = redisTemplate.opsForValue().get(key);
                     List<UserMoments> subscribedList;
                     subscribedList = StringUtil.isNullOrEmpty(subscribedListStr) ?
