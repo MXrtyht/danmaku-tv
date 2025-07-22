@@ -1,13 +1,16 @@
 package cn.edu.scnu.danmakutv.interaction.service.impl;
 
 import cn.edu.scnu.danmakutv.common.exception.DanmakuException;
+import cn.edu.scnu.danmakutv.common.response.CommonResponse;
 import cn.edu.scnu.danmakutv.domain.interaction.CollectionGroup;
 import cn.edu.scnu.danmakutv.domain.interaction.VideoCollection;
 import cn.edu.scnu.danmakutv.dto.interaction.AddVideoCollectionDTO;
+import cn.edu.scnu.danmakutv.interaction.controller.client.VideoServiceClient;
 import cn.edu.scnu.danmakutv.interaction.mapper.VideoCollectionMapper;
 import cn.edu.scnu.danmakutv.interaction.service.CollectionGroupService;
 import cn.edu.scnu.danmakutv.interaction.service.VideoCollectionService;
 import cn.edu.scnu.danmakutv.vo.interaction.CollectedVideosWithGroupVO;
+import cn.edu.scnu.danmakutv.vo.video.VideoVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
@@ -26,6 +29,9 @@ public class VideoCollectionServiceImpl extends ServiceImpl<VideoCollectionMappe
     @Resource
     private CollectionGroupService collectionGroupService;
 
+    @Resource
+    VideoServiceClient videoServiceClient;
+
     @Override
     public void addVideoCollection (AddVideoCollectionDTO addVideoCollectionDTO) {
         Long groupId = addVideoCollectionDTO.getGroupId();
@@ -42,7 +48,10 @@ public class VideoCollectionServiceImpl extends ServiceImpl<VideoCollectionMappe
         }
 
         Long videoId = addVideoCollectionDTO.getVideoId();
-        // TODO 检查被收藏的视频是否存在
+        CommonResponse<?> commonResponse = videoServiceClient.getVideoById(videoId);
+        if(commonResponse.getCode() != 200){
+            throw new DanmakuException("视频不存在", 400);
+        }
 
         // 先删除再添加
         this.baseMapper.delete(

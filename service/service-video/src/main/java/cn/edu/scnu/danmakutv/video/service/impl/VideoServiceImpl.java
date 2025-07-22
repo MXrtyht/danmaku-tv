@@ -130,7 +130,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         // 先获取该视频, 并检查其是否存在
         Video video = baseMapper.selectById(videoId);
         if (video == null) {
-            throw new RuntimeException("视频不存在");
+            throw new DanmakuException("视频不存在",400);
         }
 
         // 构建 VideoVO 对象
@@ -171,7 +171,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     public void deleteVideo (Long userId, Long videoId) {
         Video video = baseMapper.selectById(videoId);
         if (video == null || !video.getUserId().equals(userId)) {
-            throw new RuntimeException("无权限删除该视频");
+            throw new DanmakuException("无权限删除该视频",400);
         }
         // 1. 删除视频标签关联关系
         videoTagRelationService.deleteByVideoId(videoId);
@@ -191,7 +191,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         // 1. 检查视频是否存在
         Video video = baseMapper.selectById(updateVideoDTO.getVideoId());
         if (video == null) {
-            throw new RuntimeException("视频不存在");
+            throw new DanmakuException("视频不存在",400);
         }
 
         // 3. 只更新非空字段

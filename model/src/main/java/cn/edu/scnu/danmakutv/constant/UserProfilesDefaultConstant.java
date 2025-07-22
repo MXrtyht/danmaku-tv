@@ -9,7 +9,6 @@ public interface UserProfilesDefaultConstant {
 
     GenderType DEFAULT_GENDER = GenderType.MALE;
 
-    // TODO : 后续为url
     String DEFAULT_AVATAR = "null";
 
     String DEFAULT_SIGN = "这个人很懒，什么都没有留下~";
