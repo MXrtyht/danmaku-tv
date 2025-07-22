@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Configuration
-public class RocketMQConfig {
+public class InteractionServiceRocketMQConfig {
 
     @Value("${rocketmq.name.server.address}")
     private String nameServerAddr;

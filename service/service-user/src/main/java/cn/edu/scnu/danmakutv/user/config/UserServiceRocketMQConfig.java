@@ -1,8 +1,6 @@
 package cn.edu.scnu.danmakutv.user.config;
 
-import cn.edu.scnu.danmakutv.domain.user.UserFollow;
 import cn.edu.scnu.danmakutv.domain.user.UserMoments;
-import cn.edu.scnu.danmakutv.domain.user.UserProfiles;
 import cn.edu.scnu.danmakutv.user.constant.UserMomentsConstant;
 import cn.edu.scnu.danmakutv.user.service.UserFollowService;
 import cn.edu.scnu.danmakutv.vo.user.UserFanDTO;
@@ -24,10 +22,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Configuration
-public class RocketMQConfig {
+public class UserServiceRocketMQConfig {
     // 记得在properties中更改对应的值
     @Value("${rocketmq.name.server.address}")
     private String nameServerAddr;

@@ -23,6 +23,12 @@ public class UserMomentsController {
     @Autowired
     private AuthenticationSupport authenticationSupport;
 
+    /**
+     * 添加用户动态
+     * @param userMoments 用户动态信息
+     * @return CommonResponse<String> 添加结果
+     * @throws Exception 能抛出异常
+     */
     @PostMapping("/user-moments")
     public CommonResponse<String> addUserMoments(@RequestBody UserMoments userMoments) throws Exception {
         Long userId = authenticationSupport.getCurrentUserId();
