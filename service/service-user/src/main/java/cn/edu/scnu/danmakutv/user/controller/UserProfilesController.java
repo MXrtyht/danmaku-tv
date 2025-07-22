@@ -3,6 +3,7 @@ package cn.edu.scnu.danmakutv.user.controller;
 import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
 import cn.edu.scnu.danmakutv.domain.user.UserProfiles;
+import cn.edu.scnu.danmakutv.dto.user.UpdateUserCoinDTO;
 import cn.edu.scnu.danmakutv.dto.user.UserProfilesDTO;
 import cn.edu.scnu.danmakutv.user.service.UserProfilesService;
 import cn.edu.scnu.danmakutv.vo.user.UserProfilesVO;
@@ -63,5 +64,25 @@ public class UserProfilesController {
     ) {
         List<UserProfiles> userProfiles = userProfilesService.getUserProfilesByUserIds(userIds);
         return CommonResponse.success(userProfiles);
+    }
+
+    @Operation(summary = "根据用户ID获取用户信息")
+    @GetMapping("/info-by-id")
+    public CommonResponse<UserProfilesVO> getUserProfilesById (
+            @Parameter(description = "用户ID", required = true) @RequestParam Long userId
+    ) {
+        UserProfilesVO userProfilesVO = userProfilesService.getUserProfilesByUserId(userId);
+        return CommonResponse.success(userProfilesVO);
+    }
+
+    @Operation(summary = "修改硬币数量")
+    @PostMapping("/update-coin")
+    public CommonResponse<Boolean> updateUserCoin (
+            @RequestBody UpdateUserCoinDTO updateUserCoinDTO
+    ) {
+        Long userId = authenticationSupport.getCurrentUserId();
+        updateUserCoinDTO.setUserId(userId);
+        boolean result = userProfilesService.updateUserCoin(updateUserCoinDTO);
+        return CommonResponse.success(result);
     }
 }
