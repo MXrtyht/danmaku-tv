@@ -104,7 +104,7 @@ public class VideoController {
         Long videoId = videoService.uploadVideo(userUploadVideoDTO);
         // 在es中添加一条数据
         // elasticSearchService.addVideoEs(userUploadVideoDTO, videoId);
-        return CommonResponse.success("视频上传成功");
+        return CommonResponse.success(videoId.toString());
     }
 
     @Operation(
