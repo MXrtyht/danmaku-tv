@@ -29,6 +29,7 @@ public class UserMomentsServiceImpl extends ServiceImpl<UserMomentsMapper, UserM
     @Override
     public void addUserMoments(UserMoments userMoments) throws Exception {
         userMoments.setCreateTime(new Date());
+        userMoments.setId(null); // 让数据库id自增auto-increment
         baseMapper.insert(userMoments);
         DefaultMQProducer producer = applicationContext.getBean("momentsProducer", DefaultMQProducer.class);
         Message msg = new Message(UserMomentsConstant.TOPIC_MOMENTS, JSONObject.toJSONString(userMoments).getBytes(StandardCharsets.UTF_8));
