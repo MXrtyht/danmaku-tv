@@ -2,6 +2,7 @@ package cn.edu.scnu.danmakutv.user.service.impl;
 
 import cn.edu.scnu.danmakutv.constant.UserProfilesDefaultConstant;
 import cn.edu.scnu.danmakutv.domain.user.UserProfiles;
+import cn.edu.scnu.danmakutv.dto.user.UpdateUserCoinDTO;
 import cn.edu.scnu.danmakutv.dto.user.UserProfilesDTO;
 import cn.edu.scnu.danmakutv.user.mapper.UserProfilesMapper;
 import cn.edu.scnu.danmakutv.user.service.UserProfilesService;
@@ -87,5 +88,33 @@ public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, Use
                 new QueryWrapper<>(UserProfiles.class)
                         .in("user_id", userIds)
         );
+    }
+
+    @Override
+    public boolean updateUserCoin (UpdateUserCoinDTO updateUserCoinDTO) {
+        Long userId = updateUserCoinDTO.getUserId();
+        Integer coin = updateUserCoinDTO.getCoin();
+        Boolean isAdd = updateUserCoinDTO.getIsAdd();
+
+        UserProfiles userProfiles = baseMapper.selectOne(
+                new QueryWrapper<>(UserProfiles.class)
+                        .eq("user_id", userId)
+        );
+
+        if (userProfiles == null) {
+            return false; // 用户不存在
+        }
+
+        if (isAdd) {
+            userProfiles.setCoin(userProfiles.getCoin() + coin);
+        } else {
+            if (userProfiles.getCoin() < coin) {
+                return false; // 硬币不足
+            }
+            userProfiles.setCoin(userProfiles.getCoin() - coin);
+        }
+
+        userProfiles.setUpdateAt(LocalDateTime.now());
+        return baseMapper.updateById(userProfiles) > 0;
     }
 }

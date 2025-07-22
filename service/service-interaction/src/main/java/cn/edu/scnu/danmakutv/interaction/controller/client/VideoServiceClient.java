@@ -1,6 +1,7 @@
 package cn.edu.scnu.danmakutv.interaction.controller.client;
 
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
+import cn.edu.scnu.danmakutv.vo.user.UserProfilesVO;
 import cn.edu.scnu.danmakutv.vo.video.VideoVO;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.cloud.openfeign.FeignClient;

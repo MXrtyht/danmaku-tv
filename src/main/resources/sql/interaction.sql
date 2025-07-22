@@ -50,14 +50,25 @@ CREATE TABLE `t_video_comment`
 DROP TABLE IF EXISTS `t_danmaku`;
 CREATE TABLE `t_danmaku`
 (
-    `id`        BIGINT UNSIGNED                                       NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `user_id`   BIGINT UNSIGNED                                       NOT NULL COMMENT '用户ID',
-    `video_id`  BIGINT UNSIGNED                                       NOT NULL COMMENT '视频ID',
-    `content`   TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '弹幕内容',
-    `video_time` BIGINT UNSIGNED            NOT NULL COMMENT '视频时间点 (秒)',
-    `create_at` DATETIME                                              NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `id`         BIGINT UNSIGNED                                       NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `user_id`    BIGINT UNSIGNED                                       NOT NULL COMMENT '用户ID',
+    `video_id`   BIGINT UNSIGNED                                       NOT NULL COMMENT '视频ID',
+    `content`    TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '弹幕内容',
+    `video_time` BIGINT UNSIGNED                                       NOT NULL COMMENT '视频时间点 (秒)',
+    `create_at`  DATETIME                                              NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 52
   DEFAULT CHARSET = utf8mb4 COMMENT ='弹幕表';
 
+DROP TABLE IF EXISTS `t_video_coin`;
+CREATE TABLE `t_video_coin`
+(
+    `id`        BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `user_id`   BIGINT UNSIGNED NOT NULL COMMENT '用户ID',
+    `video_id`  BIGINT UNSIGNED NOT NULL COMMENT '视频ID',
+    `coin`      INT UNSIGNED NOT NULL DEFAULT 1 COMMENT '投币数量',
+    `create_at` DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '投币时间',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='视频投币表';
