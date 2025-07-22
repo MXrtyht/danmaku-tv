@@ -45,6 +45,16 @@ public class WebSocketService {
         WebSocketService.APPLICATION_CONTEXT = applicationContext;
     }
 
+    // 统一的消息发送方法
+    private void sendUnifiedMessage (String type, String data, String message) throws IOException {
+        JSONObject response = new JSONObject();
+        response.put("type", type);
+        response.put("data", data);
+        response.put("message", message);
+        response.put("time", LocalDateTime.now());
+        this.sendMessage(response.toJSONString());
+    }
+
     // 建立连接
     @OnOpen
     public void openConnection (Session session, @PathParam("token") String token) {
@@ -70,9 +80,13 @@ public class WebSocketService {
         // 日志记录
         logger.info("用户连接成功：" + sessionId + ", 当前在线人数为：" + ONLINE_COUNT.get());
 
-        // 通知前端
+        // 通知前端连接成功和当前在线人数
         try {
-            this.sendMessage("成功");
+            sendUnifiedMessage(
+                    "connection",
+                    "会话id: " + sessionId + " 用户id: " + userId + " 在线人数: " + ONLINE_COUNT.get(),
+                    "连接成功"
+            );
         } catch (Exception e) {
             logger.error("连接异常", e);
         }
@@ -94,56 +108,80 @@ public class WebSocketService {
         logger.info("用户信息：" + sessionId + ", 报文：" + message);
         if (!StringUtil.isNullOrEmpty(message)) {
             try {
-                // 群发消息
+                // 群发弹幕消息
                 for (WebSocketService webSocketService : WEBSOCKET_MAP.values()) {
-                    // if (webSocketService.session.isOpen()) {
-                    //     webSocketService.sendMessage(message);
-                    // }
-                    DefaultMQProducer danmakuProducer = (DefaultMQProducer) APPLICATION_CONTEXT.getBean("danmakuProducer");
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("message", message);
-                    jsonObject.put("sessionId", webSocketService.getSessionId());
+                    if (webSocketService.session.isOpen()) {
+                        // 先解析统一格式的消息
+                        JSONObject jsonObject = JSONObject.parseObject(message);
+                        if (jsonObject.getString("type").equals("danmaku")) {
+                            String danmakuContent = jsonObject.getString("data");
 
-                    Message msg = new Message("Topic-Danmaku", jsonObject.toJSONString().getBytes(StandardCharsets.UTF_8));
-                    RocketMQUtil.asyncSendMsg(danmakuProducer, msg);
+                            // 发送到 RocketMQ
+                            DefaultMQProducer danmakuProducer = (DefaultMQProducer) APPLICATION_CONTEXT.getBean("danmakuProducer");
+
+                            JSONObject mqMessage = new JSONObject();
+                            mqMessage.put("sessionId", webSocketService.getSessionId());
+                            mqMessage.put("message", danmakuContent);
+
+                            Message msg = new Message("Topic-Danmaku", mqMessage.toJSONString().getBytes(StandardCharsets.UTF_8));
+                            RocketMQUtil.asyncSendMsg(danmakuProducer, msg);
+                        }
+                    }
                 }
 
                 // 登陆的用户才可发弹幕
                 if (this.userId != null) {
                     // 保存弹幕到数据库
-                    Danmaku danmaku = JSONObject.parseObject(message, Danmaku.class);
-                    danmaku.setUserId(userId);
-                    danmaku.setCreateAt(LocalDateTime.now());
-                    System.out.println("-------------弹幕内容: " + danmaku.getId() + " " + danmaku.getCreateAt());
-                    DanmakuService danmakuService = APPLICATION_CONTEXT.getBean(DanmakuService.class);
-                    // danmakuService.asyncAddDanmaku(danmaku);
-                    danmakuService.addDanmaku(danmaku);
+                    // 先解析统一格式的消息
+                    JSONObject jsonObject = JSONObject.parseObject(message);
+                    if (jsonObject.getString("type").equals("danmaku")) {
+                        String danmakuContent = jsonObject.getString("data");
+                        Danmaku danmaku = JSONObject.parseObject(
+                                danmakuContent,
+                                Danmaku.class
+                        );
+                        danmaku.setUserId(userId);
+                        danmaku.setCreateAt(LocalDateTime.now());
 
-                    // 保存弹幕到redis
-                    danmakuService.addDanmakuToRedis(danmaku);
+                        DanmakuService danmakuService = APPLICATION_CONTEXT.getBean(DanmakuService.class);
+                        danmakuService.addDanmaku(danmaku);
+                        // 保存弹幕到redis
+                        danmakuService.addDanmakuToRedis(danmaku);
+                    }
                 }
 
             } catch (Exception e) {
                 logger.error("弹幕接收出现问题", e);
+                // 发送错误消息
+                try {
+                    sendUnifiedMessage("error", e.getMessage(), "弹幕接收错误");
+                } catch (IOException ioException) {
+                    logger.error("发送错误消息失败", ioException);
+                }
             }
         }
     }
 
     @OnError
     public void onError (Throwable error) {
-
+        logger.error("WebSocket 错误", error);
+        try {
+            sendUnifiedMessage("error", null, "连接发生错误");
+        } catch (IOException e) {
+            logger.error("发送错误消息失败", e);
+        }
     }
 
     // 定时任务，通知前端在线人数
-    // fixedRate 单位毫秒
     @Scheduled(fixedRate = 10000)
     private void noticeOnlineCount () throws IOException {
         for (WebSocketService webSocketService : WEBSOCKET_MAP.values()) {
             if (webSocketService.session.isOpen()) {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("onlineCount", ONLINE_COUNT.get());
-                jsonObject.put("msg", "当前在线人数为" + ONLINE_COUNT.get());
-                webSocketService.sendMessage(jsonObject.toJSONString());
+                webSocketService.sendUnifiedMessage(
+                        "connection",
+                        String.valueOf(ONLINE_COUNT.get()),
+                        "在线人数更新"
+                );
             }
         }
     }
@@ -151,5 +189,4 @@ public class WebSocketService {
     public void sendMessage (String message) throws IOException {
         this.session.getBasicRemote().sendText(message);
     }
-
 }
