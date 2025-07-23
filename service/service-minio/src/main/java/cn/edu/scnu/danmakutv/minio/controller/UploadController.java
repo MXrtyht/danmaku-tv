@@ -68,12 +68,12 @@ public class UploadController {
     @Operation(
             summary = "分片视频流处理"
     )
-    @GetMapping("/video-slice/{bucketName}/{objectName}")
+    @GetMapping("/video-slice/{bucketName}")
     public void videoSlice (
             @Parameter(description = "请求") HttpServletRequest request,
             @Parameter(description = "响应") HttpServletResponse response,
             @Parameter(description = "桶名称") @PathVariable("bucketName") String bucketName,
-            @Parameter(description = "视频名称") @PathVariable("objectName") String objectName
+            @Parameter(description = "视频名称") @RequestParam("objectName") String objectName
     ) throws Exception {
         minioService.videoSlice(request, response, bucketName, objectName);
     }
