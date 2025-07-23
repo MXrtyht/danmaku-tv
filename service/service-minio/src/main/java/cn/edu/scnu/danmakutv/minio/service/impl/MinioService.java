@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -279,7 +280,9 @@ public class MinioService {
         response.setStatus(HttpServletResponse.SC_PARTIAL_CONTENT); // 206
 
         // MinIO 文件 URL
-        String url = minioUrl + "/" + bucketName + "/" + objectName;
+        // String encodedObjectName = URLEncoder.encode(objectName, StandardCharsets.UTF_8);
+        // String url = minioUrl + "/" + bucketName + "/" + objectName;
+        String url = String.format("%s/%s/%s", minioUrl, bucketName, objectName);
 
         // 发起请求并将数据写入响应流
         HttpUtil.get(url, headers, response);
