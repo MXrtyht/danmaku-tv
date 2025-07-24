@@ -1,10 +1,12 @@
 package cn.edu.scnu.danmakutv.video.service.impl;
 
 import cn.edu.scnu.danmakutv.common.exception.DanmakuException;
+import cn.edu.scnu.danmakutv.domain.elasticsearch.VideoES;
 import cn.edu.scnu.danmakutv.domain.video.Video;
 import cn.edu.scnu.danmakutv.dto.video.GetRecommendedVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UpdateVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UserUploadVideoDTO;
+import cn.edu.scnu.danmakutv.video.controller.client.ElasticSearchClient;
 import cn.edu.scnu.danmakutv.video.mapper.VideoMapper;
 import cn.edu.scnu.danmakutv.video.service.AreaService;
 import cn.edu.scnu.danmakutv.video.service.TagService;
@@ -21,7 +23,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -36,6 +40,9 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
 
     @Resource
     private AreaService areaService;
+
+    @Resource
+    private ElasticSearchClient elasticSearchClient;
 
     // 以上可能要修改
 
@@ -115,6 +122,13 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
 
         // 插入视频-tag关联表
         videoTagRelationService.addVideoTagRelation(video.getId(), tagIds);
+
+        // 插入ES
+        VideoES videoES = new VideoES();
+        BeanUtils.copyProperties(video, videoES);
+        videoES.setCreateAt(LocalDate.now());
+        videoES.setUpdateAt(LocalDate.now());
+        elasticSearchClient.addVideo(videoES);
 
         return video.getId();
     }

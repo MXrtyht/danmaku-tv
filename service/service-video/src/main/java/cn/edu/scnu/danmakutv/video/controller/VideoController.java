@@ -2,11 +2,12 @@ package cn.edu.scnu.danmakutv.video.controller;
 
 import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
-import cn.edu.scnu.danmakutv.domain.elasticsearch.VideoEs;
+import cn.edu.scnu.danmakutv.domain.elasticsearch.VideoES;
 import cn.edu.scnu.danmakutv.domain.video.Video;
 import cn.edu.scnu.danmakutv.dto.video.GetRecommendedVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UpdateVideoDTO;
 import cn.edu.scnu.danmakutv.dto.video.UserUploadVideoDTO;
+import cn.edu.scnu.danmakutv.video.controller.client.ElasticSearchClient;
 import cn.edu.scnu.danmakutv.video.service.VideoService;
 import cn.edu.scnu.danmakutv.vo.video.VideoVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -17,6 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +33,9 @@ public class VideoController {
 
     @Resource
     private VideoService videoService;
+
+    @Resource
+    private ElasticSearchClient elasticSearchClient;
 
     // @Resource
     // private ElasticSearchService elasticSearchService;
@@ -102,8 +107,6 @@ public class VideoController {
         Long userId = authenticationSupport.getCurrentUserId();
         userUploadVideoDTO.setUserId(userId);
         Long videoId = videoService.uploadVideo(userUploadVideoDTO);
-        // 在es中添加一条数据
-        // elasticSearchService.addVideoEs(userUploadVideoDTO, videoId);
         return CommonResponse.success(videoId.toString());
     }
 
@@ -174,17 +177,4 @@ public class VideoController {
         return CommonResponse.success(videos);
     }
 
-    /**
-     * 根据tag搜索相应视频
-     *
-     * @param tags
-     * @return
-     */
-    @Operation(summary = "根据tag搜索相应视频")
-    @GetMapping("/search")
-    public CommonResponse<List<VideoEs>> searchVideo (@RequestParam List<String> tags) {
-        // List<VideoEs> videoEsList = elasticSearchService.findByTagsIn(tags);
-        // return CommonResponse.success(videoEsList);
-        return CommonResponse.success(null);
-    }
 }
