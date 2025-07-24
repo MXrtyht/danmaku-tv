@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages = {"cn.edu.scnu.danmakutv", "cn.edu.scnu.danmakutv.common.exception"})
+@SpringBootApplication(scanBasePackages = {"cn.edu.scnu.danmakutv"})
 @EnableDiscoveryClient
 @EnableFeignClients
 public class ServiceUserApplication {
