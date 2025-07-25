@@ -1,6 +1,8 @@
 package cn.edu.scnu.danmakutv.video.service;
 
 import cn.edu.scnu.danmakutv.domain.video.VideoView;
+import cn.edu.scnu.danmakutv.vo.video.GetVideoPlayCountVO;
+
 import com.baomidou.mybatisplus.extension.service.IService;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -22,6 +24,14 @@ public interface VideoViewService extends IService<VideoView> {
      * @return
      */
     Long getVideoViewCounts (Long videoId);
+    
+    /**
+     * 批量获取视频播放量
+     *
+     * @param videoId列表
+     * @return 
+     */
+    List<GetVideoPlayCountVO> getVideoViewCountsBatch(List<Long> videoIdList);
 
     /**
      * 获取用户观看历史

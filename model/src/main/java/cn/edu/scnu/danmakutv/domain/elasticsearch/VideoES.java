@@ -17,27 +17,30 @@ public class VideoES {
     @TableId(type = IdType.AUTO)
     private Long id;
 
+    @Field(name="user_id",type=FieldType.Integer)
     private Long userId;
 
+    @Field(name="video_url",type = FieldType.Text)
     private String videoUrl;
 
+    @Field(name="cover_url",type = FieldType.Text)
     private String coverUrl;
 
-    @Field(type = FieldType.Text)
+    @Field(name="title",type = FieldType.Text)
     private String title;
 
-    @Field(type = FieldType.Text)
+    @Field(name="description",type = FieldType.Text)
     private String description;
 
-    private boolean type;
+    private Boolean type;
 
     private Integer duration;
 
-    private Integer area;
+    private Boolean area;
 
-    @Field(type = FieldType.Date)
+    @Field(name = "create_at",type = FieldType.Date)
     private LocalDate createAt;
 
-    @Field(type = FieldType.Date)
+    @Field(name = "update_at",type = FieldType.Date)
     private LocalDate updateAt;
 }

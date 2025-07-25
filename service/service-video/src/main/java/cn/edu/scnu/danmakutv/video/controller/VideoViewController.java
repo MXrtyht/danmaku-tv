@@ -4,6 +4,7 @@ import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
 import cn.edu.scnu.danmakutv.domain.video.VideoView;
 import cn.edu.scnu.danmakutv.video.service.VideoViewService;
+import cn.edu.scnu.danmakutv.vo.video.GetVideoPlayCountVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -60,6 +61,19 @@ public class VideoViewController {
     @GetMapping("/video-view-counts")
     public CommonResponse<Long> getVideoViewCounts (@RequestParam Long videoId) {
         Long count = videoViewService.getVideoViewCounts(videoId);
+        return CommonResponse.success(count);
+    }
+    
+    /**
+     * 批量查询视频播放量
+     *
+     * @param videoId 视频id列表
+     * @return 视频播放量
+     */
+    @Operation(summary = "批量查询视频播放量")
+    @GetMapping("/video-view-counts-batch")
+    public CommonResponse<List<GetVideoPlayCountVO>> getVideoViewCountsBatch (@RequestParam List<Long> videoId) {
+        List<GetVideoPlayCountVO> count = videoViewService.getVideoViewCountsBatch(videoId);
         return CommonResponse.success(count);
     }
 

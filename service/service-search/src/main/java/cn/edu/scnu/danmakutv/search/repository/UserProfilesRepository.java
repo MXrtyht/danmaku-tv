@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 public interface UserProfilesRepository extends ElasticsearchRepository<UserProfilesES, Long> {
-    Page<UserProfilesES> findUserProfilesESByNicknameLike(String nickname, Pageable pageable);
+    Page<UserProfilesES> findByNicknameContaining(String nickname, Pageable pageable);
 }
