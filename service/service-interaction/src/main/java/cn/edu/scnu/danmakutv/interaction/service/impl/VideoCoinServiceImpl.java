@@ -56,11 +56,12 @@ public class VideoCoinServiceImpl extends ServiceImpl<VideoCoinMapper, VideoCoin
         UpdateUserCoinDTO updateUserCoinDTO = new UpdateUserCoinDTO();
         updateUserCoinDTO.setUserId(addVideoCoinDTO.getUserId());
         updateUserCoinDTO.setCoin(addVideoCoinDTO.getCoin());
-        updateUserCoinDTO.setIsAdd(true);
+        updateUserCoinDTO.setIsAdd(false);
 
         CommonResponse<Boolean> updateCoinResponse = userServiceClient.updateUserCoin(
                 updateUserCoinDTO
         );
+
 
         // 添加投币记录
         VideoCoinRecord videoCoinRecord = new VideoCoinRecord();

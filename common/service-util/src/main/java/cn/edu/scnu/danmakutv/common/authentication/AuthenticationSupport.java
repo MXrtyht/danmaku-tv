@@ -18,4 +18,13 @@ public class AuthenticationSupport {
         }
         return userId;
     }
+
+    public String getCurrentToken(){
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        String token = requestAttributes.getRequest().getHeader("token");
+        if (token == null || token.isEmpty()) {
+            throw new DanmakuException(StatusCodeEnum.FETCH_ACCESSTOKEN_FAILD);
+        }
+        return token;
+    }
 }
