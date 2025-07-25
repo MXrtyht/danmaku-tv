@@ -1,22 +1,30 @@
 package cn.edu.scnu.danmakutv.user.service.impl;
 
 import cn.edu.scnu.danmakutv.constant.UserProfilesDefaultConstant;
+import cn.edu.scnu.danmakutv.domain.elasticsearch.UserProfilesES;
 import cn.edu.scnu.danmakutv.domain.user.UserProfiles;
 import cn.edu.scnu.danmakutv.dto.user.UpdateUserCoinDTO;
 import cn.edu.scnu.danmakutv.dto.user.UserProfilesDTO;
+import cn.edu.scnu.danmakutv.user.controller.client.ElasticSearchClient;
 import cn.edu.scnu.danmakutv.user.mapper.UserProfilesMapper;
 import cn.edu.scnu.danmakutv.user.service.UserProfilesService;
 import cn.edu.scnu.danmakutv.vo.user.UserProfilesVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jakarta.annotation.Resource;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, UserProfiles> implements UserProfilesService {
+
+    @Resource
+    private ElasticSearchClient elasticSearchClient;
 
     /**
      * 添加用户个人资料
@@ -36,8 +44,19 @@ public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, Use
         userProfiles.setCoin(UserProfilesDefaultConstant.DEFAULT_COIN);
         userProfiles.setSign(UserProfilesDefaultConstant.DEFAULT_SIGN);
         userProfiles.setCreateAt(LocalDateTime.now());
+        userProfiles.setUpdateAt(LocalDateTime.now());
 
         baseMapper.insert(userProfiles);
+
+        // 往ES中插入用户信息
+        UserProfilesES userProfilesES = new UserProfilesES();
+        BeanUtils.copyProperties(userProfiles, userProfilesES);
+        userProfilesES.setGender(userProfiles.getGender().getCode());
+        userProfilesES.setBirthday(userProfiles.getBirthday());
+        userProfilesES.setCreateAt(userProfiles.getCreateAt().toLocalDate());
+        userProfilesES.setUpdateAt(userProfiles.getUpdateAt().toLocalDate());
+
+        elasticSearchClient.addUser(userProfilesES);
     }
 
     /**

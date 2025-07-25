@@ -9,6 +9,7 @@ import cn.edu.scnu.danmakutv.common.response.StatusCodeEnum;
 import cn.edu.scnu.danmakutv.domain.user.User;
 import cn.edu.scnu.danmakutv.dto.user.UserLoginDTO;
 import cn.edu.scnu.danmakutv.dto.user.UserRegisterDTO;
+import cn.edu.scnu.danmakutv.user.controller.client.ElasticSearchClient;
 import cn.edu.scnu.danmakutv.user.mapper.UserMapper;
 import cn.edu.scnu.danmakutv.user.service.UserProfilesService;
 import cn.edu.scnu.danmakutv.user.service.UserService;
@@ -24,6 +25,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Resource
     private UserProfilesService userProfilesService;
+
+    @Resource
+    private ElasticSearchClient elasticSearchClient;
 
     /**
      * 用户注册
