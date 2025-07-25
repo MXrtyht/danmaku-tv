@@ -4,6 +4,7 @@ import cn.edu.scnu.common.utils.IpUtil;
 import cn.edu.scnu.danmakutv.domain.video.VideoView;
 import cn.edu.scnu.danmakutv.video.mapper.VideoViewMapper;
 import cn.edu.scnu.danmakutv.video.service.VideoViewService;
+import cn.edu.scnu.danmakutv.vo.video.GetVideoPlayCountVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import eu.bitwalker.useragentutils.UserAgent;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class VideoViewServiceImpl extends ServiceImpl<VideoViewMapper, VideoView> implements VideoViewService {
@@ -71,6 +74,33 @@ public class VideoViewServiceImpl extends ServiceImpl<VideoViewMapper, VideoView
                 new QueryWrapper<VideoView>().eq("video_id", videoId)
         );
     }
+    
+    /**
+     * 批量获取视频播放量
+     *
+     * @param videoId列表
+     * @return
+     */
+    @Override
+    public List<GetVideoPlayCountVO> getVideoViewCountsBatch(List<Long> videoIds) {
+        // 1. 使用 selectMaps 获取结果
+        List<Map<String, Object>> result = baseMapper.selectMaps(
+            new QueryWrapper<VideoView>()
+                .select("video_id as videoId", "COUNT(*) as viewCount")
+                .in("video_id", videoIds)
+                .groupBy("video_id")
+        );
+
+        // 2. 显式指定 Stream 类型
+        return result.stream()
+            .<GetVideoPlayCountVO>map(map -> {  // 显式指定泛型类型
+                Long videoId = ((Number) map.get("videoId")).longValue();
+                Long viewCount = ((Number) map.get("viewCount")).longValue();
+                return new GetVideoPlayCountVO(videoId, viewCount);
+            })
+            .collect(Collectors.toList());
+    }
+
 
     /**
      * 获取用户观看历史

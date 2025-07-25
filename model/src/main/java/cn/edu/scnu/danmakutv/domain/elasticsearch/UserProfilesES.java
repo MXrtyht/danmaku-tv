@@ -14,13 +14,14 @@ public class UserProfilesES {
     @Id
     private Long id;
 
+    @Field(name="user_id",type=FieldType.Integer)
     private Long userId;
 
     private String nickname;
 
-    private Integer gender;
+    private Boolean gender;
 
-    @Field(type = FieldType.Date)
+    @Field(name="birthday",type = FieldType.Date)
     private LocalDate birthday;
 
     private String sign;
@@ -31,9 +32,9 @@ public class UserProfilesES {
 
     private Integer coin;
 
-    @Field(type = FieldType.Date)
+    @Field(name="create_at",type = FieldType.Date)
     private LocalDate createAt;
 
-    @Field(type = FieldType.Date)
+    @Field(name="update_at",type = FieldType.Date)
     private LocalDate updateAt;
 }
