@@ -38,6 +38,6 @@ public class ElasticSearchService {
     // 分页模糊查找用户(用户名)
     public Page<UserProfilesES> searchUserProfilesByNicknameWithPage (String nickname, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createAt"));
-        return this.userProfilesRepository.findUserProfilesESByNicknameLike(nickname, pageable);
+        return this.userProfilesRepository.findByNicknameContaining(nickname, pageable);
     }
 }
