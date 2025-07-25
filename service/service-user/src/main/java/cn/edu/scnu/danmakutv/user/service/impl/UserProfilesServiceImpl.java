@@ -115,6 +115,8 @@ public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, Use
         Integer coin = updateUserCoinDTO.getCoin();
         Boolean isAdd = updateUserCoinDTO.getIsAdd();
 
+        System.out.println(userId + " " + coin + " " + isAdd);
+
         UserProfiles userProfiles = baseMapper.selectOne(
                 new QueryWrapper<>(UserProfiles.class)
                         .eq("user_id", userId)
