@@ -177,4 +177,30 @@ public class VideoController {
         return CommonResponse.success(videos);
     }
 
+    /**
+     * 根据用户id查询其上传的视频
+     *
+     * @param page 分页页码
+     * @param size 分页大小
+     * @return 包含当前用户视频列表的分页结果
+     */
+    @Operation(
+            summary = "查询当前用户所有视频",
+            description = "查询视频, 返回分页结果"
+    )
+    @GetMapping("/user-videos-by-id")
+    public CommonResponse<IPage<VideoVO>> selectUserVideoById (
+            @RequestParam  @Parameter(description = "用户ID", required = true) Long userId,
+            @Size(min = 1) @Parameter(description = "分页页码, 从1开始") int page,
+            @Size(min = 4) @Parameter(description = "分页大小, 最小每页4个") int size
+    ) {
+
+        // 构造查询条件, 查询用户的视频
+        QueryWrapper<Video> wrapper = new QueryWrapper<>();
+        wrapper.eq("user_id", userId);
+
+        IPage<VideoVO> result = videoService.selectVideo(page, size, wrapper);
+
+        return CommonResponse.success(result);
+    }
 }

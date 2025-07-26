@@ -4,6 +4,7 @@ import cn.edu.scnu.danmakutv.common.authentication.AuthenticationSupport;
 import cn.edu.scnu.danmakutv.common.exception.DanmakuException;
 import cn.edu.scnu.danmakutv.common.response.CommonResponse;
 import cn.edu.scnu.danmakutv.domain.user.FollowGroup;
+import cn.edu.scnu.danmakutv.domain.user.UserProfiles;
 import cn.edu.scnu.danmakutv.dto.user.CreateFollowGroupDTO;
 import cn.edu.scnu.danmakutv.dto.user.UserFollowDTO;
 import cn.edu.scnu.danmakutv.dto.user.UserUnfollowDTO;
@@ -134,6 +135,16 @@ public class UserFollowController {
         return CommonResponse.success(followGroups);
     }
 
+    @Operation(summary = "根据当前用户的关注列表获取分组内关注的用户")
+    @GetMapping("/follow-group-users")
+    public CommonResponse<List<UserProfiles>> getFollowGroupUsers (
+            @Parameter(description = "分组ID", required = true) @RequestParam Long groupId
+    ) {
+        Long userId = authenticationSupport.getCurrentUserId();
+        List<UserProfiles> followGroupUsers = userFollowService.getFollowGroupUsers(userId, groupId);
+        return CommonResponse.success(followGroupUsers);
+    }
+
     /**
      * 获取当前用户的总关注数
      *
@@ -172,5 +183,24 @@ public class UserFollowController {
         }
         userFollowService.deleteFollowGroup(userId, groupId);
         return CommonResponse.success("删除成功");
+    }
+
+    @Operation(summary = "根据id获取粉丝数")
+    @GetMapping("/fans-count-by-id")
+    public CommonResponse<Long> getFansCountById (
+            @Parameter(description = "用户ID", required = true) @RequestParam Long userId
+    ){
+        Long fans_count = userFollowService.getFansCountById(userId);
+        return CommonResponse.success(fans_count);
+    }
+
+    @Operation(summary = "判断当前用户是否关注指定用户")
+    @GetMapping("/is-following")
+    public CommonResponse<Boolean> isFollowed (
+            @Parameter(description = "被关注用户ID", required = true) @RequestParam Long followId
+    ) {
+        Long userId = authenticationSupport.getCurrentUserId();
+        boolean isFollowed = userFollowService.isFollowed(userId, followId);
+        return CommonResponse.success(isFollowed);
     }
 }

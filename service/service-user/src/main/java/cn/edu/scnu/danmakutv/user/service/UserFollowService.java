@@ -1,6 +1,7 @@
 package cn.edu.scnu.danmakutv.user.service;
 
 import cn.edu.scnu.danmakutv.domain.user.UserFollow;
+import cn.edu.scnu.danmakutv.domain.user.UserProfiles;
 import cn.edu.scnu.danmakutv.dto.user.UserFollowDTO;
 import cn.edu.scnu.danmakutv.dto.user.UserUnfollowDTO;
 import cn.edu.scnu.danmakutv.vo.user.UserFanDTO;
@@ -24,4 +25,10 @@ public interface UserFollowService extends IService<UserFollow> {
     void removeUserFollow (@Valid UserUnfollowDTO userFollowDTO);
 
     void deleteFollowGroup (Long userId, Long groupId);
+
+    Long getFansCountById (Long userId);
+
+    boolean isFollowed (Long userId, Long followId);
+
+    List<UserProfiles> getFollowGroupUsers (Long userId, Long groupId);
 }

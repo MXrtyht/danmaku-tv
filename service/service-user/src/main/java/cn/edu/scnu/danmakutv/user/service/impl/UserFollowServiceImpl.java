@@ -267,4 +267,46 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
             throw new DanmakuException("删除关注分组失败，可能分组不存在", 400);
         }
     }
+
+    @Override
+    public Long getFansCountById (Long userId) {
+        // 查询用户的粉丝数量
+        return this.baseMapper.selectCount(
+                new QueryWrapper<>(UserFollow.class).eq("follow_id", userId)
+        );
+    }
+
+    @Override
+    public boolean isFollowed (Long userId, Long followId) {
+        // 查询用户是否关注了指定用户
+        UserFollow userFollow = this.baseMapper.selectOne(
+                new QueryWrapper<>(UserFollow.class)
+                        .eq("user_id", userId)
+                        .eq("follow_id", followId)
+        );
+        return userFollow != null;
+    }
+
+    @Override
+    public List<UserProfiles> getFollowGroupUsers (Long userId, Long groupId) {
+        // 查询指定分组下的关注用户
+        List<UserFollow> userFollows = this.baseMapper.selectList(
+                new QueryWrapper<>(UserFollow.class)
+                        .eq("user_id", userId)
+                        .eq("group_id", groupId)
+        );
+
+        if (userFollows.isEmpty()) {
+            return new ArrayList<>(); // 返回空列表而不是null
+        }
+
+        // 获取所有关注用户的id
+        Set<Long> followUserIds = userFollows.stream()
+                                             .map(UserFollow::getFollowId)
+                                             .collect(Collectors.toSet());
+
+        // 通过关注用户id获取用户信息
+        return userProfilesService.getUserProfilesByUserIds(followUserIds.stream()
+                                                                          .toList());
+    }
 }
