@@ -51,7 +51,7 @@ public class UserProfilesServiceImpl extends ServiceImpl<UserProfilesMapper, Use
         // 往ES中插入用户信息
         UserProfilesES userProfilesES = new UserProfilesES();
         BeanUtils.copyProperties(userProfiles, userProfilesES);
-        userProfilesES.setGender(userProfiles.getGender().getCode());
+        userProfilesES.setGender(userProfiles.getGender().getCode() != 0);
         userProfilesES.setBirthday(userProfiles.getBirthday());
         userProfilesES.setCreateAt(userProfiles.getCreateAt().toLocalDate());
         userProfilesES.setUpdateAt(userProfiles.getUpdateAt().toLocalDate());

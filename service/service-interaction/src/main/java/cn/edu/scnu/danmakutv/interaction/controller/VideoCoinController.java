@@ -53,7 +53,7 @@ public class VideoCoinController {
             @RequestParam Long videoId
     ) {
         Long userId = authenticationSupport.getCurrentUserId();
-        boolean status = videoCoinService.checkVideoCoinRecord(videoId, userId);
+        boolean status = videoCoinService.checkVideoCoinRecord(userId, videoId);
         return CommonResponse.success(status);
     }
 }
