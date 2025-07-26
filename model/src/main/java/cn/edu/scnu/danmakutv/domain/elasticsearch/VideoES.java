@@ -14,10 +14,9 @@ import java.time.LocalDate;
 @Document(indexName = "video")
 public class VideoES {
     @Id
-    @TableId(type = IdType.AUTO)
     private Long id;
 
-    @Field(name="user_id",type=FieldType.Integer)
+    @Field(name="user_id",type=FieldType.Long)
     private Long userId;
 
     @Field(name="video_url",type = FieldType.Text)

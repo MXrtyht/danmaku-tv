@@ -14,7 +14,7 @@ public class UserProfilesES {
     @Id
     private Long id;
 
-    @Field(name="user_id",type=FieldType.Integer)
+    @Field(name="user_id",type=FieldType.Long)
     private Long userId;
 
     private String nickname;
