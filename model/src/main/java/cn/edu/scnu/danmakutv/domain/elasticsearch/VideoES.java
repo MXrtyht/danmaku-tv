@@ -35,7 +35,7 @@ public class VideoES {
 
     private Integer duration;
 
-    private Integer area;
+    private Boolean area;
 
     @Field(name = "create_at",type = FieldType.Date)
     private LocalDate createAt;
